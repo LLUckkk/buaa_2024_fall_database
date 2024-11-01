@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CampusMarketApi.API\CampusMarketApi.API.csproj" />
+    <ProjectReference Include="..\..\src\CampusMarketApi\Core\CampusMarketApi.Core.csproj" />
+    <ProjectReference Include="..\..\src\CampusMarketApi\Application\CampusMarketApi.Application.csproj" />
   </ItemGroup>
 
 </Project>

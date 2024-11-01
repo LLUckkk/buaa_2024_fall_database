@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\CampusMarketApi.Application\CampusMarketApi.Application.csproj" />
-    <ProjectReference Include="..\CampusMarketApi.Infrastructure\CampusMarketApi.Infrastructure.csproj" />
-    <ProjectReference Include="..\CampusMarketApi.Core\CampusMarketApi.Core.csproj" />
+    <ProjectReference Include="..\Application\CampusMarketApi.Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\CampusMarketApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\Core\CampusMarketApi.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

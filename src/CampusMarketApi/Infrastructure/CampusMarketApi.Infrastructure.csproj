@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\CampusMarketApi.Core\CampusMarketApi.Core.csproj" />
-    <ProjectReference Include="..\CampusMarketApi.Application\CampusMarketApi.Application.csproj" />
+    <ProjectReference Include="..\Core\CampusMarketApi.Core.csproj" />
+    <ProjectReference Include="..\Application\CampusMarketApi.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

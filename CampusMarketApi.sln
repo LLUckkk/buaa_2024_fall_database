@@ -5,21 +5,21 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3CB8F69A-5DD6-4F07-A3F5-137F030FEDB8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Core", "src\CampusMarketApi.Core\CampusMarketApi.Core.csproj", "{F9A7B869-316F-4C33-B366-9F3291F0CA8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Core", "src\CampusMarketApi\Core\CampusMarketApi.Core.csproj", "{F9A7B869-316F-4C33-B366-9F3291F0CA8E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Infrastructure", "src\CampusMarketApi.Infrastructure\CampusMarketApi.Infrastructure.csproj", "{3B4486C6-5EC8-4A8C-B033-C608B127773E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Infrastructure", "src\CampusMarketApi\Infrastructure\CampusMarketApi.Infrastructure.csproj", "{3B4486C6-5EC8-4A8C-B033-C608B127773E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Application", "src\CampusMarketApi.Application\CampusMarketApi.Application.csproj", "{B62DFDE9-E4E3-4F29-BDAA-93421C59192C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.Application", "src\CampusMarketApi\Application\CampusMarketApi.Application.csproj", "{B62DFDE9-E4E3-4F29-BDAA-93421C59192C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampusMarketApi.Api", "src\CampusMarketApi.Api\CampusMarketApi.Api.csproj", "{3A8ED286-E685-41D0-9150-CC4678B27120}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampusMarketApi.Api", "src\CampusMarketApi\Api\CampusMarketApi.Api.csproj", "{3A8ED286-E685-41D0-9150-CC4678B27120}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{03E67BFD-F215-44CF-98B0-A0C5A5CC35D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.UnitTests", "tests\CampusMarketApi.UnitTests\CampusMarketApi.UnitTests.csproj", "{7E7FB5A7-B7B4-4821-A224-62924A02B27F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.UnitTests", "tests\CampusMarketApi\UnitTests\CampusMarketApi.UnitTests.csproj", "{7E7FB5A7-B7B4-4821-A224-62924A02B27F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.IntegrationTests", "tests\CampusMarketApi.IntegrationTests\CampusMarketApi.IntegrationTests.csproj", "{0D14F81E-AA62-4B20-B7E8-413AA29C09F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.IntegrationTests", "tests\CampusMarketApi\IntegrationTests\CampusMarketApi.IntegrationTests.csproj", "{0D14F81E-AA62-4B20-B7E8-413AA29C09F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.FunctionalTests", "tests\CampusMarketApi.FunctionalTests\CampusMarketApi.FunctionalTests.csproj", "{496838FC-6E7C-4709-9E50-CD09D359546E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusMarketApi.FunctionalTests", "tests\CampusMarketApi\FunctionalTests\CampusMarketApi.FunctionalTests.csproj", "{496838FC-6E7C-4709-9E50-CD09D359546E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
