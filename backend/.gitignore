@@ -69,3 +69,6 @@ TestResults/
 # Ignore other files
 *.DS_Store
 *.directory
+
+src\CampusMarketApi\Api\appsettings.json
+src\CampusMarketApi\Api\appsettings.Development.json
