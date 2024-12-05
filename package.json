@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "less": "^4.2.1",
+    "less-loader": "^12.2.0"
+  },
+  "dependencies": {
+    "sass": "^1.82.0",
+    "sass-loader": "^16.0.4"
+  }
+}
