@@ -24,7 +24,8 @@
                     style="width: 40px; height: 40px"
                     :src="productInfo.userInfo.avatar"
                     alt=""/>
-                <span class="name">{{ productInfo.userInfo.nickName }}</span>
+                <!-- <span class="name">{{ productInfo.userInfo.nickName }}</span> -->
+                <span class="name">user</span>
               </div>
               <div class="follow-btn">
                 <!--                <el-button type="danger" size="large" round>关注</el-button>-->
@@ -34,31 +35,35 @@
             <div class="note-scroller">
               <div class="note-content">
                 <div class="title">
-                  {{ productInfo.title }}
+                  <!-- {{ productInfo.title }} -->
+                    麦当劳
                 </div>
 
                 <div class="desc">
-                  <span>{{ productInfo.intro }} <br/></span>
+                  <!-- <span>{{ productInfo.intro }} <br/></span> -->
+                  <span>肯德基疯狂星期四v我50 <br/></span>
                   <!--                  <a class="tag tag-search">#海贼王</a>-->
                 </div>
-                <div class="post-container">
+                <!-- <div class="post-container">
                   <span class="post" v-if="productInfo.postType ===0 ">发货方式：邮寄 </span>
                   <span class="post" v-if="productInfo.postType ===1 ">发货方式：自提 </span>
-                </div>
+                </div> -->
                 <div class="post-container">
                   <div class="post">
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span>
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">99</span></span>
+                    <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span> -->
                   </div>
                 </div>
 
                 <div class="bottom-container" style="margin-top: 5px">
-                  <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
+                  <span class="date">2024-12-06</span>
+                  <!-- <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span> -->
 
-                  <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button>
+                  <!-- <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button> -->
 
                 </div>
 
-                <div style="margin-top: 10px" v-if="ableVoucher && voucherVisable &&productInfo.status === 9 && productInfo.userId != $store.state.user.userInfo.id ">
+                <!-- <div style="margin-top: 10px" v-if="ableVoucher && voucherVisable &&productInfo.status === 9 && productInfo.userId != $store.state.user.userInfo.id ">
                   <el-card shadow="hover" :body-style="{  'background-color': '#fef2f3',height:'90px'}">
                     <div style="display: flex;padding: 0;margin: 0">
                       <div class="left" style="height: 60px;width: 40%;margin-left: 10px">
@@ -80,14 +85,14 @@
                       </div>
                     </div>
                   </el-card>
-                </div>
+                </div> -->
               </div>
 
               <div class="divider interaction-divider"></div>
               <!-- 评论 -->
-              <div class="comments-el">
+              <!-- <div class="comments-el">
                 <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status" :delshow="productInfo.userId === $store.state.user.userInfo.id" @reply="handleReply" @del="handleDel"></Comment>
-              </div>
+              </div> -->
             </div>
             <div class="interactions-footer" v-if="productInfo.status === 9">
               <div class="buttons">
@@ -173,19 +178,19 @@ export default {
     }
   },
   created() {
-    this.getProductInfo()
-    this.getCommentList()
-    this.getCollectList()
+    //this.getProductInfo()
+    //this.getCommentList()
+    //this.getCollectList()
   },
   methods: {
     getProductInfo() {
       this.$api.product.getProductInfo({productId: this.productId}).then(res => {
         this.productInfo = res.result
-        if (this.productInfo.productVoucher) {
-          this.voucherVisable = true
-          this.productInfo.productVoucher.beginTime = new Date(this.productInfo.productVoucher.beginTime).toLocaleString()
-          this.productInfo.productVoucher.endTime = new Date(this.productInfo.productVoucher.endTime).toLocaleString()
-        }
+        // if (this.productInfo.productVoucher) {
+        //   this.voucherVisable = true
+        //   this.productInfo.productVoucher.beginTime = new Date(this.productInfo.productVoucher.beginTime).toLocaleString()
+        //   this.productInfo.productVoucher.endTime = new Date(this.productInfo.productVoucher.endTime).toLocaleString()
+        // }
         if (res.result.image) this.productInfo.image = JSON.parse(res.result.image)
       })
     },

@@ -1,4 +1,3 @@
-<!--动态页，显示关注的人的动态-->
 <template>
   <div class="container " >
     <div class="header"><span class="header-icon"></span><span class="header-title">我的动态</span></div>

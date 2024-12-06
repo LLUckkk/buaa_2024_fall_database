@@ -6,6 +6,8 @@ import message from '@/views/message/message.vue'
 import release from '@/views/release/release.vue'
 import dashboard from '@/views/dashboard/dashboard.vue'
 import index from '@/views/index.vue'
+//临时添加
+import main from '@/views/main/main.vue'
 
 const routes = [
   {
@@ -16,6 +18,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/main',
+    name: 'main',
+    component: main,
   },
   {
     path: '/dashboard',

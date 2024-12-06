@@ -4,10 +4,11 @@
     <!--top-->
     <div class="channel-container">
       <div class="scroll-container channel-scroll-container">
-        <div class="content-container "  style="margin-left: 3vh">
-            <div class="channel " :class="activeMenu ===item.typeCode?'active':''" v-for="(item,index) in menuList" :key="item.typeCode" @click="changeMenu(item)">
-              {{ item.typeName }}
-            </div>
+        <div class="content-container " style="margin-left: 3vh">
+          <div class="channel " :class="activeMenu === item.typeCode ? 'active' : ''" v-for="(item, index) in menuList"
+            :key="item.typeCode" @click="changeMenu(item)">
+            {{ item.typeName }}
+          </div>
         </div>
       </div>
     </div>
@@ -20,20 +21,24 @@
       <div class="feeds-loading-top" v-show="topLoading">
         <i class="el-icon-loading" style="width: 1.2em; height: 1.2em"></i>
       </div>
-      <Waterfall :list="list" :width="230" :hasAroundGutter="false" style="max-width: 1260px; " :delay="1000" :animationEffect="'animate__zoomIn'">
-        <template #item="{ item,url}">
+      <Waterfall :list="list" :width="230" :hasAroundGutter="false" style="max-width: 1260px; " :delay="1000"
+        :animationEffect="'animate__zoomIn'">
+        <template #item="{ item, url }">
           <div class="card" @click="toMain(item.id)">
             <el-image style="border-radius: 10px;width: 230px;" :src="item.image" fit="cover"></el-image>
             <div class="footer">
               <a class="title"><span>{{ item.title }}</span></a>
               <div class="price">
                 <span>￥{{ $utils.convert.to_price(item.price) }}</span>
-                <span style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;text-decoration: line-through">￥{{ $utils.convert.to_price(item.originalPrice) }}</span>
-                <span style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;">{{ item.postType === 0 ? '邮寄' : '自提' }}</span>
+                <span
+                  style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;text-decoration: line-through">￥{{
+                    $utils.convert.to_price(item.originalPrice) }}</span>
+                <span style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;">{{ item.postType === 0
+                  ? '邮寄' : '自提' }}</span>
               </div>
               <div class="author-wrapper">
                 <a class="author">
-                  <img class="author-avatar" :src="item.avatar"/>
+                  <img class="author-avatar" :src="item.avatar" />
                   <span class="name">{{ item.city }}{{ item.district }}</span>
                 </a>
                 <span class="like-wrapper"><i class="el-icon-thumb"></i>
@@ -47,8 +52,9 @@
       </Waterfall>
       <!--loading-->
       <el-collapse-transition>
-        <div class="feeds-loading" v-show="busy &&!noMore">
-          <span style="text-align: center;color:#cacdd5;font-size: 12px;">加载中</span><i class="el-icon-loading" style="font-size: 12px;margin-left: 10px"></i>
+        <div class="feeds-loading" v-show="busy && !noMore">
+          <span style="text-align: center;color:#cacdd5;font-size: 12px;">加载中</span><i class="el-icon-loading"
+            style="font-size: 12px;margin-left: 10px"></i>
         </div>
       </el-collapse-transition>
       <div v-show="noMore" style="text-align: center;color:#cacdd5;font-size: 12px;margin: 3vh">没有更多了</div>
@@ -59,13 +65,13 @@
 </template>
 
 <script>
-import {LazyImg, Waterfall} from 'vue-waterfall-plugin-next'
+import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 import 'vue-waterfall-plugin-next/dist/style.css'
 import Main from "@/views/main/main.vue";
 import screenUtil from "@/utils/screenUtil";
 
 export default {
-  components: {Waterfall, LazyImg, Main},
+  components: { Waterfall, LazyImg, Main },
 
   data() {
     return {
@@ -83,7 +89,9 @@ export default {
         typeCode: '',
         key: '',
       },
-      menuList: [{typeCode: '', typeName: '全部'}],
+      menuList: [{ typeCode: '', typeName: '全部' }, { typeCode: '1', typeName: '电子产品' }, { typeCode: '2', typeName: '书籍资料' }, 
+      { typeCode: '3', typeName: '服装首饰' }, { typeCode: '4', typeName: '食物饮品' }, { typeCode: '5', typeName: '生活用品' },
+       { typeCode: '6', typeName:"学习用品"}, {typeCode: '7', typeName: "其他"}],
       list: [],
     }
   },
@@ -405,7 +413,7 @@ export default {
       background: #fff;
       border: 1px solid rgba(0, 0, 0, 0.08);
       box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1),
-      0 1px 2px 0 rgba(0, 0, 0, 0.02);
+        0 1px 2px 0 rgba(0, 0, 0, 0.02);
       border-radius: 100px;
       color: rgba(51, 51, 51, 0.8);
       display: flex;

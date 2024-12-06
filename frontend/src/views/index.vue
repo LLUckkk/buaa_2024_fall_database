@@ -3,28 +3,29 @@
     <div class="top">
       <header class="mask-paper">
         <a style="display: flex">
-          <img class="logo" style="width: 72px;height: 72px;margin-top: 20px" src="@/assets/logo1.png"/>
-          <span style="line-height: 100px;font-weight: bolder;font-size: 30px;margin-left: 20px;letter-spacing: 4px">闲宝交易平台</span>
+          <img class="logo" style="width: 72px;height: 72px;margin-top: 20px" src="@/assets/logo1.png" />
+          <span
+            style="line-height: 100px;font-weight: bolder;font-size: 30px;margin-left: 20px;letter-spacing: 4px">闲宝交易平台</span>
         </a>
         <div class="tool-box">
         </div>
         <div class="input-box" id="sujContainer" v-show="$route.path === '/dashboard'">
-          <input
-              type="text"
-              v-model="key"
-              class="search-input"
-              placeholder="搜索你想要的"
-
-              @focus="focusInput"
-              @keyup.enter="searchPage"
-              ref="SearchInput"
-          />
+          <input type="text" v-model="key" class="search-input" placeholder="搜索你想要的" @focus="focusInput"
+            @keyup.enter="searchPage" ref="SearchInput" />
           <div class="input-button">
             <div class="search-icon" v-if="key === ''">
-              <i class="el-icon-search" style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px"></i>
+              <i style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px">
+                <el-icon>
+                  <Search />
+                </el-icon>
+              </i>
             </div>
             <div class="close-icon" v-else @click="clearKeyword">
-              <i class="el-icon-circle-close" style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px"></i>
+              <i style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px">
+                <el-icon>
+                  <CircleClose />
+                </el-icon>
+              </i>
             </div>
           </div>
         </div>
@@ -35,63 +36,71 @@
     <div class="main">
       <div class="side-bar">
         <ul class="channel-list">
-          <li :class="$route.path === '/dashboard'?'active-channel':''">
+          <li :class="$route.path === '/dashboard' ? 'active-channel' : ''">
             <a class="link-wrapper" @click="toDashboard()">
-              <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                <i class="el-icon-house"></i>
+              <div
+                style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
+                <el-icon size="large" color=#ff2442>
+                  <ShoppingBag />
+                </el-icon>
               </div>
-              <span class="channel"
-              >推荐</span
-              ></a>
-          </li>
-          <li  :class="$route.path === '/followtrend'?'active-channel':''">
-          <!-- <li  :class="$route.path === '/followtrend'?'active-channel':''" v-if="loginStatus"> -->
-            <a class="link-wrapper" @click="toTrend()">
-              <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                <i class="el-icon-star-off"></i>
-              </div>
-              <span class="channel">
-              动态</span>
+              <span class="channel">推荐</span>
             </a>
           </li>
-          <li :class="$route.path === '/message'?'active-channel':''">
-          <!-- <li :class="$route.path === '/notice'?'active-channel':''" v-if="loginStatus"> -->
+          <li :class="$route.path === '/followtrend' ? 'active-channel' : ''">
+            <!-- <li  :class="$route.path === '/followtrend'?'active-channel':''" v-if="loginStatus"> -->
+            <a class="link-wrapper" @click="toTrend()">
+              <div
+                style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
+                <el-icon size="large" color=#ff2442>
+                  <Sunrise />
+                </el-icon>
+              </div>
+              <span class="channel">
+                动态</span>
+            </a>
+          </li>
+          <li :class="$route.path === '/message' ? 'active-channel' : ''">
+            <!-- <li :class="$route.path === '/notice'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toMessage()">
-              <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                <el-badge v-if="noReadMessage" is-dot class="item"><i class="el-icon-bell"></i></el-badge>
-                <i v-else class="el-icon-bell"></i>
+              <div
+                style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
+                <el-badge v-if="noReadMessage" is-dot class="item">
+                  <el-icon size="large" color=#ff2442>
+                    <ChatLineRound />
+                  </el-icon></el-badge>
+                <i v-else class="el-icon-bell">
+                  <el-icon size="large" color=#ff2442>
+                    <ChatLineRound />
+                  </el-icon>
+                </i>
               </div>
               <span class="channel">消息</span>
             </a>
           </li>
-          <li :class="$route.path === '/release'?'active-channel':''">
-          <!-- <li :class="$route.path === '/publish'?'active-channel':''" v-if="loginStatus"> -->
+          <li :class="$route.path === '/release' ? 'active-channel' : ''">
+            <!-- <li :class="$route.path === '/publish'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toPush()">
-              <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                <i class="el-icon-circle-plus-outline"></i>
+              <div
+                style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
+                  <el-icon size="large" color=#ff2442><Pointer /></el-icon>
               </div>
               <span class="channel">
-              发布</span
-              >
+                发布</span>
             </a>
           </li>
-          <li style="background-color: #ff2e4d; border-radius: 999px;">
-          <!-- <li style="background-color: #ff2e4d; border-radius: 999px;" v-if="!loginStatus"> -->
-            <a class="link-wrapper"   @click="toggleLogin()">
-              <i class="el-icon-user" style="width: 1.5em; height: 1.5em; margin-right: 8px"></i>
-              <span class="channel" style="color: white">
-              登录</span
-              >
-            </a>
-          </li>
-          <li :class="$route.path === '/my'?'active-channel':''">
-          <!-- <li v-else :class="$route.path === '/my'?'active-channel':''"> -->
-            <a class="link-wrapper" @click="toUser">
-              <!-- <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%" :src="$store.state.user.userInfo.avatar"></el-image> -->
-<!--              <i class="el-icon-user" style="width: 1em; height: 1em; margin-right: 8px"></i> -->
+          <li :class="$route.path === '/my' ? 'active-channel' : ''">
+            <!-- <li v-else :class="$route.path === '/my'?'active-channel':''"> -->
+            <a class="link-wrapper" @click="toUser()">
+              <!-- <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%"
+                :src="$store.state.user.userInfo.avatar"></el-image> -->
+              <!-- <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%"></el-image> -->
+              <div
+                style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
+                  <el-icon size="large" color=#ff2442><User /></el-icon>
+              </div>
               <span class="channel">
-              我的</span
-              >
+                我的</span>
             </a>
           </li>
         </ul>
@@ -103,16 +112,16 @@
                 <div>
                   <div class="group-wrapper">
                     <div class="group-header">设置</div>
-<!--                    <div class="menu-item hover-effect">-->
-<!--                      <span>深色模式</span>-->
-<!--                      <div class="multistage-toggle component">-->
-<!--                        <button class="toggle-item active">-->
-<!--                          <div class="icon-wrapper">-->
-<!--                          </div>-->
-<!--                        </button>-->
-<!--                      </div>-->
-<!--                    </div>-->
-                    <div class="menu-item hover-effect" >
+                    <!--                    <div class="menu-item hover-effect">-->
+                    <!--                      <span>深色模式</span>-->
+                    <!--                      <div class="multistage-toggle component">-->
+                    <!--                        <button class="toggle-item active">-->
+                    <!--                          <div class="icon-wrapper">-->
+                    <!--                          </div>-->
+                    <!--                        </button>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
+                    <div class="menu-item hover-effect">
                       <a @click="logout">
                         <i class="el-icon-turn-off"></i>
                         <span style="margin-left: 10px">退出登录</span>
@@ -135,7 +144,7 @@
         <router-view />
       </div>
     </div>
-    <Login v-if="showLogin" @click-child="loginClose"></Login>
+    <!-- <Login v-if="showLogin" @click-child="loginClose"></Login> -->
   </div>
 </template>
 
@@ -143,29 +152,30 @@
 import Login from "@/views/login.vue";
 import Cookies from "js-cookie";
 import user from "@/store/user";
+import { Search } from "@element-plus/icons-vue";
 export default {
   computed: {
     user() {
       return user
     }
   },
-  components: {Login},
-  data(){
-    return{
-      noReadMessage:false,
-      moreStatus:false,
-      showLogin:false,
-      key:"",
-      loginStatus:false,
+  components: { Login },
+  data() {
+    return {
+      noReadMessage: false,
+      moreStatus: false,
+      showLogin: false,
+      key: "",
+      loginStatus: false,
     }
   },
   created() {
     //this.$eventBus.$on('noReadMessage', this.handleMessage);
     let token = Cookies.get('web-token')
-    if(token){
+    if (token) {
       this.showLogin = false
       this.loginStatus = true
-    }else{
+    } else {
       this.showLogin = true
       this.loginStatus = false
     }
@@ -173,26 +183,26 @@ export default {
     //this.getNoReadMessageFlush()
   },
   methods: {
-    clearKeyword(){
-      this.key =''
+    clearKeyword() {
+      this.key = ''
     },
     getNoReadMessageFlush() {
       this.timer = setInterval(() => {
         this.getNoReadMessage()
       }, 2000)
     },
-    handleMessage(val){
-      if(val > 0) {
+    handleMessage(val) {
+      if (val > 0) {
         this.noReadMessage = true
-      }else{
+      } else {
         this.noReadMessage = false
       }
     },
-    getNoReadMessage(){
-      this.$api.chatList.getNoReadCount().then(res=>{
-        if(res.result > 0) {
+    getNoReadMessage() {
+      this.$api.chatList.getNoReadCount().then(res => {
+        if (res.result > 0) {
           this.noReadMessage = true
-        }else{
+        } else {
           this.noReadMessage = false
         }
       })
@@ -204,33 +214,34 @@ export default {
       this.$router.push("/followtrend")
     },
     toMessage() {
-      this.$router.push("/notice")
+      this.$router.push("/message")
     },
     toPush() {
-      this.$router.push("/publish")
+      this.$router.push("/release")
     },
     toUser() {
-      this.$router.push("/user")
+      this.$router.push("/my")
     },
     toggleMore() {
       this.moreStatus = !this.moreStatus
     },
-    toggleLogin(){
-      this.showLogin = !this.showLogin
+    toggleLogin() {
+      //this.showLogin = !this.showLogin
+      this.$router.push("/login")
     },
-    changeInput(){
+    changeInput() {
       this.searchPage()
     },
-    focusInput(){},
-    searchPage(){
+    focusInput() { },
+    searchPage() {
       //this.$eventBus.$emit('keyChanged', this.key);
     },
-    loginClose(val){
+    loginClose(val) {
       this.showLogin = false;
       this.loginStatus = val;
     },
-    logout(){
-      this.$api.user.logout().then(res=>{
+    logout() {
+      this.$api.user.logout().then(res => {
         Cookies.remove("web-token")
         sessionStorage.clear();
         this.$store.commit("clearUserInfo")
@@ -336,6 +347,7 @@ a {
           height: 100%;
           color: rgba(51, 51, 51, 0.8);
           cursor: pointer;
+
           .close-icon .search-icon {
             width: 40px;
             height: 100%;
@@ -357,6 +369,7 @@ a {
       @media screen and (max-width: 695px) {
         display: none;
       }
+
       @media screen and (min-width: 696px) and (max-width: 959px) {
         display: none;
       }
@@ -497,6 +510,7 @@ a {
                 padding: 0 12px;
                 font-weight: 400;
                 cursor: pointer;
+
                 .icon {
                   color: rgba(51, 51, 51, 0.3);
                   margin-left: auto;
@@ -517,7 +531,7 @@ a {
                   .active {
                     background: #fff;
                     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
-                    0 1px 2px 0 rgba(0, 0, 0, 0.02);
+                      0 1px 2px 0 rgba(0, 0, 0, 0.02);
                     color: #333;
                   }
 
@@ -537,7 +551,8 @@ a {
                   }
                 }
               }
-              .menu-item:hover{
+
+              .menu-item:hover {
                 background-color: rgba(0, 0, 0, 0.03);
                 border-radius: 999px;
                 color: #333;

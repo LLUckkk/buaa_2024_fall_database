@@ -4,6 +4,7 @@
     "less-loader": "^12.2.0"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.7.9",
     "js-cookie": "^3.0.5",
     "promise": "^8.3.0",
