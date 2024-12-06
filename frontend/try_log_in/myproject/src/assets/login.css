@@ -14,7 +14,7 @@
         align-items: center;
         .form {
             width: 400px;
-            height: 550px;
+            height:550px;
             background: rgba(255,255,255,0.15);
             
             backdrop-filter: blur(79px) saturate(0);
@@ -100,28 +100,6 @@
                     font-weight: bold;
                     transition:0.25s ease-out;
                     opacity: 0;
-                }
-            }
-            .input-container {
-                display: flex;
-                width: 100%;
-                align-items: center;
-
-                input {
-                    flex: 1;
-                    margin-right: 10px;
-                }
-
-                .captcha-btn {
-                    width: 120px;
-                    height: 35px;
-                    background: lightskyblue;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    font-weight: bold;
-                    font-size: 12px;
-                    cursor: pointer;
                 }
             }
             button {

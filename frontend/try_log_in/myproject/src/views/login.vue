@@ -16,7 +16,6 @@
                 <div v-if="EMPassWord" class="errormessage">{{ EMPassWord }}</div>
             </div>
             <button @click="validateForm()">登录</button>
-            <button @click="checkHeartbeat()">测试</button>
         </div>
         <div :class="active == 2 ? 'form' : 'form hidden'">
             <div class="title"><b>开始</b></div>
@@ -40,14 +39,6 @@
                 <input type="text" placeholder="学号" v-model="studentId"/>
                 <span class = "label">学号</span>
                 <div v-if="EMStudentId" class="errormessage">{{ EMStudentId }}</div>
-            </div>
-            <div class="inputf">
-                <div class="input-container">
-                    <input type="text" placeholder="输入验证码" v-model= "identifyCode"/>
-                    <span class="label">验证码</span>
-                    <button class="captcha-btn">获取验证码</button>
-                </div>
-                <div v-if="EMIdentifyCode" class="errormessage">{{ EMIdentifyCode }}</div>
             </div>
             <button @click="validateFormR()">注册</button>
         </div>
@@ -79,7 +70,6 @@ const password = ref('');
 const usernameR = ref('');
 const passwordR = ref('');
 const email = ref('');
-const identifyCode = ref('');
 const studentId = ref('');
 // error message
 const EMUserName = ref('');
@@ -87,25 +77,24 @@ const EMPassWord = ref('');
 const EMUserNameR = ref('');
 const EMPassWordR = ref('');
 const EMEmail = ref('');
-const EMIdentifyCode = ref('');
 const EMStudentId = ref('');
 // 表单验证函数
 const validateForm = () => {
     //用户名规范
     if (!username.value) {
-        EMUserName.value = '用户名不能为空呦';
+        EMUserName.value = '用户名不能为空';
     } else{
         EMUserName.value = '';  // 清空错误信息
     }
     //密码规范
     if (!password.value) {
-        EMPassWord.value = '密码怎么可以为空';
+        EMPassWord.value = '密码不能为空';
     } else {
         EMPassWord.value = '';  // 清空错误信息
     }
-
+    
 };
-//注册部分规范
+
 const registerUser = async () => {
     try {
         const response = await axios.post(`${API_URL}auth/register`, {
@@ -124,19 +113,22 @@ const registerUser = async () => {
         alert('注册失败');
     }
 };
-
+//注册部分规范
 const validateFormR = () => {
     //用户名
     if (usernameR.value.length < 3 || usernameR.value.length > 8) {
-        EMUserNameR.value = '用户名不能太长也不能太短~';
+        EMUserNameR.value = '用户名不能太长也不能太短';
+        return;
     } else {
         EMUserNameR.value = '';  // 清空错误信息
     }
     //密码
     if (!passwordR.value) {
         EMPassWordR.value = '密码不能为空';
-    } else if (passwordR.value.length <= 8) {
-        EMPassWordR.value = '密码不能太短，不然容易被盗号'
+        return;
+    } else if (passwordR.value.length < 6) {
+        EMPassWordR.value = '密码不能太短，不然容易被盗号';
+        return;
     } else {
         EMPassWordR.value = '';
     }
@@ -145,20 +137,14 @@ const validateFormR = () => {
 
     if (!email.value) {
         EMEmail.value = '邮箱不能为空';
+        return;
     } else if (!emailRegex.test(email.value)) {
-        EMEmail.value = '邮箱地址不合法，怎么给你发邮件！';
+        EMEmail.value = '邮箱地址不合法';
+        return;
     } else {
         EMEmail.value = '';  // 清空错误信息
     }
-    //验证码
-    if (!identifyCode.value) {
-        EMIdentifyCode.value = '验证码不能为空';
-    } else {
-        EMIdentifyCode.value = '';  // 清空错误信息
-    }
-    if (!EMUserNameR.value && !EMPassWordR.value && !EMEmail.value && !EMIdentifyCode.value) {
-        registerUser();
-    }
+    registerUser();
 };
 //点击切换按钮，所有错误信息清空
 const clickSwitch = () => {
@@ -168,14 +154,12 @@ const clickSwitch = () => {
     EMPassWord.value = '';
     EMUserNameR.value = '';
     EMPassWordR.value = '';
-    EMIdentifyCode.value = '';
     EMEmail.value = '';
     // 清空文本框
     username.value = '';
     password.value = '';
     usernameR.value = '';
     passwordR.value = '';
-    identifyCode.value = '';
     email.value = '';
 };
 
