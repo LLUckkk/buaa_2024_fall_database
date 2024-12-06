@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from '../router'
-import {Notification} from 'element-ui';
+import {Notification} from 'element-plus';
 import Cookies from "js-cookie";
 import "../style.css";
 

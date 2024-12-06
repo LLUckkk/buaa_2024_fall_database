@@ -37,7 +37,6 @@
         <ul class="channel-list">
           <li :class="$route.path === '/dashboard'?'active-channel':''">
             <a class="link-wrapper" @click="toDashboard()">
-
               <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
                 <i class="el-icon-house"></i>
               </div>
@@ -45,8 +44,8 @@
               >推荐</span
               ></a>
           </li>
-
-          <li  :class="$route.path === '/followtrend'?'active-channel':''" v-if="loginStatus">
+          <li  :class="$route.path === '/followtrend'?'active-channel':''">
+          <!-- <li  :class="$route.path === '/followtrend'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toTrend()">
               <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
                 <i class="el-icon-star-off"></i>
@@ -55,7 +54,8 @@
               动态</span>
             </a>
           </li>
-          <li :class="$route.path === '/notice'?'active-channel':''" v-if="loginStatus">
+          <li :class="$route.path === '/message'?'active-channel':''">
+          <!-- <li :class="$route.path === '/notice'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toMessage()">
               <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
                 <el-badge v-if="noReadMessage" is-dot class="item"><i class="el-icon-bell"></i></el-badge>
@@ -64,18 +64,19 @@
               <span class="channel">消息</span>
             </a>
           </li>
-          <li :class="$route.path === '/publish'?'active-channel':''" v-if="loginStatus">
+          <li :class="$route.path === '/release'?'active-channel':''">
+          <!-- <li :class="$route.path === '/publish'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toPush()">
               <div style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
                 <i class="el-icon-circle-plus-outline"></i>
               </div>
-
               <span class="channel">
               发布</span
               >
             </a>
           </li>
-          <li style="background-color: #ff2e4d; border-radius: 999px;" v-if="!loginStatus">
+          <li style="background-color: #ff2e4d; border-radius: 999px;">
+          <!-- <li style="background-color: #ff2e4d; border-radius: 999px;" v-if="!loginStatus"> -->
             <a class="link-wrapper"   @click="toggleLogin()">
               <i class="el-icon-user" style="width: 1.5em; height: 1.5em; margin-right: 8px"></i>
               <span class="channel" style="color: white">
@@ -83,10 +84,11 @@
               >
             </a>
           </li>
-          <li v-else :class="$route.path === '/user'?'active-channel':''">
+          <li :class="$route.path === '/my'?'active-channel':''">
+          <!-- <li v-else :class="$route.path === '/my'?'active-channel':''"> -->
             <a class="link-wrapper" @click="toUser">
-              <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%" :src="$store.state.user.userInfo.avatar"></el-image>
-<!--              <i class="el-icon-user" style="width: 1em; height: 1em; margin-right: 8px"></i>-->
+              <!-- <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%" :src="$store.state.user.userInfo.avatar"></el-image> -->
+<!--              <i class="el-icon-user" style="width: 1em; height: 1em; margin-right: 8px"></i> -->
               <span class="channel">
               我的</span
               >
@@ -138,7 +140,7 @@
 </template>
 
 <script>
-import Login from "@/pages/login.vue";
+import Login from "@/views/login.vue";
 import Cookies from "js-cookie";
 import user from "@/store/user";
 export default {
@@ -158,7 +160,7 @@ export default {
     }
   },
   created() {
-    this.$eventBus.$on('noReadMessage', this.handleMessage);
+    //this.$eventBus.$on('noReadMessage', this.handleMessage);
     let token = Cookies.get('web-token')
     if(token){
       this.showLogin = false
@@ -167,8 +169,8 @@ export default {
       this.showLogin = true
       this.loginStatus = false
     }
-    this.getNoReadMessage()
-    this.getNoReadMessageFlush()
+    //this.getNoReadMessage()
+    //this.getNoReadMessageFlush()
   },
   methods: {
     clearKeyword(){
@@ -199,16 +201,16 @@ export default {
       this.$router.push("/dashboard")
     },
     toTrend() {
-      this.$router.push("/market")
+      this.$router.push("/followtrend")
     },
     toMessage() {
-      this.$router.push("/message")
+      this.$router.push("/notice")
     },
     toPush() {
-      this.$router.push("/release")
+      this.$router.push("/publish")
     },
     toUser() {
-      this.$router.push("/my")
+      this.$router.push("/user")
     },
     toggleMore() {
       this.moreStatus = !this.moreStatus
@@ -221,7 +223,7 @@ export default {
     },
     focusInput(){},
     searchPage(){
-      this.$eventBus.$emit('keyChanged', this.key);
+      //this.$eventBus.$emit('keyChanged', this.key);
     },
     loginClose(val){
       this.showLogin = false;
@@ -238,7 +240,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timer)
-    this.$eventBus.$off('noReadMessage', this.handleMessage);
+    //this.$eventBus.$off('noReadMessage', this.handleMessage);
   }
 }
 </script>

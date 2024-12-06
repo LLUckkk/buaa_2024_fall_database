@@ -47,7 +47,7 @@
                 </div>
                 <div class="post-container">
                   <div class="post">
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style=";font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span>
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span>
                   </div>
                 </div>
 

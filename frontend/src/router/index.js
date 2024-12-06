@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/login.vue'
-import recommend from '@/views/recommend/recommend.vue'
-import market from '@/views/market/market.vue'
+import followtrend from '@/views/followtrend/followtrend.vue'
 import my from '@/views/my/my.vue'
 import message from '@/views/message/message.vue'
 import release from '@/views/release/release.vue'
 import dashboard from '@/views/dashboard/dashboard.vue'
+import index from '@/views/index.vue'
 
 const routes = [
   {
@@ -23,30 +23,38 @@ const routes = [
     component: dashboard,
   },
   {
-    path: '/recommend',
-    name: 'recommend', 
-    component: recommend,
+    path: "/index",
+    name: "index",
+    component: index,
+    redirect: "/dashboard",
+    children: [
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: dashboard,
+      },
+      {
+        path: "/followTrend",
+        name:"followtrend",
+        component: followtrend,
+      },
+      {
+        path: '/message',
+        name: 'message',
+        component: message,
+      },
+      {
+        path: '/my',
+        name: 'my',
+        component: my,
+      },
+      {
+        path: '/release',
+        name: 'release',
+        component: release
+      }
+    ]
   },
-  {
-    path: '/market',
-    name: 'market', 
-    component: market,
-  },
-  {
-    path: '/message',
-    name: 'message', 
-    component: message,
-  },
-  {
-    path: '/my',
-    name: 'my', 
-    component: my,
-  },
-  {
-    path: '/release',
-    name: 'release',
-    component: release
-  }
 ]
 
 const router = createRouter({
