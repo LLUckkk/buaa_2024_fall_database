@@ -124,7 +124,9 @@
       </div>
       <div class="close-cricle" @click="close">
         <div class="close close-mask-white">
-          <i class="el-icon-close" style="color: rgba(51, 51, 51, 0.8)"></i>
+          <i class="el-icon-close" style="color: rgba(51, 51, 51, 0.8)">
+            <el-icon size="large"><Close /></el-icon>
+          </i>
         </div>
       </div>
       <div class="back-desk" @click="close"></div>
