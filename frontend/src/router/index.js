@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue'
+import Login from '../views/login.vue'
 import recommend from '@/views/recommend/recommend.vue'
 import market from '@/views/market/market.vue'
 import my from '@/views/my/my.vue'
 import message from '@/views/message/message.vue'
 import release from '@/views/release/release.vue'
+import dashboard from '@/views/dashboard/dashboard.vue'
 
 const routes = [
   {
@@ -15,6 +16,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: dashboard,
   },
   {
     path: '/recommend',
