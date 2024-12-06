@@ -73,7 +73,7 @@
 
           <li v-else :class="$route.path === '/user'?'active-channel':''">
             <a class="link-wrapper" @click="toUser">
-              <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%" :src="$store.state.user.userInfo.avatar"></el-image>
+              <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%" alt="not to show"></el-image>
 <!--              <i class="el-icon-user" style="width: 1em; height: 1em; margin-right: 8px"></i>-->
               <span class="channel">
               我的</span
@@ -131,17 +131,17 @@ export default {
     }
   },
   created() {
-    // this.$eventBus.$on('noReadMessage', this.handleMessage);
-    // let token = Cookies.get('web-token')
-    // if(token){
-    //   this.showLogin = false
-    //   this.loginStatus = true
-    // }else{
-    //   this.showLogin = true
-    //   this.loginStatus = false
-    // }
-    // this.getNoReadMessage()
-    // this.getNoReadMessageFlush()
+    this.$eventBus.$on('noReadMessage', this.handleMessage);
+    let token = Cookies.get('web-token')
+    if(token){
+      this.showLogin = false
+      this.loginStatus = true
+    }else{
+      this.showLogin = true
+      this.loginStatus = false
+    }
+    this.getNoReadMessage()
+    this.getNoReadMessageFlush()
   },
   methods: {
     clearKeyword(){
