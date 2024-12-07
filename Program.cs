@@ -1,4 +1,6 @@
 using System.Text;
+using Market.Interfaces;
+using Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +56,9 @@ namespace Market
 						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 					};
 				});
+
+			builder.Services.AddScoped<IFileService, FileService>();
+			
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();

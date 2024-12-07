@@ -1,6 +1,60 @@
 SET CLIENT_ENCODING TO 'UTF8';
 
-SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS "user" CASCADE;
+
+CREATE TABLE "user" (
+    id VARCHAR(19) PRIMARY KEY,
+    avatar VARCHAR(255),
+    intro VARCHAR(255),
+    nick_name VARCHAR(100),
+    email VARCHAR(100),
+    student_id VARCHAR(20),
+    password VARCHAR(100),
+    status INTEGER,
+    update_time BIGINT,
+    create_time BIGINT,
+    address VARCHAR(10),
+    number VARCHAR(9),
+    check_nick_name VARCHAR(100),
+    check_intro VARCHAR(255),
+    check_avatar VARCHAR(255),
+    check_status INTEGER
+);
+
+DROP TABLE IF EXISTS product_type CASCADE;
+
+CREATE TABLE product_type (
+    id VARCHAR(19) PRIMARY KEY,
+    type_code VARCHAR(10) UNIQUE,
+    type_name VARCHAR(20),
+    create_time BIGINT,
+    update_time BIGINT
+);
+
+DROP TABLE IF EXISTS product_info CASCADE;
+
+CREATE TABLE product_info (
+    id VARCHAR(19) PRIMARY KEY,
+    user_id VARCHAR(19),
+    title VARCHAR(100),
+    intro TEXT,
+    image TEXT,
+    price BIGINT,
+    original_price BIGINT,
+    type_code VARCHAR(10),
+    type_name VARCHAR(20),
+    post_type INTEGER,
+    like_count INTEGER,
+    adcode VARCHAR(10),
+    province VARCHAR(10),
+    city VARCHAR(10),
+    district VARCHAR(10),
+    status INTEGER,
+    create_time BIGINT,
+    update_time BIGINT,
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
+    FOREIGN KEY (type_code) REFERENCES product_type (type_code)
+);
 
 DROP TABLE IF EXISTS chat_list CASCADE;
 
@@ -63,7 +117,7 @@ CREATE TABLE payment_order (
     time_create TIMESTAMP,
     time_update TIMESTAMP,
     time_finish TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (pay_type_id) REFERENCES payment_type (id)
 );
 
@@ -83,7 +137,7 @@ CREATE TABLE payment_pay (
     time_create TIMESTAMP,
     time_update TIMESTAMP,
     time_finish TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (order_id) REFERENCES payment_order (id)
 );
 
@@ -104,33 +158,8 @@ CREATE TABLE product_collect (
     product_id VARCHAR(19),
     create_time BIGINT,
     update_time BIGINT,
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (product_id) REFERENCES product_info (id)
-);
-
-DROP TABLE IF EXISTS product_info CASCADE;
-
-CREATE TABLE product_info (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19),
-    title VARCHAR(100),
-    intro TEXT,
-    image TEXT,
-    price BIGINT,
-    original_price BIGINT,
-    type_code VARCHAR(10),
-    type_name VARCHAR(20),
-    post_type INTEGER,
-    like_count INTEGER,
-    adcode VARCHAR(10),
-    province VARCHAR(10),
-    city VARCHAR(10),
-    district VARCHAR(10),
-    status INTEGER,
-    create_time BIGINT,
-    update_time BIGINT,
-    FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (type_code) REFERENCES product_type (type_code)
 );
 
 DROP TABLE IF EXISTS product_order CASCADE;
@@ -173,20 +202,10 @@ CREATE TABLE product_order (
     eva_content TEXT,
     create_time TIMESTAMP,
     update_time TIMESTAMP,
-    FOREIGN KEY (product_user_id) REFERENCES user(id),
+    FOREIGN KEY (product_user_id) REFERENCES "user" (id),
     FOREIGN KEY (product_id) REFERENCES product_info (id),
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (pay_order_id) REFERENCES payment_order (id)
-);
-
-DROP TABLE IF EXISTS product_type CASCADE;
-
-CREATE TABLE product_type (
-    id VARCHAR(19) PRIMARY KEY,
-    type_code VARCHAR(10),
-    type_name VARCHAR(20),
-    create_time BIGINT,
-    update_time BIGINT
 );
 
 DROP TABLE IF EXISTS product_voucher CASCADE;
@@ -214,9 +233,9 @@ CREATE TABLE system_role (
     update_time BIGINT
 );
 
-DROP TABLE IF EXISTS system_user CASCADE;
+DROP TABLE IF EXISTS "system_user" CASCADE;
 
-CREATE TABLE system_user (
+CREATE TABLE "system_user" (
     id VARCHAR(19) PRIMARY KEY,
     username VARCHAR(100),
     password VARCHAR(100),
@@ -227,27 +246,6 @@ CREATE TABLE system_user (
     create_time BIGINT,
     update_time BIGINT,
     FOREIGN KEY (role_id) REFERENCES system_role (id)
-);
-
-DROP TABLE IF EXISTS "user" CASCADE;
-
-CREATE TABLE "user" (
-    id VARCHAR(19) PRIMARY KEY,
-    avatar VARCHAR(255),
-    intro VARCHAR(255),
-    nick_name VARCHAR(100),
-    phone BIGINT,
-    password VARCHAR(100),
-    status INTEGER,
-    update_time BIGINT,
-    create_time BIGINT,
-    province VARCHAR(10),
-    city VARCHAR(10),
-    number VARCHAR(9),
-    check_nick_name VARCHAR(100),
-    check_intro VARCHAR(255),
-    check_avatar VARCHAR(255),
-    check_status INTEGER
 );
 
 DROP TABLE IF EXISTS user_address CASCADE;
@@ -273,9 +271,7 @@ CREATE TABLE voucher_order (
     status INTEGER,
     create_time BIGINT,
     update_time BIGINT,
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (product_id) REFERENCES product_info (id),
     FOREIGN KEY (voucher_id) REFERENCES product_voucher (id)
 );
-
-SET FOREIGN_KEY_CHECKS = 1;
