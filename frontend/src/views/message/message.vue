@@ -69,7 +69,7 @@
         display: inline-block;
         width: 6px;
         height: 19px;
-        background: #3a64ff;
+        background: #ff2442;
         border-radius: 3px;
         margin-right: 2px;
       }

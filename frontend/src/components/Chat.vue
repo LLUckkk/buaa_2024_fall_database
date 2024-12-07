@@ -118,12 +118,12 @@ export default {
     }
   },
   mounted() {
-    this.getProductInfo()
-    this.userInfo = this.$store.state.user.userInfo
-    this.getUserInfo()
-    websocket.Init(this.chatListItem.id, this.userInfo.id);
-    this.getMessage();
-    this.receiveMessage();
+    //this.getProductInfo()
+    //this.userInfo = this.$store.state.user.userInfo
+    //this.getUserInfo()
+    //websocket.Init(this.chatListItem.id, this.userInfo.id);
+    //this.getMessage();
+    //this.receiveMessage();
 
   },
   destroyed() {
@@ -159,10 +159,10 @@ export default {
       this.close();
     },
     getProductInfo(){
-      this.$api.product.getProductInfo({productId: this.productId}).then(res=>{
-        this.productInfo = res.result
-        this.productInfo.image = JSON.parse(this.productInfo.image)[0]
-      })
+      // this.$api.product.getProductInfo({productId: this.productId}).then(res=>{
+      //   this.productInfo = res.result
+      //   this.productInfo.image = JSON.parse(this.productInfo.image)[0]
+      // })
     },
     getUserInfo() {
       this.toUserId = this.userInfo.id === this.chatListItem.fromUserId ? this.chatListItem.toUserId : this.chatListItem.fromUserId

@@ -3,13 +3,17 @@
     <div class="top">
       <header class="mask-paper">
         <a style="display: flex">
-          <img class="logo" style="width: 72px;height: 72px;margin-top: 20px" src="@/assets/logo1.png" />
+          <img class="logo" style="width: 90px;height: 72px;margin-top: 50px" src="@/assets/logo_neww.png" />
           <span
-            style="line-height: 100px;font-weight: bolder;font-size: 30px;margin-left: 20px;letter-spacing: 4px">闲宝交易平台</span>
+            style="line-height: 100px;font-weight: bolder;font-size: 30px;margin-left: 10px;margin-top: 40px;letter-spacing: 2px;font-family: '微软雅黑'">
+            <span style="color: rgb(51.2, 126.4, 204);">航游</span>
+            <span style="color: #ff2442;">集市</span>
+          </span>
+
         </a>
         <div class="tool-box">
         </div>
-        <div class="input-box" id="sujContainer" v-show="$route.path === '/dashboard'">
+        <div class="input-box" id="sujContainer" v-show="$route.path === '/dashboard'"  style="margin-top: 10px;">
           <input type="text" v-model="key" class="search-input" placeholder="搜索你想要的" @focus="focusInput"
             @keyup.enter="searchPage" ref="SearchInput" />
           <div class="input-button">
@@ -83,7 +87,9 @@
             <a class="link-wrapper" @click="toPush()">
               <div
                 style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                  <el-icon size="large" color=#ff2442><Pointer /></el-icon>
+                <el-icon size="large" color=#ff2442>
+                  <Pointer />
+                </el-icon>
               </div>
               <span class="channel">
                 发布</span>
@@ -97,7 +103,9 @@
               <!-- <el-image style="width: 1.5em; height: 1.5em; margin-right: 8px;border-radius: 100%"></el-image> -->
               <div
                 style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
-                  <el-icon size="large" color=#ff2442><User /></el-icon>
+                <el-icon size="large" color=#ff2442>
+                  <User />
+                </el-icon>
               </div>
               <span class="channel">
                 我的</span>

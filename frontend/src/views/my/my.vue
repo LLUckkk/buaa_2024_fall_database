@@ -19,8 +19,8 @@
                   <div class="user-name">{{ userInfo.nickName }}</div>
                 </div>
                 <div class="user-content">
-                  <span class="user-redId">闲宝号：{{ userInfo.number }}</span>
-                  <span class="user-IP"> IP属地：{{ userInfo.province }} {{ userInfo.city }}</span>
+                  <span class="user-redId">ID：{{ userInfo.number }}</span>
+                  <span class="user-IP"> 位置：{{ userInfo.province }} {{ userInfo.city }}</span>
                 </div>
               </div>
             </div>
@@ -76,7 +76,7 @@
     </div>
     <!--抽屉 用户编辑-->
     <div>
-      <el-drawer destroy-on-close @close-drawer="closeDrawer" :show-close="false" :size="'400px'" :visible.sync="drawer" direction="rtl">
+      <el-drawer destroy-on-close @close-drawer="closeDrawer" :show-close="false" :size="'400px'" v-model="drawer" direction="rtl">
         <user_edit v-if="type === 'user'" @close-drawer="closeDrawer"></user_edit>
         <user_address v-if="type === 'address'" @close-drawer="closeDrawer"></user_address>
       </el-drawer>

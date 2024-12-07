@@ -12,7 +12,7 @@
 
             <div class="user-info">
               <!-- <a class>用户名</a> -->
-              <a class>{{item.fromUserNick}}</a>
+              <a class>{{ item.fromUserNick }}</a>
               <!-- <a class>{{ userInfo.id === item.fromUserId ? item.toUserNick : item.fromUserNick }}</a> -->
             </div>
 
@@ -22,7 +22,7 @@
               <div class="msg-count" v-show="item.noReadCount > 0">{{ item.noReadCount }}</div>
             </div>
             <div class="user-info">
-              <div class="interaction-hint"><span>{{item.updateTime}}</span></div>
+              <div class="interaction-hint"><span>{{ item.updateTime }}</span></div>
               <!-- <div class="interaction-hint"><span>{{ $utils.convert.formatTime(item.updateTime) }}</span></div> -->
             </div>
           </div>
@@ -36,8 +36,8 @@
 
     <!--抽屉 聊天侧边栏-->
     <div>
-      <el-drawer @close="closeChat" @open_main="toMain" :size="'450px'" :show-close="false" destroy-on-close
-        :visible.sync="chatVisiable" direction="rtl">
+      <el-drawer @onClose="closeChat" @open_main="toMain" :size="'450px'" :show-close="false"
+         direction="rtl" v-model="chatVisiable">
         <Chat :chat-list-item="chatListItem" @close="closeChat" @open_main="toMain"
           :product-id="chatListItem.productId"></Chat>
       </el-drawer>
@@ -47,24 +47,26 @@
 </template>
 
 <script setup>
-const testChat=[
+const testChat = [
   {
-    chatMessage:{
+    chatMessage: {
       content: "this is a message",
     },
     noReadCount: 5,
-    updateTime : "2024-12-07",
+    updateTime: "2024-12-07",
     productImage: "@/assets/logo.jpg",
     fromUserNick: "hhh",
-  }, 
+    productId: 1,
+  },
   {
-    chatMessage:{
+    chatMessage: {
       content: "this is a message",
     },
     noReadCount: 0,
-    updateTime : "2024-12-07",
+    updateTime: "2024-12-07",
     productImage: "@/assets/logo.jpg",
     fromUserNick: "hhh",
+    productId: 2,
   },
 ]
 </script>
@@ -112,11 +114,14 @@ export default {
       }, 1000)
     },
     toChat(item) {
-      this.$api.chatMessage.updateChatMessageIsRead(item.id).then(res => {
-        item.noReadCount = 0
-        this.chatListItem = item
-        this.chatVisiable = true;
-      })
+      // this.$api.chatMessage.updateChatMessageIsRead(item.id).then(res => {
+      //   item.noReadCount = 0
+      //   this.chatListItem = item
+      //   this.chatVisiable = true;
+      // })
+      item.noReadCount = 0;
+      this.chatListItem = item;
+      this.chatVisiable = true;
     },
     toMain(productId) {
       this.productId = productId

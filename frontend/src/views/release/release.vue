@@ -1,19 +1,12 @@
 <template>
   <div class="container">
     <div class="push-container">
-      <el-form label-position="left" class="check-form" :model="formData" :rules="rules" ref="form" label-width="80px" :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
+      <el-form label-position="left" class="check-form" :model="formData" :rules="rules" ref="form" label-width="80px"
+        :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
         <div class="header"><span class="header-icon"></span><span class="header-title">发布闲置</span></div>
         <div class="img-list">
-          <div class="header-title" style="margin-top: 10px;margin-bottom: 15px;font-size: 18px">图片编辑</div>
-
-          <el-upload
-              v-model:file-list="fileList"
-              action="http://127.0.0.1:5050/upload/image"
-              list-type="picture-card"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :on-success="handleUploadSuccess"
-          >
+          <el-upload v-model:file-list="fileList" action="http://127.0.0.1:5050/upload/image" list-type="picture-card"
+            :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUploadSuccess">
             <div style="line-height: 80px;font-size: 12px;color: #9999b3">+添加优质图</div>
           </el-upload>
 
@@ -23,68 +16,43 @@
         </div>
         <div class="push-content">
           <el-form-item label-width="0" prop="title">
-            <el-input
-                style="margin-left: 15px;"
-                v-model="formData.title"
-                maxlength="20"
-                show-word-limit
-                type="text"
-                placeholder="填写商品标题，可能会更容易卖出哦~"
-                class="input-title"
-            />
+            <el-input style="margin-left: 15px;" v-model="formData.title" maxlength="20" show-word-limit type="text"
+              placeholder="填写商品标题，可能会更容易卖出哦~" class="input-title" />
           </el-form-item>
           <el-form-item label-width="0" prop="intro">
-            <el-input
-                style="margin-left: 15px;"
-                v-model="formData.intro"
-                :rows="5"
-                maxlength="200"
-                show-word-limit
-                type="textarea"
-                placeholder="描述下宝贝的品牌型号、货品来源..."
-                class="input-content"
-            />
+            <el-input style="margin-left: 15px;" v-model="formData.intro" :rows="5" maxlength="200" show-word-limit
+              type="textarea" placeholder="描述下宝贝的品牌型号、货品来源..." class="input-content" />
           </el-form-item>
         </div>
         <div class="btns">
-<!--          <button class="css-fm44j css-osq2ks dyn">-->
-<!--            <span class="btn-content"># 话题</span></button-->
-<!--          >-->
-<!--          <button class="css-fm44j css-osq2ks dyn">-->
-<!--          <span class="btn-content"-->
-<!--          ><div class="smile"></div>-->
-<!--            表情</span-->
-<!--          >-->
-<!--          </button>-->
-          <el-form-item label="商品分类" prop="type" style="width:200px ">
-            <el-select v-model="formData.type" placeholder="选择商品分类" >
-              <el-option v-for="(item,index) in menuList" :key="item.id" :label="item.typeName" :value="item.typeCode"></el-option>
+          <!--          <button class="css-fm44j css-osq2ks dyn">-->
+          <!--            <span class="btn-content"># 话题</span></button-->
+          <!--          >-->
+          <!--          <button class="css-fm44j css-osq2ks dyn">-->
+          <!--          <span class="btn-content"-->
+          <!--          ><div class="smile"></div>-->
+          <!--            表情</span-->
+          <!--          >-->
+          <!--          </button>-->
+          <el-form-item label="商品分类" prop="type" style="width:300px ">
+            <el-select v-model="formData.type" placeholder="选择商品分类">
+              <el-option v-for="(item, index) in menuList" :key="item.id" :label="item.typeName"
+                :value="item.typeCode"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="商品位置" prop="type" style="width:300px ">
+            <el-select v-model="formData.type" placeholder="选择商品位置">
+              <el-option v-for="(item, index) in placeList" :key="item.id" :label="item.typeName"
+                :value="item.typeCode"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="价格">
+            <el-input-number required controls-position="right" v-model="formData.price" :precision="2" :step="1"
+              :min="0"></el-input-number>
           </el-form-item>
         </div>
         <div style="margin-left: 20px">
-          <el-divider style="width: 576px"/>
-        </div>
-        <div>
-          <div class="header-title" style="margin-top: 10px;margin-bottom: 15px;font-size: 18px;padding-left: 20px"> 发布设置</div>
-          <div style="padding-left: 20px">
-            <el-form-item label="宝贝位置">
-              <div  style="cursor: pointer;margin-left:0;border-radius: 7px;color: #857679;" @click="selectAdd">  <i class="el-icon-location-information"></i> {{ formData.province + " " + formData.city }} <i class="el-icon-caret-right"></i></div>
-            </el-form-item>
-            <el-form-item label="发货方式" prop="postType">
-              <el-radio-group v-model="formData.postType" required>
-                <el-radio label="0">邮寄</el-radio>
-                <el-radio label="1">自提</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="价格">
-              <el-input-number required controls-position="right" v-model="formData.price" :precision="2" :step="1" :min="0"></el-input-number>
-            </el-form-item>
-            <el-form-item label="原价">
-              <el-input-number required controls-position="right" v-model="formData.originalPrice" :precision="2" :step="1" :min="0"></el-input-number>
-            </el-form-item>
-
-          </div>
+          <el-divider style="width: 576px" />
         </div>
         <div class="submit">
           <button class="publishBtn" type="submit" @click.prevent="publish()">
@@ -108,7 +76,7 @@
 <script>
 //import gdMapUtil from "@/utils/gdMapUtil";
 //import Address_edit from "@/views/release/address_edit.vue";
-import {Notification} from "element-plus";
+import { Notification } from "element-plus";
 
 export default {
   //components: {Address_edit},
@@ -122,10 +90,14 @@ export default {
       },
       location: "",
       fileList: [],
-      menuList:[],
+      menuList: [{ typeCode: '', typeName: '全部' }, { typeCode: '1', typeName: '电子产品' }, { typeCode: '2', typeName: '书籍资料' },
+      { typeCode: '3', typeName: '服装首饰' }, { typeCode: '4', typeName: '食物饮品' }, { typeCode: '5', typeName: '生活用品' },
+      { typeCode: '6', typeName: "学习用品" }, { typeCode: '7', typeName: "其他" }],
+      placeList: [{ typeCode: '1', typeName: '新北区' }, { typeCode: '2', typeName: '大运村' },
+      { typeCode: '3', typeName: '合一区' }, { typeCode: '4', typeName: '沙河西区' }, { typeCode: '5', typeName: '沙河东区' }],
       formData: {
-        id:'',
-        type:'',
+        id: '',
+        type: '',
         title: '',
         intro: '',
         image: '',
@@ -154,7 +126,7 @@ export default {
         if (valid) {
           this.$api.product.createProductInfo(this.formData).then(res => {
             this.$router.push("/user")
-            Notification({type: 'success', title: '闲宝交易平台', message: '请等待审核通过'})
+            Notification({ type: 'success', title: '闲宝交易平台', message: '请等待审核通过' })
           })
         }
       })
@@ -187,9 +159,9 @@ export default {
     handleUploadSuccess(response, file, fileList) {
       this.fileList = fileList
     },
-    closeDrawer(changeAddress){
-      if(changeAddress){
-        l.GeocoderGetAddress(changeAddress.location.lng, changeAddress.location.lat).then(res=>{
+    closeDrawer(changeAddress) {
+      if (changeAddress) {
+        l.GeocoderGetAddress(changeAddress.location.lng, changeAddress.location.lat).then(res => {
           this.formData.adcode = res.regeocode.addressComponent.adcode
           this.formData.province = res.regeocode.addressComponent.province
           this.formData.city = res.regeocode.addressComponent.city
@@ -201,29 +173,33 @@ export default {
   computed: {
     rules() {
       return {
-        postType: [{required: true, message: '请选择发货方式~', trigger: 'blur'}],
-        intro: [{required: true, message: '有商品描述才能发布哦~', trigger: 'blur'}],
-        title: [{required: true, message: '有商品标题才能发布哦~', trigger: 'blur'}],
-        type: [{required: true, message: '选择商品分类才能发布哦~', trigger: 'blur'}],
+        postType: [{ required: true, message: '请选择发货方式~', trigger: 'blur' }],
+        intro: [{ required: true, message: '有商品描述才能发布哦~', trigger: 'blur' }],
+        title: [{ required: true, message: '有商品标题才能发布哦~', trigger: 'blur' }],
+        type: [{ required: true, message: '选择商品分类才能发布哦~', trigger: 'blur' }],
       }
     }
   }
 }
 </script>
 <style lang="less" scoped>
-/deep/ .push-content .el-input--mini .el-input__inner{
+/deep/ .push-content .el-input--mini .el-input__inner {
   height: 40px;
 }
+
 .check-form .el-form-item__content {
   margin-left: 0 !important;
 }
+
 /deep/ .el-drawer__header {
   display: none;
 }
+
 /deep/ .el-upload-list--picture-card .el-upload-list__item {
   width: 80px;
   height: 80px;
 }
+
 /deep/ .el-upload-list__item.is-success .el-upload-list__item-status-label {
   display: none;
 }
@@ -256,7 +232,7 @@ export default {
         display: inline-block;
         width: 6px;
         height: 19px;
-        background: #3a64ff;
+        background: #ff2442;
         border-radius: 3px;
         margin-right: 2px;
       }
