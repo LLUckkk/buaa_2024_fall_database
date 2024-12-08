@@ -14,24 +14,28 @@ namespace Market.Entities
         public string ProductId { get; set; }
 
         [Column("parent_id")]
-        public string ParentId { get; set; }
+        public string? ParentId { get; set; }
 
         [Column("pub_user_id")]
         public string PubUserId { get; set; }
 
         [Column("parent_user_id")]
-        public string ParentUserId { get; set; }
+        public string? ParentUserId { get; set; }
 
         [Column("pub_nickname")]
         public string PubNickname { get; set; }
 
         [Column("parent_user_nickname")]
-        public string ParentUserNickname { get; set; }
+        public string? ParentUserNickname { get; set; }
 
         [Column("content")]
         public string Content { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }
+
+
+        [ForeignKey("PubUserId")]
+        public User User { get; set; }
     }
 }

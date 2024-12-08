@@ -32,7 +32,7 @@ namespace Market.Models
                 Id = user.Id,
                 Avatar = user.Avatar,
                 Intro = user.Intro,
-                NickName = user.NickName,
+                NickName = user.Nickname,
                 Username = user.Username,
                 Email = user.Email,
                 StudentId = user.StudentId,

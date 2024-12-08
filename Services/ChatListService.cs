@@ -9,8 +9,8 @@ namespace Market.Services {
             // TODO
             return "";
         }
-        public List<ChatList> GetList() {
-            return new List<ChatList>();
+        public List<ChatListObj> GetList() {
+            return new List<ChatListObj>();
         }
         public int GetUnreadCount() {
             return 0;

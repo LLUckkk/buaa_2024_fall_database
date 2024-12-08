@@ -1,6 +1,6 @@
 namespace Market.Models
 {
-    public class ProductOrder
+    public class ProductOrderObj
     {
         public string ProductId { get; set; }
         public string Info { get; set; }

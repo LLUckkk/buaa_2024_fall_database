@@ -65,7 +65,7 @@ namespace Market.Services
 
             if (!string.IsNullOrEmpty(req.Key))
             {
-                query = query.Where(u => u.NickName.Contains(req.Key) || u.Email.Contains(req.Key) || u.Username.Contains(req.Key));
+                query = query.Where(u => u.Nickname.Contains(req.Key) || u.Email.Contains(req.Key) || u.Username.Contains(req.Key));
             }
 
             query = query.Where(u => u.CheckStatus == req.CheckStatus);
@@ -161,7 +161,7 @@ namespace Market.Services
                 Password = _passwordHasher.HashPassword(request.Password),
                 Avatar = "default.png",
                 Email = request.Email,
-                NickName = request.Username,
+                Nickname = request.Username,
                 StudentId = request.StudentId,
                 Address = "Somewhere",
                 CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),

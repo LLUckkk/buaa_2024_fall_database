@@ -21,7 +21,7 @@ namespace Market.Entities
 
         [Column("nick_name")]
         [StringLength(100)]
-        public string? NickName { get; set; }
+        public string? Nickname { get; set; }
 
         [Column("username")]
         [StringLength(100)]

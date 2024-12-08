@@ -2,7 +2,7 @@ using Market.Entities;
 
 namespace Market.Models
 {
-    public class ChatList
+    public class ChatListObj
     {
         public string Id { get; set; }
         public string FromUserId { get; set; }
