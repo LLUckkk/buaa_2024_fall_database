@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using Market.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Market.Interfaces
 {
     public interface IFileService
     {
-        Task<string> UploadImageAsync(IFormFile file);
-        Task<bool> RemoveImageAsync(string fileName);
+        Task<Result<string>> UploadImageAsync(IFormFile file);
+        Task<Result> RemoveImageAsync(string fileName);
     }
 }

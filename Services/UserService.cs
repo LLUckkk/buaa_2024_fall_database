@@ -19,48 +19,48 @@ namespace Market.Services
                 return Result<string>.Fail(ResultCode.Fail, "User already exists");
             }
             var user = CreateUser(req);
-            return Result<string>.Ok(_tokenService.GenerateToken(user));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
         }
 
         public Result<string> Login(UserLogin req)
         {
             var user = _dbcontext.Users.FirstOrDefault(u => u.Username == req.Username);
-            if (user == null || !_passwordHasher.VerifyPassword(user.Password, req.Password))
+            if (user == null || !_passwordHasher.VerifyPassword(req.Password, user.Password))
             {
-                return Result<string>.Fail(ResultCode.NotFindError, "Invalid username or password");
+                return Result<string>.Fail(ResultCode.NotFoundError, "Invalid username or password");
             }
             if (user.Status == 0)
             {
                 return Result<string>.Fail(ResultCode.Fail, "User is disabled");
             }
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            return Result<string>.Ok(_tokenService.GenerateToken(user));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
         }
 
-        public Result<User> GetUserInfo()
+        public Result<UserInfo> GetUserInfo()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
             if (uid == null)
             {
-                return Result<User>.Fail(ResultCode.NotFindError);
+                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
             }
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
-                return Result<User>.Fail(ResultCode.NotFindError);
+                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
             }
-            return Result<User>.Ok(user);
+            return Result<UserInfo>.Ok(UserInfo.FromUser(user));
         }
 
-        public Result<User> GetUserInfo(string id) {
+        public Result<UserInfo> GetUserInfo(string id) {
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
-                return Result<User>.Fail(ResultCode.NotFindError);
+                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
             }
-            return Result<User>.Ok(user);
+            return Result<UserInfo>.Ok(UserInfo.FromUser(user));
         }
-        public Result<Page<User>> getUserList(UserAdminPage req) {
+        public Page<UserInfo> getUserList(UserAdminPage req) {
             var query = _dbcontext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.Key))
@@ -76,15 +76,15 @@ namespace Market.Services
             var totalItems = query.Count();
             var users = query.Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
 
-            var page = new Page<User>
+            var page = new Page<UserInfo>
             {
-                Items = users,
+                Items = users.Select(UserInfo.FromUser).ToList(),
                 Total = totalItems,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
             };
 
-            return Result<Page<User>>.Ok(page);
+            return page;
         }
         public Result UpdateUserInfo(UpdateUserInfo req)
         {
@@ -93,12 +93,12 @@ namespace Market.Services
                 var uid = _tokenService.GetCurrentLoginUserId();
                 if (uid == null)
                 {
-                    return Result.Fail(ResultCode.NotFindError);
+                    return Result.Fail(ResultCode.NotFoundError);
                 }
                 var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
                 if (user == null)
                 {
-                    return Result.Fail(ResultCode.NotFindError);
+                    return Result.Fail(ResultCode.NotFoundError);
                 }
 
                 if (req.NickName != null)
@@ -133,12 +133,12 @@ namespace Market.Services
             var uid = _tokenService.GetCurrentLoginUserId();
             if (uid == null)
             {
-                return Result.Fail(ResultCode.NotFindError);
+                return Result.Fail(ResultCode.NotFoundError);
             }
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
-                return Result.Fail(ResultCode.NotFindError);
+                return Result.Fail(ResultCode.NotFoundError);
             }
             if (req.Password == null || req.PasswordCheck == null)
             {
@@ -156,8 +156,10 @@ namespace Market.Services
         {
             var user = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 Username = request.Username,
                 Password = _passwordHasher.HashPassword(request.Password),
+                Avatar = "default.png",
                 Email = request.Email,
                 NickName = request.Username,
                 StudentId = request.StudentId,
@@ -169,6 +171,16 @@ namespace Market.Services
             _dbcontext.Users.Add(user);
             _dbcontext.SaveChanges();
             return user;
+        }
+
+        public User? GetCurrentUser()
+        {
+            var uid = _tokenService.GetCurrentLoginUserId();
+            if (uid == null)
+            {
+                return null;
+            }
+            return _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
         }
     }
 }

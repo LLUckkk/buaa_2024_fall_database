@@ -7,7 +7,7 @@ namespace Market.Entities
     public class SystemRole
     {
         [Key]
-        [Column("id", TypeName = "varchar(19)")]
+        [Column("id", TypeName = "varchar(36)")]
         public string Id { get; set; }
 
         [Column("role_code", TypeName = "varchar(20)")]
@@ -21,7 +21,5 @@ namespace Market.Entities
 
         [Column("update_time")]
         public long UpdateTime { get; set; }
-
-        public ICollection<SystemUser> SystemUsers { get; set; }
     }
 }

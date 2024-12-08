@@ -13,9 +13,6 @@ namespace Market.Entities
         [Column("user_id")]
         public string UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-
         [Column("title")]
         public string Title { get; set; }
 
@@ -31,12 +28,8 @@ namespace Market.Entities
         [Column("original_price")]
         public long OriginalPrice { get; set; }
 
-        [ForeignKey("ProductType")]
         [Column("type_code")]
         public string TypeCode { get; set; }
-
-        [ForeignKey("TypeCode")]
-        public ProductType ProductType { get; set; }
 
         [Column("type_name")]
         public string TypeName { get; set; }

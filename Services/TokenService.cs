@@ -11,7 +11,7 @@ public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private Dictionary<string, DateTime> _tokens = new Dictionary<string, DateTime>();
+    private readonly Dictionary<string, DateTime> _tokens = new();
 
     public TokenService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
@@ -19,11 +19,11 @@ public class TokenService : ITokenService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string GenerateToken(User user)
+    public string GenerateToken(string user)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user),
         };
 
         var jwtKey = _configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key is not configured.");
@@ -90,6 +90,10 @@ public class TokenService : ITokenService
     public void LogoutCurrentUser()
     {
         var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        if (string.IsNullOrEmpty(token))
+        {
+            return;
+        }
         _tokens.Remove(token);
     }
 

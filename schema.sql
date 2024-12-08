@@ -3,7 +3,7 @@ SET CLIENT_ENCODING TO 'UTF8';
 DROP TABLE IF EXISTS "user" CASCADE;
 
 CREATE TABLE "user" (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     avatar VARCHAR(255),
     intro VARCHAR(255),
     nick_name VARCHAR(100),
@@ -24,7 +24,7 @@ CREATE TABLE "user" (
 DROP TABLE IF EXISTS product_type CASCADE;
 
 CREATE TABLE product_type (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     type_code VARCHAR(10) UNIQUE,
     type_name VARCHAR(20),
     create_time BIGINT,
@@ -34,8 +34,8 @@ CREATE TABLE product_type (
 DROP TABLE IF EXISTS product_info CASCADE;
 
 CREATE TABLE product_info (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19),
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36),
     title VARCHAR(100),
     intro TEXT,
     image TEXT,
@@ -59,13 +59,13 @@ CREATE TABLE product_info (
 DROP TABLE IF EXISTS chat_list CASCADE;
 
 CREATE TABLE chat_list (
-    id VARCHAR(19) PRIMARY KEY,
-    product_id VARCHAR(19) REFERENCES product_info (id),
+    id VARCHAR(36) PRIMARY KEY,
+    product_id VARCHAR(36) REFERENCES product_info (id),
     product_image VARCHAR(255),
-    from_user_id VARCHAR(19) NOT NULL,
+    from_user_id VARCHAR(36) NOT NULL,
     from_user_avatar VARCHAR(100),
     from_user_nick VARCHAR(100),
-    to_user_id VARCHAR(19) NOT NULL,
+    to_user_id VARCHAR(36) NOT NULL,
     to_user_nick VARCHAR(100),
     to_user_avatar VARCHAR(100),
     create_time BIGINT,
@@ -75,10 +75,10 @@ CREATE TABLE chat_list (
 DROP TABLE IF EXISTS chat_message CASCADE;
 
 CREATE TABLE chat_message (
-    id VARCHAR(19) PRIMARY KEY,
-    chat_list_id VARCHAR(19) NOT NULL REFERENCES chat_list (id),
-    from_user_id VARCHAR(19) NOT NULL,
-    to_user_id VARCHAR(19) NOT NULL,
+    id VARCHAR(36) PRIMARY KEY,
+    chat_list_id VARCHAR(36) NOT NULL REFERENCES chat_list (id),
+    from_user_id VARCHAR(36) NOT NULL,
+    to_user_id VARCHAR(36) NOT NULL,
     from_user_nick VARCHAR(100),
     to_user_nick VARCHAR(100),
     content TEXT,
@@ -89,12 +89,12 @@ CREATE TABLE chat_message (
 DROP TABLE IF EXISTS comment CASCADE;
 
 CREATE TABLE comment (
-    id VARCHAR(19) PRIMARY KEY,
-    product_id VARCHAR(19),
-    parent_id VARCHAR(19) REFERENCES comment (id),
-    pub_user_id VARCHAR(19),
+    id VARCHAR(36) PRIMARY KEY,
+    product_id VARCHAR(36),
+    parent_id VARCHAR(36) REFERENCES comment (id),
+    pub_user_id VARCHAR(36),
     pub_nickname VARCHAR(100),
-    parent_user_id VARCHAR(19),
+    parent_user_id VARCHAR(36),
     parent_user_nickname VARCHAR(255),
     content TEXT,
     create_time BIGINT
@@ -103,14 +103,14 @@ CREATE TABLE comment (
 DROP TABLE IF EXISTS payment_order CASCADE;
 
 CREATE TABLE payment_order (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     order_number VARCHAR(32),
-    user_id VARCHAR(19),
+    user_id VARCHAR(36),
     pay_price BIGINT,
     pay_type_id BIGINT,
     pay_type_name VARCHAR(200),
     order_status INTEGER,
-    payment_pay_id VARCHAR(19),
+    payment_pay_id VARCHAR(36),
     payment_status INTEGER,
     payment_type VARCHAR(20),
     process_status INTEGER,
@@ -124,9 +124,9 @@ CREATE TABLE payment_order (
 DROP TABLE IF EXISTS payment_pay CASCADE;
 
 CREATE TABLE payment_pay (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19),
-    order_id VARCHAR(19),
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36),
+    order_id VARCHAR(36),
     payment_price BIGINT,
     payment_type VARCHAR(30),
     payment_result_data TEXT,
@@ -153,9 +153,9 @@ CREATE TABLE payment_type (
 DROP TABLE IF EXISTS product_collect CASCADE;
 
 CREATE TABLE product_collect (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19),
-    product_id VARCHAR(19),
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36),
+    product_id VARCHAR(36),
     create_time BIGINT,
     update_time BIGINT,
     FOREIGN KEY (user_id) REFERENCES "user" (id),
@@ -165,11 +165,11 @@ CREATE TABLE product_collect (
 DROP TABLE IF EXISTS product_order CASCADE;
 
 CREATE TABLE product_order (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     order_number VARCHAR(32),
-    product_user_id VARCHAR(19),
-    product_id VARCHAR(19),
-    user_id VARCHAR(19),
+    product_user_id VARCHAR(36),
+    product_id VARCHAR(36),
+    user_id VARCHAR(36),
     product_title VARCHAR(100),
     product_img TEXT,
     product_price BIGINT,
@@ -196,7 +196,7 @@ CREATE TABLE product_order (
     ship_company VARCHAR(100),
     ship_time TIMESTAMP,
     pay_status INTEGER,
-    pay_order_id VARCHAR(19),
+    pay_order_id VARCHAR(36),
     deal_status INTEGER DEFAULT 0,
     eva_score INTEGER,
     eva_content TEXT,
@@ -211,8 +211,8 @@ CREATE TABLE product_order (
 DROP TABLE IF EXISTS product_voucher CASCADE;
 
 CREATE TABLE product_voucher (
-    id VARCHAR(19) PRIMARY KEY,
-    product_id VARCHAR(19) NOT NULL REFERENCES product_info (id),
+    id VARCHAR(36) PRIMARY KEY,
+    product_id VARCHAR(36) NOT NULL REFERENCES product_info (id),
     title VARCHAR(255),
     voucher_value BIGINT,
     stock INTEGER,
@@ -226,7 +226,7 @@ CREATE TABLE product_voucher (
 DROP TABLE IF EXISTS system_role CASCADE;
 
 CREATE TABLE system_role (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     role_code VARCHAR(20),
     role_name VARCHAR(20),
     create_time BIGINT,
@@ -236,11 +236,11 @@ CREATE TABLE system_role (
 DROP TABLE IF EXISTS "system_user" CASCADE;
 
 CREATE TABLE "system_user" (
-    id VARCHAR(19) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     username VARCHAR(100),
     password VARCHAR(100),
     name VARCHAR(20),
-    role_id VARCHAR(19),
+    role_id VARCHAR(36),
     role_code VARCHAR(20),
     role_name VARCHAR(20),
     create_time BIGINT,
@@ -251,8 +251,8 @@ CREATE TABLE "system_user" (
 DROP TABLE IF EXISTS user_address CASCADE;
 
 CREATE TABLE user_address (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19) NOT NULL REFERENCES "user" (id),
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36) NOT NULL REFERENCES "user" (id),
     name VARCHAR(10),
     phone VARCHAR(20),
     address VARCHAR(255),
@@ -263,10 +263,10 @@ CREATE TABLE user_address (
 DROP TABLE IF EXISTS voucher_order CASCADE;
 
 CREATE TABLE voucher_order (
-    id VARCHAR(19) PRIMARY KEY,
-    user_id VARCHAR(19),
-    product_id VARCHAR(19),
-    voucher_id VARCHAR(19),
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36),
+    product_id VARCHAR(36),
+    voucher_id VARCHAR(36),
     voucher_value BIGINT,
     status INTEGER,
     create_time BIGINT,

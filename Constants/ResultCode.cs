@@ -4,7 +4,7 @@ namespace Market.Constants
     {
         public static readonly ResultCode Success = new ResultCode(1, "操作成功");
         public static readonly ResultCode Fail = new ResultCode(0, "操作失败");
-        public static readonly ResultCode NotFindError = new ResultCode(10001, "未查询到信息");
+        public static readonly ResultCode NotFoundError = new ResultCode(10001, "未查询到信息");
         public static readonly ResultCode SaveError = new ResultCode(10002, "保存信息失败");
         public static readonly ResultCode UpdateError = new ResultCode(10003, "更新信息失败");
         public static readonly ResultCode DeleteError = new ResultCode(100012, "删除信息失败");

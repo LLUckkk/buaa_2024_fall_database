@@ -12,9 +12,6 @@ namespace Market.Entities {
         [Column("product_id")]
         public string ProductId { get; set; }
 
-        [ForeignKey("ProductId")]
-        public ProductInfo Product { get; set; }
-
         [Column("title")]
         public string Title { get; set; }
 

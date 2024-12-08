@@ -13,14 +13,8 @@ namespace Market.Entities
         [Column("user_id")]
         public string UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-
         [Column("product_id")]
         public string ProductId { get; set; }
-
-        [ForeignKey("ProductId")]
-        public ProductInfo Product { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }

@@ -57,8 +57,15 @@ namespace Market
 					};
 				});
 
+			builder.Services.AddHttpContextAccessor();
+			builder.Services.AddScoped<IAppLogger<string>, AppLogger>();
+			builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 			builder.Services.AddScoped<IFileService, FileService>();
-			
+			builder.Services.AddScoped<ITokenService, TokenService>();
+			builder.Services.AddScoped<IUserService, UserService>();
+
+			builder.Services.AddScoped<ClearOldTokenTask>();
+
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();

@@ -7,7 +7,7 @@ namespace Market.Entities
     public class ProductType
     {
         [Key]
-        [Column("id", TypeName = "VARCHAR(19)")]
+        [Column("id", TypeName = "VARCHAR(36)")]
         public string Id { get; set; }
 
         [Column("type_code", TypeName = "VARCHAR(10)")]

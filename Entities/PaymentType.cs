@@ -11,7 +11,7 @@ namespace Market.Entities
         public long Id { get; set; }
 
         [Column("type_name")]
-        [MaxLength(200)]
+        [StringLength(200)]
         public string TypeName { get; set; }
 
         [Column("wx_pay")]

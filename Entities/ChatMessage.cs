@@ -13,9 +13,6 @@ namespace Market.Entities
         [Column("chat_list_id")]
         public string ChatListId { get; set; }
 
-        [ForeignKey("ChatListId")]
-        public ChatList ChatList { get; set; }
-
         [Column("from_user_id")]
         public string FromUserId { get; set; }
 

@@ -22,9 +22,6 @@ namespace Market.Entities
         [Column("role_id")]
         public string RoleId { get; set; }
 
-        [ForeignKey("RoleId")]
-        public SystemRole Role { get; set; }
-
         [Column("role_code")]
         public string RoleCode { get; set; }
 

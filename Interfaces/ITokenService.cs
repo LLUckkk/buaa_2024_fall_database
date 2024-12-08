@@ -4,7 +4,7 @@ namespace Market.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        string GenerateToken(string user);
         string? ValidateToken(string token);
         string? GetCurrentLoginUserId();
         void LogoutCurrentUser();

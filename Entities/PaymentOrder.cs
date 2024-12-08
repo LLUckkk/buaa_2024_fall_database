@@ -6,13 +6,13 @@ namespace Market.Entities
     public class PaymentOrder
     {
         [Key]
-        [Column(TypeName = "varchar(19)")]
+        [Column(TypeName = "varchar(36)")]
         public string Id { get; set; }
 
         [Column(TypeName = "varchar(32)")]
         public string OrderNumber { get; set; }
 
-        [Column(TypeName = "varchar(19)")]
+        [Column(TypeName = "varchar(36)")]
         public string UserId { get; set; }
 
         [Column(TypeName = "bigint")]
@@ -27,7 +27,7 @@ namespace Market.Entities
         [Column(TypeName = "int")]
         public int OrderStatus { get; set; }
 
-        [Column(TypeName = "varchar(19)")]
+        [Column(TypeName = "varchar(36)")]
         public string PaymentPayId { get; set; }
 
         [Column(TypeName = "int")]

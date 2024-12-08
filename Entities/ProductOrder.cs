@@ -15,20 +15,11 @@ public class ProductOrder
     [Column("product_user_id")]
     public string ProductUserId { get; set; }
 
-    [ForeignKey("ProductUserId")]
-    public User ProductUser { get; set; }
-
     [Column("product_id")]
     public string ProductId { get; set; }
 
-    [ForeignKey("ProductId")]
-    public ProductInfo Product { get; set; }
-
     [Column("user_id")]
     public string UserId { get; set; }
-
-    [ForeignKey("UserId")]
-    public User User { get; set; }
 
     [Column("product_title")]
     public string ProductTitle { get; set; }
@@ -110,9 +101,6 @@ public class ProductOrder
 
     [Column("pay_order_id")]
     public string PayOrderId { get; set; }
-
-    [ForeignKey("PayOrderId")]
-    public PaymentOrder PaymentOrder { get; set; }
 
     [Column("deal_status")]
     public int DealStatus { get; set; } = 0;

@@ -8,20 +8,20 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        [StringLength(19)]
+        [StringLength(36)]
         public string Id { get; set; }
 
         [Column("avatar")]
         [StringLength(255)]
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         [Column("intro")]
         [StringLength(255)]
-        public string Intro { get; set; }
+        public string? Intro { get; set; }
 
         [Column("nick_name")]
         [StringLength(100)]
-        public string NickName { get; set; }
+        public string? NickName { get; set; }
 
         [Column("username")]
         [StringLength(100)]
@@ -51,32 +51,21 @@ namespace Market.Entities
 
         [Column("address")]
         [StringLength(10)]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [Column("check_nick_name")]
         [StringLength(100)]
-        public string CheckNickName { get; set; }
+        public string? CheckNickName { get; set; }
 
         [Column("check_intro")]
         [StringLength(255)]
-        public string CheckIntro { get; set; }
+        public string? CheckIntro { get; set; }
 
         [Column("check_avatar")]
         [StringLength(255)]
-        public string CheckAvatar { get; set; }
+        public string? CheckAvatar { get; set; }
 
         [Column("check_status")]
         public int CheckStatus { get; set; }
-
-        public ICollection<ProductInfo> ProductInfos { get; set; }
-        public ICollection<ChatList> ChatListsFrom { get; set; }
-        public ICollection<ChatList> ChatListsTo { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<PaymentOrder> PaymentOrders { get; set; }
-        public ICollection<PaymentPay> PaymentPays { get; set; }
-        public ICollection<ProductCollect> ProductCollects { get; set; }
-        public ICollection<ProductOrder> ProductOrders { get; set; }
-        public ICollection<UserAddress> UserAddresses { get; set; }
-        public ICollection<VoucherOrder> VoucherOrders { get; set; }
     }
 }

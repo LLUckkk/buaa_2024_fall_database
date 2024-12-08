@@ -8,15 +8,12 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        [StringLength(19)]
+        [StringLength(36)]
         public string Id { get; set; }
 
         [Column("user_id")]
-        [StringLength(19)]
+        [StringLength(36)]
         public string UserId { get; set; }
-
-        [ForeignKey("UserId")]
-        public User User { get; set; }
 
         [Column("name")]
         [StringLength(10)]
