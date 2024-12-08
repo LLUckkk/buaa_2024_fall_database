@@ -52,7 +52,7 @@ namespace Market.Services
             return Result<User>.Ok(user);
         }
 
-        Result<User> GetUserInfo(string id) {
+        public Result<User> GetUserInfo(string id) {
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
@@ -86,7 +86,7 @@ namespace Market.Services
 
             return Result<Page<User>>.Ok(page);
         }
-        Result UpdateUserInfo(UpdateUserInfo req)
+        public Result UpdateUserInfo(UpdateUserInfo req)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Market.Services
                 return Result.Fail(ResultCode.UpdateError);
             }
         }
-        Result UpdateUserPassword(UpdateUserInfo req)
+        public Result UpdateUserPassword(UpdateUserInfo req)
         {
             var uid = _tokenService.GetCurrentLoginUserId();
             if (uid == null)

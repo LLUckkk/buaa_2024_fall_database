@@ -11,6 +11,7 @@ public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private Dictionary<string, DateTime> _tokens = new Dictionary<string, DateTime>();
 
     public TokenService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
@@ -36,7 +37,9 @@ public class TokenService : ITokenService
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: creds);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
+        _tokens.Add(tokenStr, token.ValidTo);
+        return tokenStr;
     }
 
     public string? ValidateToken(string? token)
@@ -77,6 +80,28 @@ public class TokenService : ITokenService
     public string? GetCurrentLoginUserId()
     {
         var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        if (string.IsNullOrEmpty(token) || !_tokens.ContainsKey(token))
+        {
+            return null;
+        }
         return ValidateToken(token);
+    }
+
+    public void LogoutCurrentUser()
+    {
+        var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        _tokens.Remove(token);
+    }
+
+    public void ClearOldToken()
+    {
+        var now = DateTimeOffset.UtcNow;
+        foreach (var token in _tokens)
+        {
+            if (token.Value < now)
+            {
+                _tokens.Remove(token.Key);
+            }
+        }
     }
 }

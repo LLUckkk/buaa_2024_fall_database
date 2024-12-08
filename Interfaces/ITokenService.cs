@@ -7,6 +7,8 @@ namespace Market.Interfaces
         string GenerateToken(User user);
         string? ValidateToken(string token);
         string? GetCurrentLoginUserId();
+        void LogoutCurrentUser();
+        void ClearOldToken();
     }
 
 }
