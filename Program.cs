@@ -1,9 +1,11 @@
 using System.Text;
 using Market.Interfaces;
 using Market.Services;
+using Market.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -58,14 +60,22 @@ namespace Market
 				});
 
 			builder.Services.AddHttpContextAccessor();
-			builder.Services.AddScoped<IAppLogger<string>, AppLogger>();
-			builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-			builder.Services.AddScoped<IFileService, FileService>();
-			builder.Services.AddScoped<ITokenService, TokenService>();
+
+			builder.Services.AddSingleton<IAppLogger<string>, AppLogger>();
+			builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+			builder.Services.AddSingleton<ITokenService, TokenService>();
+
+			builder.Services.AddScoped<IChatListService, ChatListService>();
 			builder.Services.AddScoped<IUserService, UserService>();
+			builder.Services.AddScoped<IUserAddressService, UserAddressService>();
+			builder.Services.AddScoped<IFileService, FileService>();
+			builder.Services.AddScoped<IProductCollectService, ProductCollectService>();
+			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+			builder.Services.AddScoped<ISystemUserService, SystemUserService>();
+			builder.Services.AddScoped<IVoucherService, VoucherService>();
 
-			builder.Services.AddScoped<ClearOldTokenTask>();
-
+			builder.Services.AddHostedService<ClearOldTokenTask>();
+			builder.Services.AddHostedService<SaveDatabaseChangesTask>();
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();
