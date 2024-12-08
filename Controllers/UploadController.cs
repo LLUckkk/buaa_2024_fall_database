@@ -25,5 +25,16 @@ namespace Market.Controllers
             var fileName = await _fileService.UploadImageAsync(file);
             return Ok(new { FileName = fileName });
         }
+
+        [HttpGet("image/delete")]
+        public async Task<IActionResult> DeleteImage([FromQuery] string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest("File name is required.");
+
+            await _fileService.RemoveImageAsync(fileName);
+            return Ok();
+
+        }
     }
 }

@@ -23,6 +23,10 @@ namespace Market.Entities
         [StringLength(100)]
         public string NickName { get; set; }
 
+        [Column("username")]
+        [StringLength(100)]
+        public string Username { get; set; }
+
         [Column("email")]
         [StringLength(100)]
         [EmailAddress]
@@ -48,10 +52,6 @@ namespace Market.Entities
         [Column("address")]
         [StringLength(10)]
         public string Address { get; set; }
-
-        [Column("number")]
-        [StringLength(9)]
-        public string Number { get; set; }
 
         [Column("check_nick_name")]
         [StringLength(100)]

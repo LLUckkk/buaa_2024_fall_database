@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Market.Entities;
 
-namespace Market
+namespace Market.Services
 {
     public class ApplicationDbContext : DbContext
     {

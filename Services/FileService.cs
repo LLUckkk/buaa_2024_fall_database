@@ -27,5 +27,16 @@ namespace Market.Services
 
             return fileName;
         }
+
+        public async Task<bool> RemoveImageAsync(string fileName)
+        {
+            var fullPath = Path.Combine(_imagePath, fileName);
+            if (File.Exists(fullPath))
+            {
+                await Task.Run(() => File.Delete(fullPath));
+                return true;
+            }
+            return false;
+        }
     }
 }
