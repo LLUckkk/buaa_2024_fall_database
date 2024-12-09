@@ -4,14 +4,14 @@ namespace Market.Interfaces
 {
     public interface IProductInfoService
     {
-        Result CreateProductInfo(ProductInfo req);
+        Result CreateProductInfo(ProductInfoObj req);
         List<ProductInfoPageContent> GetProductInfoList(ProductInfoPage req);
         Result<ProductInfoDetail> GetProductInfo(string id);
-        List<ProductInfo> GetMyProductInfoList();
+        List<ProductInfoObj> GetMyProductInfoList();
         Result CreateLike(string id);
-        Page<ProductInfo> GetProductInfoPage(SystemProductInfoPage req);
+        Page<ProductInfoObj> GetProductInfoPage(SystemProductInfoPage req);
         Result<ProductInfoAdminDetail> GetProductInfoAdminDetail(string id);
-        Result<List<ProductInfo>> GetMyProductCollectionInfoList();
+        Result<List<ProductInfoObj>> GetMyProductCollectionInfoList();
         Result ApproveProduct(string id);
         Result RejectProduct(string id);
         Result HideProduct(string id);

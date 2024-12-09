@@ -3,9 +3,9 @@ using Market.Services;
 
 namespace Market.Tasks
 {
-    public class PaymentTasks(ILogger<PaymentTasks> logger, IServiceProvider serviceProvider) : IHostedService, IDisposable
+    public class TimeoutTasks(ILogger<TimeoutTasks> logger, IServiceProvider serviceProvider) : IHostedService, IDisposable
     {
-        private readonly ILogger<PaymentTasks> _logger = logger;
+        private readonly ILogger<TimeoutTasks> _logger = logger;
         private readonly IServiceProvider _serviceProvider = serviceProvider;
         private Timer _timer { get; set; }
 
@@ -27,6 +27,10 @@ namespace Market.Tasks
                 );
                 dbContext.PaymentOrders.Where(o => o.ProcessStatus == 1 && o.PaymentStatus == 9).ToList().ForEach(o =>
                     paymentService.PaymentOrderStatusUpdateCallback(o)
+                );
+                var productOrderService = scope.ServiceProvider.GetRequiredService<IProductOrderService>();
+                dbContext.ProductOrders.Where(o => o.DealStatus == 2 && o.CreateTime.AddMinutes(10) < DateTime.Now).ToList().ForEach(o =>
+                    productOrderService.ClearOutdatedOrder(o)
                 );
             }
         }

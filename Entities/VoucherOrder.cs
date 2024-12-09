@@ -12,8 +12,14 @@ namespace Market.Entities
         [Column("user_id")]
         public string? UserId { get; set; }
 
+        [Column("product_id")]
+        public string? ProductId { get; set; }
+
         [Column("voucher_id")]
         public string? VoucherId { get; set; }
+
+        [Column("voucher_value")]
+        public long VoucherValue { get; set; }
 
         [Column("status")]
         public int Status { get; set; }

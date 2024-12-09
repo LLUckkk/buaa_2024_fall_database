@@ -5,8 +5,8 @@ namespace Market.Interfaces
 {
     public interface IProductOrderService
     {
-        Result<string> CreateProductOrder(string productId, UserAddress address, string extraInfo);
-        void ClearOutdatedOrders();
+        Result<string> CreateProductOrder(string productId, string info, string address, string name, string phone);
+        void ClearOutdatedOrder(ProductOrder order);
         Result<List<ProductOrder>> GetMySellOrderList();
         Result<List<ProductOrder>> GetMyBuyOrderList();
 

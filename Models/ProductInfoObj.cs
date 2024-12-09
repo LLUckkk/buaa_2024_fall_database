@@ -1,6 +1,6 @@
 namespace Market.Models
 {
-    public class ProductInfo
+    public class ProductInfoObj
     {
         public string Title { get; set; }
         public string Intro { get; set; }

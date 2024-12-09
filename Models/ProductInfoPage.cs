@@ -1,6 +1,6 @@
 namespace Market.Models
 {
-    public class ProductInfoPage : Page<ProductInfo>
+    public class ProductInfoPage : Page<ProductInfoObj>
     {
         public string TypeCode { get; set; }
         public string Key { get; set; }

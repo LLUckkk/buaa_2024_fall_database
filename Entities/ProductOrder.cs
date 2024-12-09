@@ -67,7 +67,7 @@ public class ProductOrder
     public string PostMode { get; set; }
 
     [Column("post_self_code")]
-    public string PostSelfCode { get; set; }
+    public string? PostSelfCode { get; set; }
 
     [Column("post_username")]
     public string PostUsername { get; set; }
@@ -76,7 +76,7 @@ public class ProductOrder
     public string PostPhone { get; set; }
 
     [Column("post_address")]
-    public string PostAddress { get; set; }
+    public string? PostAddress { get; set; }
 
     [Column("ship_username")]
     public string ShipUsername { get; set; }
