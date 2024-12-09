@@ -1,3 +1,4 @@
+using Market.Entities;
 using Market.Models;
 
 namespace Market.Interfaces
@@ -5,13 +6,13 @@ namespace Market.Interfaces
     public interface IProductInfoService
     {
         Result CreateProductInfo(ProductInfoObj req);
-        List<ProductInfoPageContent> GetProductInfoList(ProductInfoPage req);
+        Result<List<ProductInfoDetail>> GetProductInfoList(ProductInfoPage req);
         Result<ProductInfoDetail> GetProductInfo(string id);
-        List<ProductInfoObj> GetMyProductInfoList();
+        Result<List<ProductInfo>> GetMyProductInfoList();
         Result CreateLike(string id);
-        Page<ProductInfoObj> GetProductInfoPage(SystemProductInfoPage req);
+        Result<Page<ProductInfoDetail>> GetProductInfoPage(SystemProductInfoPage req);
         Result<ProductInfoAdminDetail> GetProductInfoAdminDetail(string id);
-        Result<List<ProductInfoObj>> GetMyProductCollectionInfoList();
+        Result<List<ProductInfoDetail>> GetMyProductCollectionInfoList();
         Result ApproveProduct(string id);
         Result RejectProduct(string id);
         Result HideProduct(string id);

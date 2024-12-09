@@ -33,7 +33,7 @@ namespace Market.Services
             var po = new ProductOrder
             {
                 Id = Guid.NewGuid().ToString(),
-                OrderNumber = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999),
+                OrderNumber = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999),
                 ProductId = productId,
                 ProductUserId = product.UserId,
                 UserId = user.Id,
@@ -53,8 +53,8 @@ namespace Market.Services
                 PostPhone = phone,
                 PostAddress = product.PostType == 1 ? null : address,
                 DealStatus = 0,
-                CreateTime = DateTime.Now,
-                UpdateTime = DateTime.Now,
+                CreateTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow,
             };
             var VoucherOrder = _dbContext.VoucherOrders.FirstOrDefault(v => v.UserId == user.Id && v.ProductId == productId && v.Status == 9);
             if (VoucherOrder != null)
@@ -84,7 +84,7 @@ namespace Market.Services
         {
             order.PostSelfCode = "";
             order.DealStatus = 1;
-            order.UpdateTime = DateTime.Now;
+            order.UpdateTime = DateTime.UtcNow;
             _dbContext.ProductOrders.Update(order);
         }
         public Result<List<ProductOrder>> GetMySellOrderList()
@@ -170,20 +170,20 @@ namespace Market.Services
 
         public Result<long> GetTodayCount() {
             var startDay = DateTime.Today;
-            var endDay = DateTime.Now;
+            var endDay = DateTime.UtcNow;
             var count = _dbContext.ProductOrders.Count(o => o.CreateTime >= startDay && o.CreateTime <= endDay);
             return Result<long>.Ok(count);
         }
         public Result<long> GetMonthCount() {
-            var startDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            var endDay = DateTime.Now;
+            var startDay = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+            var endDay = DateTime.UtcNow;
             var count = _dbContext.ProductOrders.Count(o => o.CreateTime >= startDay && o.CreateTime <= endDay);
             return Result<long>.Ok(count);
         }
         public Result<long> GetTodayTurnover() {
             long money = 0L;
             var startDay = DateTime.Today;
-            var endDay = DateTime.Now;
+            var endDay = DateTime.UtcNow;
 
             var list = _dbContext.ProductOrders.Where(o => o.CreateTime >= startDay && o.CreateTime <= endDay).ToList();
             foreach (var productOrder in list)
@@ -194,8 +194,8 @@ namespace Market.Services
         }
         public Result<long> GetMonthTurnover() {
             long money = 0L;
-            var startDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            var endDay = DateTime.Now;
+            var startDay = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+            var endDay = DateTime.UtcNow;
 
             var list = _dbContext.ProductOrders.Where(o => o.CreateTime >= startDay && o.CreateTime <= endDay).ToList();
             foreach (var productOrder in list)

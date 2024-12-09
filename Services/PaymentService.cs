@@ -28,7 +28,7 @@ namespace Market.Services
             var paymentOrder = new PaymentOrder
             {
                 Id = Guid.NewGuid().ToString(),
-                OrderNumber = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999),
+                OrderNumber = DateTime.UtcNow.ToString("yyyyMMddHHmmss") + new Random().Next(1000, 9999),
                 UserId = user.Id,
                 PayPrice = productOrder.Price,
                 PayTypeId = 1,
@@ -36,8 +36,8 @@ namespace Market.Services
                 OrderStatus = 0,
                 PaymentStatus = 0,
                 ProcessStatus = 0,
-                TimeCreate = DateTime.Now,
-                TimeUpdate = DateTime.Now,
+                TimeCreate = DateTime.UtcNow,
+                TimeUpdate = DateTime.UtcNow,
             };
             _dbContext.PaymentOrders.Add(paymentOrder);
             productOrder.PayOrderId = paymentOrder.Id;
@@ -49,7 +49,7 @@ namespace Market.Services
             if (order.PayTypeId == 1)
             {
                 order.PaymentStatus = 9;
-                order.TimeFinish = DateTime.Now;
+                order.TimeFinish = DateTime.UtcNow;
                 _dbContext.PaymentOrders.Update(order);
                 _dbContext.ProductOrders.Where(o => o.PayOrderId == order.Id).ToList().ForEach(o =>
                 {
@@ -109,7 +109,7 @@ namespace Market.Services
             {
                 return Result<string>.Fail(ResultCode.Fail);
             }
-            if (order.TimeCreate.AddMinutes(5) < DateTime.Now)
+            if (order.TimeCreate.AddMinutes(5) < DateTime.UtcNow)
             {
                 return Result<string>.Fail(ResultCode.Fail, "订单已过期");
             }
@@ -121,15 +121,15 @@ namespace Market.Services
                 OrderId = order.Id,
                 PaymentPrice = (long)(order.PayPrice * type.WxPay),
                 PaymentType = "weixin",
-                PaymentTimeStart = DateTime.Now.ToString("yyyyMMssHHmmss"),
-                PaymentTimeExpire = DateTime.Now.AddMinutes(5).ToString("yyyyMMssHHmmss"),
-                TimeCreate = DateTime.Now,
-                TimeUpdate = DateTime.Now,
+                PaymentTimeStart = DateTime.UtcNow.ToString("yyyyMMssHHmmss"),
+                PaymentTimeExpire = DateTime.UtcNow.AddMinutes(5).ToString("yyyyMMssHHmmss"),
+                TimeCreate = DateTime.UtcNow,
+                TimeUpdate = DateTime.UtcNow,
             };
             _dbContext.PaymentPays.Add(pay);
             order.PaymentStatus = 1;
             order.PaymentPayId = pay.Id;
-            order.TimeUpdate = DateTime.Now;
+            order.TimeUpdate = DateTime.UtcNow;
             _dbContext.PaymentOrders.Update(order);
             return Result<string>.Ok(pay.Id);
         }
@@ -151,13 +151,13 @@ namespace Market.Services
             pay.PaymentResultData = "支付成功";
             pay.PaymentStatus = 9;
             pay.ProcessStatus = 1;
-            pay.TimeUpdate = DateTime.Now;
+            pay.TimeUpdate = DateTime.UtcNow;
             _dbContext.PaymentPays.Update(pay);
             return Result.Ok();
         }
         public void PayStatusUpdateCallback(PaymentPay pay) {
             pay.ProcessStatus = 9;
-            pay.TimeFinish = DateTime.Now;
+            pay.TimeFinish = DateTime.UtcNow;
             _dbContext.PaymentPays.Update(pay);
 
             var order = _dbContext.PaymentOrders.FirstOrDefault(o => o.Id == pay.OrderId);
@@ -168,7 +168,7 @@ namespace Market.Services
             order.PaymentStatus = 9;
             order.OrderStatus = 2;
             order.ProcessStatus = 1;
-            order.TimeFinish = DateTime.Now;
+            order.TimeFinish = DateTime.UtcNow;
             order.PaymentType = pay.PaymentType;
             _dbContext.PaymentOrders.Update(order);
         }

@@ -29,10 +29,10 @@ namespace Market.Entities
         public long OriginalPrice { get; set; }
 
         [Column("type_code")]
-        public string TypeCode { get; set; }
+        public string? TypeCode { get; set; }
 
         [Column("type_name")]
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
 
         [Column("post_type")]
         public int PostType { get; set; }
@@ -41,16 +41,16 @@ namespace Market.Entities
         public int LikeCount { get; set; }
 
         [Column("adcode")]
-        public string Adcode { get; set; }
+        public string? Adcode { get; set; }
 
         [Column("province")]
-        public string Province { get; set; }
+        public string? Province { get; set; }
 
         [Column("city")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [Column("district")]
-        public string District { get; set; }
+        public string? District { get; set; }
 
         [Column("status")]
         public int Status { get; set; }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Market.Entities
 {
@@ -38,6 +39,7 @@ namespace Market.Entities
 
         [Column("password")]
         [StringLength(100)]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [Column("status")]

@@ -5,7 +5,7 @@ using Market.Models;
 
 namespace Market.Services
 {
-    public class CommnetService(IUserService userService, ApplicationDbContext dbContext) : ICommentService
+    public class CommentService(IUserService userService, ApplicationDbContext dbContext) : ICommentService
     {
         private readonly IUserService _userService = userService;
         private readonly ApplicationDbContext _dbContext = dbContext;

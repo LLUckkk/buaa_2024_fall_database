@@ -23,14 +23,14 @@ namespace Market.Controllers
         [HttpGet("getUserInfo")]
         public IActionResult GetUserInfo()
         {
-            return Ok(_userService.GetUserInfo());
+            return Ok(_userService.GetUser());
         }
 
         // GET /user/getUserInfo/byId
         [HttpGet("getUserInfo/byId")]
         public IActionResult GetUserInfoById(string userId)
         {
-            return Ok(_userService.GetUserInfo(userId));
+            return Ok(_userService.GetUserById(userId));
         }
 
         // PUT /user

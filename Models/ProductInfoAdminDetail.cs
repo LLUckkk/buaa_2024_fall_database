@@ -4,7 +4,7 @@ namespace Market.Models
 {
     public class ProductInfoAdminDetail
     {
-        public ProductInfoObj ProductInfo;
-        public UserInfo User;
+        public ProductInfo ProductInfo;
+        public User User;
     }
 }

@@ -37,30 +37,30 @@ namespace Market.Services
             return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
         }
 
-        public Result<UserInfo> GetUserInfo()
+        public Result<User> GetUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
             if (uid == null)
             {
-                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
+                return Result<User>.Fail(ResultCode.NotFoundError);
             }
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
-                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
+                return Result<User>.Fail(ResultCode.NotFoundError);
             }
-            return Result<UserInfo>.Ok(UserInfo.FromUser(user));
+            return Result<User>.Ok(user);
         }
 
-        public Result<UserInfo> GetUserInfo(string id) {
+        public Result<User> GetUser(string id) {
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
-                return Result<UserInfo>.Fail(ResultCode.NotFoundError);
+                return Result<User>.Fail(ResultCode.NotFoundError);
             }
-            return Result<UserInfo>.Ok(UserInfo.FromUser(user));
+            return Result<User>.Ok(user);
         }
-        public Page<UserInfo> getUserList(UserAdminPage req) {
+        public Page<User> getUserList(UserAdminPage req) {
             var query = _dbcontext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.Key))
@@ -76,9 +76,9 @@ namespace Market.Services
             var totalItems = query.Count();
             var users = query.Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
 
-            var page = new Page<UserInfo>
+            var page = new Page<User>
             {
-                Items = users.Select(UserInfo.FromUser).ToList(),
+                Items = users.ToList(),
                 Total = totalItems,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize

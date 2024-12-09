@@ -3,50 +3,50 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Market.Entities
 {
+    [Table("payment_order")]
     public class PaymentOrder
     {
         [Key]
-        [Column(TypeName = "varchar(36)")]
+        [Column("id", TypeName = "varchar(36)")]
         public string Id { get; set; }
 
-        [Column(TypeName = "varchar(32)")]
+        [Column("order_number", TypeName = "varchar(32)")]
         public string OrderNumber { get; set; }
 
-        [Column(TypeName = "varchar(36)")]
+        [Column("user_id", TypeName = "varchar(36)")]
         public string UserId { get; set; }
 
-        [Column(TypeName = "bigint")]
+        [Column("pay_price", TypeName = "bigint")]
         public long PayPrice { get; set; }
 
-        [Column(TypeName = "bigint")]
+        [Column("pay_type_id", TypeName = "bigint")]
         public long PayTypeId { get; set; }
 
-        [Column(TypeName = "varchar(200)")]
+        [Column("pay_type_name", TypeName = "varchar(200)")]
         public string PayTypeName { get; set; }
 
-        [Column(TypeName = "int")]
+        [Column("order_status", TypeName = "int")]
         public int OrderStatus { get; set; }
 
-        [Column(TypeName = "varchar(36)")]
+        [Column("payment_pay_id", TypeName = "varchar(36)")]
         public string PaymentPayId { get; set; }
 
-        [Column(TypeName = "int")]
+        [Column("payment_status", TypeName = "int")]
         public int PaymentStatus { get; set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [Column("payment_type", TypeName = "varchar(20)")]
         public string PaymentType { get; set; }
 
-        [Column(TypeName = "int")]
+        [Column("process_status", TypeName = "int")]
         public int ProcessStatus { get; set; }
 
-        [Column(TypeName = "timestamp")]
+        [Column("time_create", TypeName = "timestamp")]
         public DateTime TimeCreate { get; set; }
 
-        [Column(TypeName = "timestamp")]
+        [Column("time_update", TypeName = "timestamp")]
         public DateTime TimeUpdate { get; set; }
 
-        [Column(TypeName = "timestamp")]
+        [Column("time_finish", TypeName = "timestamp")]
         public DateTime TimeFinish { get; set; }
-
     }
 }

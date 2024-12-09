@@ -17,6 +17,8 @@ namespace Market.Models
         public string District { get; set; }
         public int Status { get; set; }
         public string UserId { get; set; }
+        public int? LikeCount { get; set; }
+        public string? Avatar { get; set; }
         public long CreateTime { get; set; }
         public User UserInfo { get; set; }
         public long UpdateTime { get; set; }

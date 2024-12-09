@@ -66,12 +66,18 @@ namespace Market
 			builder.Services.AddSingleton<ITokenService, TokenService>();
 
 			builder.Services.AddScoped<IChatListService, ChatListService>();
-			builder.Services.AddScoped<IUserService, UserService>();
-			builder.Services.AddScoped<IUserAddressService, UserAddressService>();
+			builder.Services.AddScoped<ICommentService, CommentService>();
 			builder.Services.AddScoped<IFileService, FileService>();
+			builder.Services.AddScoped<IPaymentService, PaymentService>();
+			builder.Services.AddScoped<IProductCollectService, ProductCollectService>();
+			builder.Services.AddScoped<IProductInfoService, ProductInfoService>();
+			builder.Services.AddScoped<IProductOrderService, ProductOrderService>();
+			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 			builder.Services.AddScoped<IProductCollectService, ProductCollectService>();
 			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 			builder.Services.AddScoped<ISystemUserService, SystemUserService>();
+			builder.Services.AddScoped<IUserAddressService, UserAddressService>();
+			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<IVoucherService, VoucherService>();
 
 			builder.Services.AddHostedService<ClearOldTokenTask>();

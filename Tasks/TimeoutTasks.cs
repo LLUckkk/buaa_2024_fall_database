@@ -29,7 +29,7 @@ namespace Market.Tasks
                     paymentService.PaymentOrderStatusUpdateCallback(o)
                 );
                 var productOrderService = scope.ServiceProvider.GetRequiredService<IProductOrderService>();
-                dbContext.ProductOrders.Where(o => o.DealStatus == 2 && o.CreateTime.AddMinutes(10) < DateTime.Now).ToList().ForEach(o =>
+                dbContext.ProductOrders.Where(o => o.DealStatus == 2 && o.CreateTime.AddMinutes(10) < DateTime.UtcNow).ToList().ForEach(o =>
                     productOrderService.ClearOutdatedOrder(o)
                 );
             }
