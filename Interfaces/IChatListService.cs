@@ -7,7 +7,7 @@ namespace Market.Interfaces
     {
         Result<string> Create(ChatListCreate req);
         Result<List<ChatListObj>> GetList();
-        Result<int> GetUnreadCount();
+        Result<int> GetTotalUnreadCount();
         Result<List<ChatMessage>> GetChatMessageList(string chatId);
         Result UpdateChatReadStatus(string chatId);
     }

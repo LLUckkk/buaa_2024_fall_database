@@ -1,6 +1,6 @@
 namespace Market.Models
 {
-    public class PaymentPay
+    public class PaymentPayObj
     {
         public string PaymentOrderId { get; set; }
     }

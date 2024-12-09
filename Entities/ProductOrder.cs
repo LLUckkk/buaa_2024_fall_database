@@ -58,7 +58,7 @@ public class ProductOrder
     public long BuyMoneyAll { get; set; }
 
     [Column("buy_money")]
-    public long BuyMoney { get; set; }
+    public long Price { get; set; }
 
     [Column("buy_info")]
     public string BuyInfo { get; set; }

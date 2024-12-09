@@ -47,7 +47,7 @@ namespace Market.Services
             var userid = _tokenService.GetCurrentLoginUserId();
             if (userid == null)
             {
-                return Result.Fail(ResultCode.Fail);
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             }
             var voucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == voucherId);
             if (voucher == null)

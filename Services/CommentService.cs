@@ -34,7 +34,7 @@ namespace Market.Services
             var user = _userService.GetCurrentUser();
             if (user == null)
             {
-                return Result.Fail(ResultCode.Fail);
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             }
             var comment = new Comment
             {
@@ -58,14 +58,12 @@ namespace Market.Services
             }
             _dbContext.Comments.Add(comment);
             return Result.Ok();
-
         }
 
         public Page<Comment> GetCommentPage(SystemCommentPage req)
         {
 
             var query = _dbContext.Comments.Where(c => req.Key != null && (c.PubNickname.Contains(req.Key) ||
-                                         c.ParentUserId.Contains(req.Key) ||
                                          c.ProductId.Contains(req.Key) ||
                                          c.Content.Contains(req.Key)))
                                          .OrderByDescending(c => c.CreateTime);
@@ -81,7 +79,7 @@ namespace Market.Services
             };
         }
 
-        private void ResolveCommentTree(List<CommentObj> comments)
+        private static void ResolveCommentTree(List<CommentObj> comments)
         {
             var commentMap = comments.ToDictionary(c => c.Id);
             foreach (var comment in comments)

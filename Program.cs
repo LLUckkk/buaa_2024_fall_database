@@ -76,6 +76,7 @@ namespace Market
 
 			builder.Services.AddHostedService<ClearOldTokenTask>();
 			builder.Services.AddHostedService<SaveDatabaseChangesTask>();
+			builder.Services.AddHostedService<PaymentTasks>();
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();

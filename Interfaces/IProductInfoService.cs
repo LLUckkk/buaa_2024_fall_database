@@ -17,7 +17,5 @@ namespace Market.Interfaces
         Result HideProduct(string id);
         Result<long> GetTodayCount();
         Result<long> GetMonthCount();
-
-
     }
 }

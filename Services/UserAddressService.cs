@@ -15,7 +15,7 @@ namespace Market.Services
             var userid = _tokenService.GetCurrentLoginUserId();
             if (userid == null)
             {
-                return Result.Fail(ResultCode.Fail);
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             }
             var userAddress = new UserAddress
             {
@@ -38,7 +38,7 @@ namespace Market.Services
             var userid = _tokenService.GetCurrentLoginUserId();
             if (userid == null)
             {
-                return Result.Fail(ResultCode.Fail);
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             }
             var userAddress = _dbContext.UserAddresses.FirstOrDefault(ua => ua.Id == id);
             if (userAddress == null || userAddress.UserId != userid)
@@ -52,7 +52,7 @@ namespace Market.Services
             return Result.Ok();
         }
 
-        public IEnumerable<UserAddress> GetUserAddressList()
+        public List<UserAddress> GetUserAddressList()
         {
             var userId = _tokenService.GetCurrentLoginUserId();
             return _dbContext.UserAddresses.Where(ua => userId != null && ua.UserId == userId).ToList();

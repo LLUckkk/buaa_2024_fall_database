@@ -13,7 +13,7 @@ namespace Market.Entities
 
         [Column("avatar")]
         [StringLength(255)]
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; }
 
         [Column("intro")]
         [StringLength(255)]
@@ -21,7 +21,7 @@ namespace Market.Entities
 
         [Column("nick_name")]
         [StringLength(100)]
-        public string? Nickname { get; set; }
+        public string Nickname { get; set; }
 
         [Column("username")]
         [StringLength(100)]

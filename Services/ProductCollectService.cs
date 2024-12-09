@@ -15,7 +15,7 @@ namespace Market.Services
             var userid = _tokenService.GetCurrentLoginUserId();
             if (userid == null)
             {
-                return Result.Fail(ResultCode.Fail);
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             }
             ProductCollect collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.Id == id && pc.UserId == userid);
             if (collect == null)

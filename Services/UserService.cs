@@ -182,5 +182,10 @@ namespace Market.Services
             }
             return _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
         }
+
+        public User? GetUserById(string id)
+        {
+            return _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+        }
     }
 }

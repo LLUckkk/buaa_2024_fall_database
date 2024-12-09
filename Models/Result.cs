@@ -5,9 +5,10 @@ namespace Market.Models
     public class Empty { }
     public class Result : Result<Empty>
     {
-        public static Result Ok() => new Result();
-        public static Result Fail(ResultCode resultCode) => new Result { Code = resultCode.Code, Message = resultCode.Name };
-        public static Result Fail(ResultCode resultCode, string message) => new Result { Code = resultCode.Code, Message = message };
+        public static Result Ok() => new();
+        public static Result Fail(AuthCode authCode) => new() { Code = authCode.Code, Message = authCode.Name };
+        public static Result Fail(ResultCode resultCode) => new() { Code = resultCode.Code, Message = resultCode.Name };
+        public static Result Fail(ResultCode resultCode, string message) => new() { Code = resultCode.Code, Message = message };
     }
 
     public class Result<T>
@@ -20,6 +21,12 @@ namespace Market.Models
         {
         }
 
+        private Result(AuthCode authCode)
+        {
+            Code = authCode.Code;
+            Message = authCode.Name;
+        }
+        
         private Result(ResultCode resultCode)
         {
             Code = resultCode.Code;
@@ -51,6 +58,10 @@ namespace Market.Models
             return new Result<T>(data, ResultCode.Success);
         }
 
+        public static Result<T> Fail(AuthCode authCode)
+        {
+            return new Result<T>(authCode);
+        }
         public static Result<T> Fail(ResultCode resultCode)
         {
             return new Result<T>(resultCode);

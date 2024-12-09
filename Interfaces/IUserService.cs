@@ -12,5 +12,6 @@ namespace Market.Interfaces
         Result UpdateUserInfo(UpdateUserInfo req);
         Result UpdateUserPassword(UpdateUserInfo req);
         User? GetCurrentUser();
+        User? GetUserById(string id);
     }
 }

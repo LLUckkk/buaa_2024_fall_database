@@ -17,5 +17,21 @@ namespace Market.Models
         public long UpdateTime { get; set; }
         public ChatMessage ChatMessage { get; set; }
         public int NoReadCount { get; set; }
+    
+        public static ChatListObj FromChatList(ChatList list) {
+            return new ChatListObj {
+                Id = list.Id,
+                ProductId = list.ProductId,
+                ProductImage = list.ProductImage,
+                FromUserId = list.FromUserId,
+                ToUserId = list.ToUserId,
+                FromUserNick = list.FromUserNickname,
+                ToUserNick = list.ToUserNickname,
+                FromUserAvatar = list.FromUserAvatar,
+                ToUserAvatar = list.ToUserAvatar,
+                CreateTime = list.CreateTime,
+                UpdateTime = list.UpdateTime,
+            };
+        }
     }
 }

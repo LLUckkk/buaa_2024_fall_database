@@ -28,7 +28,7 @@ namespace Market.Entities {
 
         [Column("from_user_nick")]
         [StringLength(100)]
-        public string FromUserNick { get; set; }
+        public string FromUserNickname { get; set; }
 
         [Column("to_user_id")]
         [StringLength(36)]
@@ -37,7 +37,7 @@ namespace Market.Entities {
 
         [Column("to_user_nick")]
         [StringLength(100)]
-        public string ToUserNick { get; set; }
+        public string ToUserNickname { get; set; }
 
         [Column("to_user_avatar")]
         [StringLength(100)]

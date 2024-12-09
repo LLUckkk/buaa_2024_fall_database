@@ -87,7 +87,7 @@ namespace Market.Services
                 return Result.Fail(ResultCode.SaveError, "Username already exists");
             }
 
-            SystemUser systemUser = new SystemUser
+            SystemUser systemUser = new()
             {
                 Username = req.Username,
                 Password = _passwordHasher.HashPassword(req.Password),
@@ -136,8 +136,6 @@ namespace Market.Services
             systemUser.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             _dbcontext.SystemUsers.Update(systemUser);
-            _dbcontext.SaveChanges();
-
             return Result.Ok();
         }
     }
