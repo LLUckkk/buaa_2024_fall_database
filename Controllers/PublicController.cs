@@ -10,14 +10,12 @@ namespace Market.Controllers
     { 
         private readonly IUserService _userService = userService;
 
-        // POST /public/register
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserRegister dto)
         {
             return Ok(_userService.Register(dto));
         }
 
-        // POST /public/login
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLogin dto)
         {

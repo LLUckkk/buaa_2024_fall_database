@@ -65,7 +65,7 @@ namespace Market
 			builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 			builder.Services.AddSingleton<ITokenService, TokenService>();
 
-			builder.Services.AddScoped<IChatListService, ChatListService>();
+			builder.Services.AddScoped<IChatService, ChatService>();
 			builder.Services.AddScoped<ICommentService, CommentService>();
 			builder.Services.AddScoped<IFileService, FileService>();
 			builder.Services.AddScoped<IPaymentService, PaymentService>();

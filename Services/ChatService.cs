@@ -5,7 +5,7 @@ using Market.Models;
 
 namespace Market.Services
 {
-    public class ChatListService(ApplicationDbContext dbContext, IUserService userService) : IChatListService
+    public class ChatService(ApplicationDbContext dbContext, IUserService userService) : IChatService
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly IUserService _userService = userService;
@@ -75,6 +75,24 @@ namespace Market.Services
                         .ToList();
             return Result<List<ChatListObj>>.Ok(list);
         }
+
+        public Result<ChatListObj> GetSingleList(string chatId) {
+            var user = _userService.GetCurrentUser();
+            if (user == null)
+            {
+                return Result<ChatListObj>.Fail(AuthCode.UserPermissionUnauthorized);
+            }
+            var chat = _dbContext.ChatLists.FirstOrDefault(c => c.Id == chatId);
+            if (chat == null)
+            {
+                return Result<ChatListObj>.Fail(ResultCode.NotFoundError);
+            }
+            var obj = ChatListObj.FromChatList(chat);
+            obj.ChatMessage = GetListLastMessage(chatId);
+            obj.NoReadCount = GetListUnreadCount(chatId);
+            return Result<ChatListObj>.Ok(obj);
+        }
+        
         public Result<int> GetTotalUnreadCount()
         {
             var user = _userService.GetCurrentUser();

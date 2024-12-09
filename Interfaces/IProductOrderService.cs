@@ -18,6 +18,12 @@ namespace Market.Interfaces
         Result<long> GetTodayTurnover();
         Result<long> GetMonthTurnover();
 
+        Result UserPerformSelfPickup(string orderId);
+        Result UserPerformDelivery(ProductOrderPost req);
+        Result UserConfigurePickupAddress(ProductOrderPost req);
+        Result UserConfirmDelivery(string orderId);
+        Result UserFeedback(ProductOrderEvaluate req);
+
         // List<Map> getTableData();
         // List<Map<String, Object>> getVideoData();
         // Map<String, List<Map<String, Long>>> getOrderData();

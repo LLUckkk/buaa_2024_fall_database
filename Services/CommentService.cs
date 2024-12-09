@@ -29,7 +29,7 @@ namespace Market.Services
                 CommentCount = commentCount
             };
         }
-        public Result CreateComment(string productId, string? parentId, string content)
+        public Result CreateComment(CreateComment req)
         {
             var user = _userService.GetCurrentUser();
             if (user == null)
@@ -39,15 +39,15 @@ namespace Market.Services
             var comment = new Comment
             {
                 Id = Guid.NewGuid().ToString(),
-                ProductId = productId,
-                Content = content,
+                ProductId = req.ProductId,
+                Content = req.Content,
                 PubUserId = user.Id,
                 PubNickname = user.Nickname,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds()
             };
-            if (parentId != null)
+            if (req.ParentId != null)
             {
-                var parent = _dbContext.Comments.FirstOrDefault(c => c.Id == parentId);
+                var parent = _dbContext.Comments.FirstOrDefault(c => c.Id == req.ParentId);
                 if (parent == null)
                 {
                     return Result.Fail(ResultCode.NotFoundError);
@@ -77,6 +77,16 @@ namespace Market.Services
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
             };
+        }
+
+        public Result DeleteComment(string id) {
+            var comment = _dbContext.Comments.FirstOrDefault(c => c.Id == id);
+            if (comment == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            _dbContext.Comments.Remove(comment);
+            return Result.Ok();
         }
 
         private static void ResolveCommentTree(List<CommentObj> comments)

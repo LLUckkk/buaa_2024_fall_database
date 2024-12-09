@@ -204,5 +204,72 @@ namespace Market.Services
             }
             return Result<long>.Ok(money);
         }
+
+        public Result UserPerformSelfPickup(string orderId) {
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId && o.DealStatus == 4 && o.PostMode == "自提");
+            if (order == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            order.DealStatus = 9;
+            _dbContext.ProductOrders.Update(order);
+            return Result.Ok();
+        }
+        public Result UserPerformDelivery(ProductOrderPost req) {
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.ProductOrderId && o.DealStatus == 3 && o.PostMode == "快递");
+            if (order == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            order.DealStatus = 4;
+            order.ShipCompany = req.PostCompany;
+            order.ShipNum = req.PostNum;
+            order.ShipTime = DateTime.UtcNow;
+            _dbContext.ProductOrders.Update(order);
+            return Result.Ok();
+        }
+        public Result UserConfigurePickupAddress(ProductOrderPost req) {
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.ProductOrderId && o.DealStatus == 3 && o.PostMode == "自提");
+            if (order == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            order.DealStatus = 4;
+            order.ShipUsername = req.Username;
+            order.ShipPhone = req.Phone;
+            order.ShipAddress = req.Address;
+            order.ShipTime = DateTime.UtcNow;
+            _dbContext.ProductOrders.Update(order);
+            return Result.Ok();
+        }
+        public Result UserConfirmDelivery(string orderId) {
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId && o.DealStatus == 4 && o.PostMode == "快递");
+            if (order == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            order.DealStatus = 9;
+            order.ShipTime = DateTime.UtcNow;
+            _dbContext.ProductOrders.Update(order);
+            return Result.Ok();
+        }
+        public Result UserFeedback(ProductOrderEvaluate req) {
+            var user = _userService.GetCurrentUser();
+            if (user == null)
+            {
+                return Result.Fail(AuthCode.UserPermissionUnauthorized);
+            }
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.Id && o.UserId == user.Id && o.DealStatus == 9);
+            if (order == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            order.EvaScore = req.Score;
+            order.EvaContent = req.Content;
+            order.DealStatus = 11;
+            order.UpdateTime = DateTime.UtcNow;
+            _dbContext.ProductOrders.Update(order);
+            return Result.Ok();
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Market.Interfaces
     public interface IProductTypeService
     {
         Page<ProductType> GetProductTypeList(SystemProductTypePage req);
+        List<ProductType> GetList();
     }
 }

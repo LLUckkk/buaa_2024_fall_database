@@ -21,5 +21,10 @@ namespace Market.Services
                 PageSize = req.PageSize
             };
         }
+
+        public List<ProductType> GetList()
+        {
+            return _dbContext.ProductTypes.ToList();
+        }
     }
 }
