@@ -2,6 +2,7 @@ using System.Text;
 using Market.Interfaces;
 using Market.Services;
 using Market.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +58,11 @@ namespace Market
 						ValidAudience = builder.Configuration["Jwt:Audience"],
 						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
 					};
-				});
+				})
+				.AddCookie(
+					CookieAuthenticationDefaults.AuthenticationScheme,
+					options => builder.Configuration.Bind("CookieSettings", options)
+				);
 
 			builder.Services.AddHttpContextAccessor();
 

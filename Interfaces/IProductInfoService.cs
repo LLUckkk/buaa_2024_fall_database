@@ -13,6 +13,7 @@ namespace Market.Interfaces
         Result<Page<ProductInfoDetail>> GetProductInfoPage(SystemProductInfoPage req);
         Result<ProductInfoAdminDetail> GetProductInfoAdminDetail(string id);
         Result<List<ProductInfoDetail>> GetMyProductCollectionInfoList();
+        Result RemoveById(string id);
         Result ApproveProduct(string id);
         Result RejectProduct(string id);
         Result HideProduct(string id);

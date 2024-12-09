@@ -1,3 +1,4 @@
+using Market.Entities;
 using Market.Models;
 
 namespace Market.Interfaces
@@ -6,5 +7,6 @@ namespace Market.Interfaces
     {
         Result CreateProductVoucher(ProductVoucherCreate req);
         Result CreateTimeLimitedOfferOrder(string voucherId);
+        ProductVoucher? GetProductVoucher(string id);
     }
 }

@@ -329,5 +329,15 @@ namespace Market.Services
             var count = _dbContext.ProductInfos.Count(pi => pi.CreateTime >= startDay && pi.CreateTime < endDay);
             return Result<long>.Ok(count);
         }
+
+        public Result RemoveById(string id) {
+            var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
+            if (productInfo == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            _dbContext.ProductInfos.Remove(productInfo);
+            return Result.Ok();
+        }
     }
 }

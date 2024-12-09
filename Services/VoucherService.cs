@@ -80,5 +80,11 @@ namespace Market.Services
             _dbContext.VoucherOrders.Add(order);
             return Result.Ok();
         }
+
+        public ProductVoucher? GetProductVoucher(string id)
+        {
+            return _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == id);
+        }
+
     }
 }

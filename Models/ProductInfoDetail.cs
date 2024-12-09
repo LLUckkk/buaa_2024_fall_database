@@ -20,8 +20,9 @@ namespace Market.Models
         public int? LikeCount { get; set; }
         public string? Avatar { get; set; }
         public long CreateTime { get; set; }
-        public User UserInfo { get; set; }
+        public User? UserInfo { get; set; }
         public long UpdateTime { get; set; }
-        public ProductVoucher ProductVoucher { get; set; }
+        public ProductVoucher? ProductVoucher { get; set; }
+        public string? Type { get; set; }
     }
 }
