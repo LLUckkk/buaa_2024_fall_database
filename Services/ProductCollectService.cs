@@ -13,11 +13,6 @@ namespace Market.Services
         public Result Create(ProductCollect req)
         {
             var userId = _tokenService.GetCurrentLoginUserId();
-            if (userId == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
-
             var existingCollect = _dbContext.ProductCollects
                 .FirstOrDefault(pc => pc.UserId == userId && pc.ProductId == req.ProductId);
 
@@ -41,10 +36,6 @@ namespace Market.Services
         public Result Delete(string id)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
-            if (userid == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             ProductCollect collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.Id == id && pc.UserId == userid);
             if (collect == null)
             {
@@ -57,10 +48,6 @@ namespace Market.Services
         public Result<List<string>> GetCollectionProductIdList()
         {
             var userId = _tokenService.GetCurrentLoginUserId();
-            if (userId == null)
-            {
-                return Result<List<string>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
 
             var productCollects = _dbContext.ProductCollects
                 .Where(pc => pc.UserId == userId)

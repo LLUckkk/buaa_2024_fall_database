@@ -1,5 +1,8 @@
+using System.Buffers;
 using System.Text;
+using Market.Constants;
 using Market.Interfaces;
+using Market.Models;
 using Market.Services;
 using Market.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -45,24 +48,31 @@ namespace Market
 			});
 			builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer(options =>
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
 				{
-					options.TokenValidationParameters = new TokenValidationParameters
+					builder.Configuration.Bind("CookieSettings", options);
+					options.Events.OnRedirectToAccessDenied = context =>
 					{
-						ValidateIssuer = true,
-						ValidateAudience = true,
-						ValidateLifetime = true,
-						ValidateIssuerSigningKey = true,
-						ValidIssuer = builder.Configuration["Jwt:Issuer"],
-						ValidAudience = builder.Configuration["Jwt:Audience"],
-						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+						context.Response.StatusCode = StatusCodes.Status200OK;
+						context.Response.ContentType = "application/json";
+						var result = Result.Fail(AuthCode.UserPermissionUnauthenticated);
+						var json = System.Text.Json.JsonSerializer.Serialize(result);
+						var bytes = Encoding.UTF8.GetBytes(json);
+						context.Response.BodyWriter.Write(bytes);
+						return Task.CompletedTask;
 					};
-				})
-				.AddCookie(
-					CookieAuthenticationDefaults.AuthenticationScheme,
-					options => builder.Configuration.Bind("CookieSettings", options)
-				);
+					options.Events.OnRedirectToLogin = context =>
+					{
+						context.Response.StatusCode = StatusCodes.Status200OK;
+						context.Response.ContentType = "application/json";
+						var result = Result.Fail(AuthCode.UserPermissionUnauthenticated);
+						var json = System.Text.Json.JsonSerializer.Serialize(result);
+						var bytes = Encoding.UTF8.GetBytes(json);
+						context.Response.BodyWriter.Write(bytes);
+						return Task.CompletedTask;
+					};
+				});
 
 			builder.Services.AddHttpContextAccessor();
 
@@ -85,9 +95,10 @@ namespace Market
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<IVoucherService, VoucherService>();
 
-			builder.Services.AddHostedService<ClearOldTokenTask>();
+			// builder.Services.AddHostedService<ClearOldTokenTask>();
 			builder.Services.AddHostedService<SaveDatabaseChangesTask>();
 			builder.Services.AddHostedService<TimeoutTasks>();
+			builder.Services.AddHostedService<SetupSystemRoleTask>();
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();

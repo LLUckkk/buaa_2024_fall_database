@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("upload")]
     public class UploadController : ControllerBase
     {

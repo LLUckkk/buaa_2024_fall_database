@@ -40,10 +40,6 @@ namespace Market.Services
         public Result<User> GetUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            if (uid == null)
-            {
-                return Result<User>.Fail(ResultCode.NotFoundError);
-            }
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
@@ -91,10 +87,6 @@ namespace Market.Services
             try
             {
                 var uid = _tokenService.GetCurrentLoginUserId();
-                if (uid == null)
-                {
-                    return Result.Fail(ResultCode.NotFoundError);
-                }
                 var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
                 if (user == null)
                 {
@@ -131,10 +123,6 @@ namespace Market.Services
         public Result UpdateUserPassword(UpdateUserInfo req)
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            if (uid == null)
-            {
-                return Result.Fail(ResultCode.NotFoundError);
-            }
             var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
@@ -176,10 +164,6 @@ namespace Market.Services
         public User? GetCurrentUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            if (uid == null)
-            {
-                return null;
-            }
             return _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
         }
 

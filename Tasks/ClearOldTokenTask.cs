@@ -2,6 +2,7 @@ using Market.Interfaces;
 
 namespace Market.Tasks
 {
+    // Deprecated
     public class ClearOldTokenTask : IHostedService, IDisposable
     {
         private readonly ILogger<ClearOldTokenTask> _logger;

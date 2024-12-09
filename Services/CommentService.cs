@@ -32,10 +32,6 @@ namespace Market.Services
         public Result CreateComment(CreateComment req)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var comment = new Comment
             {
                 Id = Guid.NewGuid().ToString(),

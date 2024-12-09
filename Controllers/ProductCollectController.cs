@@ -1,10 +1,12 @@
 using Market.Entities;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("user/collect")]
     public class ProductCollectController(IProductCollectService productCollectService) : ControllerBase { 
         private readonly IProductCollectService _productCollectService = productCollectService;

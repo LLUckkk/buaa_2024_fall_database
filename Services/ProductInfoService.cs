@@ -13,10 +13,6 @@ namespace Market.Services
         public Result CreateProductInfo(ProductInfoObj req)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var pi = new ProductInfo
             {
                 Id = Guid.NewGuid().ToString(),
@@ -50,10 +46,6 @@ namespace Market.Services
         public Result<List<ProductInfoDetail>> GetProductInfoList(ProductInfoPage req)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<List<ProductInfoDetail>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var query = _dbContext.ProductInfos.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.TypeCode))
@@ -132,10 +124,6 @@ namespace Market.Services
         public Result<List<ProductInfo>> GetMyProductInfoList()
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<List<ProductInfo>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
 
             var list = _dbContext.ProductInfos
                 .Where(pi => pi.UserId == user.Id && pi.Status != 10)
@@ -225,10 +213,6 @@ namespace Market.Services
         public Result<List<ProductInfoDetail>> GetMyProductCollectionInfoList()
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<List<ProductInfoDetail>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
 
             var collectList = _dbContext.ProductCollects.Where(pc => pc.UserId == user.Id).ToList();
             var collectInfoList = collectList.Select(collect =>

@@ -13,10 +13,6 @@ namespace Market.Services
         public Result AddUserAddress(UserAddress req)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
-            if (userid == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var userAddress = new UserAddress
             {
                 UserId = userid,
@@ -36,10 +32,6 @@ namespace Market.Services
         public Result DeleteUserAddress(string id)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
-            if (userid == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var userAddress = _dbContext.UserAddresses.FirstOrDefault(ua => ua.Id == id);
             if (userAddress == null || userAddress.UserId != userid)
             {

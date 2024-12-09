@@ -1,5 +1,3 @@
-using Market.Entities;
-
 namespace Market.Interfaces
 {
     public interface ITokenService
@@ -7,7 +5,7 @@ namespace Market.Interfaces
         string GenerateToken(string userid, string role);
         string? ValidateToken(string token);
         string? GetCurrentLoginUserId();
-        void LogoutCurrentUser();
+        void LogoutCurrentUser(bool isSystemUser);
         void ClearOldToken();
     }
 

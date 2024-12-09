@@ -16,8 +16,6 @@ namespace Market.Services
         public async Task<Result<string>> UploadImageAsync(IFormFile file)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-                return Result<string>.Fail(AuthCode.UserPermissionUnauthorized);
             if (file == null || file.Length == 0)
                 return Result<string>.Fail(ResultCode.Fail, "File is empty.");
 
@@ -47,8 +45,6 @@ namespace Market.Services
         public async Task<Result> RemoveImageAsync(string fileName)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
             if (string.IsNullOrWhiteSpace(fileName))
                 return Result.Fail(ResultCode.Fail, "File name is required.");
 

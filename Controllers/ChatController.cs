@@ -1,10 +1,12 @@
 using Market.Interfaces;
 using Market.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("chat")]
     public class ChatController(IChatService chatService) : ControllerBase { 
         private readonly IChatService _chatService = chatService;

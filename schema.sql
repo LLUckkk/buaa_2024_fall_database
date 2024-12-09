@@ -233,9 +233,9 @@ CREATE TABLE system_role (
     update_time BIGINT
 );
 
-DROP TABLE IF EXISTS "system_user" CASCADE;
+DROP TABLE IF EXISTS "system_users" CASCADE;
 
-CREATE TABLE "system_user" (
+CREATE TABLE "system_users" (
     id VARCHAR(36) PRIMARY KEY,
     username VARCHAR(100),
     password VARCHAR(100),

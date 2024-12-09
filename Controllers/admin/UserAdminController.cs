@@ -1,10 +1,12 @@
 using Market.Interfaces;
 using Market.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Admin")]
     [Route("admin/web/user")]
     public class UserAdminController(IUserService userService) : ControllerBase { 
         private readonly IUserService _userService = userService;

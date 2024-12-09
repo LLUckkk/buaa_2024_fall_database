@@ -107,16 +107,12 @@ namespace Market.Services
                 return Result<string>.Fail(ResultCode.Fail);
             }
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            return Result<string>.Ok(_tokenService.GenerateToken(user.Id, user.RoleName));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id, user.RoleCode));
         }
 
         public Result<SystemUserInfo> GetUserInfo()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            if (uid == null)
-            {
-                return Result<SystemUserInfo>.Fail(ResultCode.NotFoundError);
-            }
             var user = _dbcontext.SystemUsers.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {

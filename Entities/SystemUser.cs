@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Market.Entities
 {
-    [Table("system_user")]
+    [Table("system_users")]
     public class SystemUser
     {
         [Key]

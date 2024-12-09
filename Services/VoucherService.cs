@@ -45,10 +45,6 @@ namespace Market.Services
         public Result CreateTimeLimitedOfferOrder(string voucherId)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
-            if (userid == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var voucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == voucherId);
             if (voucher == null)
             {

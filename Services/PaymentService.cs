@@ -13,10 +13,6 @@ namespace Market.Services
         public Result<string> CreatePaymentOrder(string productId)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<string>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var productOrder = _dbContext.ProductOrders.FirstOrDefault(o => o.ProductId == productId && o.UserId == user.Id);
             if (productOrder == null || productOrder.DealStatus != 0)
                 return Result<string>.Fail(ResultCode.ValidateError);

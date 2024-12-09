@@ -1,10 +1,12 @@
 using Market.Interfaces;
 using Market.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Admin")]
     [Route("admin/payment")]
     public class PaymentAdminController(IPaymentService paymentService) : ControllerBase
     {

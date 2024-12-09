@@ -1,10 +1,12 @@
 using Market.Interfaces;
 using Market.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "System")]
     [Route("admin/product/info")]
     public class ProductInfoAdminController(IProductInfoService productInfoService) : ControllerBase {
         private readonly IProductInfoService _productInfoService = productInfoService;

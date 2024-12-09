@@ -1,10 +1,12 @@
 using Market.Entities;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("user/address")]
     public class UserAddressController(IUserAddressService userAddressService) : ControllerBase
     {

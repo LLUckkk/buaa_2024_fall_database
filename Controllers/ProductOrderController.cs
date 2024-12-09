@@ -1,11 +1,13 @@
 using Market.Interfaces;
 using Market.Models;
 using Market.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("product/order")]
     public class ProductOrderController(IProductOrderService productOrderService) : ControllerBase
     {

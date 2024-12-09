@@ -1,10 +1,13 @@
+using Market.Constants;
 using Market.Interfaces;
 using Market.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Admin,System")]
     [Route("admin/user")]
     public class SystemUserAdminController(ISystemUserService systemUserService, ITokenService tokenService) : ControllerBase {
         private readonly ISystemUserService _systemUserService = systemUserService;
@@ -32,8 +35,12 @@ namespace Market.Controllers
 
         [HttpPost("logout")]
         public IActionResult Logout() {
-            _tokenService.LogoutCurrentUser();
-            return Ok();
+            _tokenService.LogoutCurrentUser(true);
+            if (_tokenService.GetCurrentLoginUserId() == null) {
+                return Ok(Result.Ok());
+            } else {
+                return Ok(Result.Fail(AuthCode.UserPermissionUnauthorized));
+            }
         }
     }
 }

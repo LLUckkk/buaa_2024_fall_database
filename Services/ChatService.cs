@@ -13,10 +13,6 @@ namespace Market.Services
         public Result<string> Create(ChatListCreate req)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<string>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var existing = _dbContext.ChatLists.FirstOrDefault(c => c.FromUserId == user.Id && c.ToUserId == req.ToUserId || c.FromUserId == req.ToUserId && c.ToUserId == user.Id);
             if (existing != null)
             {
@@ -58,10 +54,6 @@ namespace Market.Services
         public Result<List<ChatListObj>> GetList()
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<List<ChatListObj>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var list = _dbContext.ChatLists
                         .Where(c => c.FromUserId == user.Id || c.ToUserId == user.Id).OrderByDescending(c => c.UpdateTime)
                         .Select(c => ChatListObj.FromChatList(c))
@@ -78,10 +70,6 @@ namespace Market.Services
 
         public Result<ChatListObj> GetSingleList(string chatId) {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<ChatListObj>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var chat = _dbContext.ChatLists.FirstOrDefault(c => c.Id == chatId);
             if (chat == null)
             {
@@ -96,10 +84,6 @@ namespace Market.Services
         public Result<int> GetTotalUnreadCount()
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<int>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var count = _dbContext.ChatLists
                         .Where(c => c.FromUserId == user.Id || c.ToUserId == user.Id)
                         .Sum(c => GetListUnreadCount(c.Id));
@@ -109,10 +93,6 @@ namespace Market.Services
         public Result<List<ChatMessage>> GetChatMessageList(string chatId)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result<List<ChatMessage>>.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var list = _dbContext.ChatMessages
                         .Where(m => m.ChatListId == chatId)
                         .OrderBy(m => m.SendTime)
@@ -122,10 +102,6 @@ namespace Market.Services
         public Result UpdateChatReadStatus(string chatId)
         {
             var user = _userService.GetCurrentUser();
-            if (user == null)
-            {
-                return Result.Fail(AuthCode.UserPermissionUnauthorized);
-            }
             var list = _dbContext.ChatMessages
                         .Where(m => m.ChatListId == chatId && m.ToUserId == user.Id && m.IsRead == 0)
                         .ToList();
