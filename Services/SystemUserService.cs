@@ -12,7 +12,7 @@ namespace Market.Services
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly ITokenService _tokenService = tokenService;
 
-        public Page<SystemRole> GetRoleList(SystemRolePage req)
+        public Page<SystemRole> GetRolePage(SystemRolePage req)
         {
             var query = _dbcontext.SystemRoles.AsQueryable().Where(x => x.RoleName.Contains(req.Key) || x.RoleCode.Contains(req.Key)).OrderByDescending(x => x.CreateTime);
             return new Page<SystemRole>
@@ -22,6 +22,77 @@ namespace Market.Services
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
             };
+        }
+
+        public Result CreateRole(SystemRoleCreate req)
+        {
+            if (string.IsNullOrEmpty(req.RoleCode) || string.IsNullOrEmpty(req.RoleName))
+            {
+                return Result.Fail(ResultCode.ValidateError);
+            }
+            var role = new SystemRole
+            {
+                RoleCode = req.RoleCode,
+                RoleName = req.RoleName,
+                CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+            _dbcontext.SystemRoles.Add(role);
+            var result = _dbcontext.SaveChanges();
+            if (result == 0)
+            {
+                return Result.Fail(ResultCode.SaveError);
+            }
+            return Result.Ok();
+        }
+
+        public Result DeleteRole(string id)
+        {
+            var role = _dbcontext.SystemRoles.FirstOrDefault(x => x.Id == id);
+            if (role == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            var users = _dbcontext.SystemUsers.Where(u => u.RoleId == id).Count();
+            if (users > 0)
+            {
+                return Result.Fail(ResultCode.DeleteError, "Role has users");
+            }
+            _dbcontext.SystemRoles.Remove(role);
+            var result = _dbcontext.SaveChanges();
+            if (result == 0)
+            {
+                return Result.Fail(ResultCode.DeleteError);
+            }
+            return Result.Ok();
+        }
+
+        public Result UpdateRole(SystemRoleUpdate req)
+        {
+            if (string.IsNullOrEmpty(req.Id))
+            {
+                return Result.Fail(ResultCode.ValidateError);
+            }
+            var role = _dbcontext.SystemRoles.FirstOrDefault(x => x.Id == req.Id);
+            if (role == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            role.RoleCode = req.RoleCode;
+            role.RoleName = req.RoleName;
+            role.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _dbcontext.SystemRoles.Update(role);
+            var result = _dbcontext.SaveChanges();
+            if (result == 0)
+            {
+                return Result.Fail(ResultCode.SaveError);
+            }
+            return Result.Ok();
+        }
+
+        public Result<List<SystemRole>> GetRoleList()
+        {
+            return Result<List<SystemRole>>.Ok(_dbcontext.SystemRoles.ToList());
         }
 
         public Result<string> Login(SystemUserLogin req)
@@ -36,7 +107,7 @@ namespace Market.Services
                 return Result<string>.Fail(ResultCode.Fail);
             }
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id, user.RoleName));
         }
 
         public Result<SystemUserInfo> GetUserInfo()
@@ -73,7 +144,7 @@ namespace Market.Services
             };
             return page;
         }
-        public Result Create(SystemUserCreate req)
+        public Result CreateSystemUser(SystemUserCreate req)
         {
             SystemRole role = _dbcontext.SystemRoles.FirstOrDefault(r => r.RoleCode == req.RoleCode);
             if (role == null)
@@ -104,7 +175,7 @@ namespace Market.Services
 
             return Result.Ok();
         }
-        public Result Update(SystemUserUpdate req)
+        public Result UpdateSystemUser(SystemUserUpdate req)
         {
             if (string.IsNullOrEmpty(req.Id))
             {
@@ -136,6 +207,20 @@ namespace Market.Services
             systemUser.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             _dbcontext.SystemUsers.Update(systemUser);
+            return Result.Ok();
+        }
+
+        public Result DeleteSystemUser(string id)
+        {
+            SystemUser systemUser = _dbcontext.SystemUsers.FirstOrDefault(u => u.Id == id);
+            if (systemUser == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+
+            _dbcontext.SystemUsers.Remove(systemUser);
+            _dbcontext.SaveChanges();
+
             return Result.Ok();
         }
     }

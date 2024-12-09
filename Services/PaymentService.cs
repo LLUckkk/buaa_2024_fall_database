@@ -172,5 +172,14 @@ namespace Market.Services
             order.PaymentType = pay.PaymentType;
             _dbContext.PaymentOrders.Update(order);
         }
+
+        public Result<PaymentOrder> GetPaymentOrderById(string orderId) {  
+            var order = _dbContext.PaymentOrders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null)
+            {
+                return Result<PaymentOrder>.Fail(ResultCode.NotFoundError);
+            }
+            return Result<PaymentOrder>.Ok(order);
+        }
     }
 }

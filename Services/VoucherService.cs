@@ -86,5 +86,15 @@ namespace Market.Services
             return _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == id);
         }
 
+        public Result DeleteProductVoucher(string id)
+        {
+            var voucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == id);
+            if (voucher == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            _dbContext.ProductVouchers.Remove(voucher);
+            return Result.Ok();
+        }
     }
 }

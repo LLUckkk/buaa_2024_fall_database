@@ -5,11 +5,17 @@ namespace Market.Interfaces
 {
     public interface ISystemUserService
     {
-        Page<SystemRole> GetRoleList(SystemRolePage req);
+        Page<SystemRole> GetRolePage(SystemRolePage req);
+        Result CreateRole(SystemRoleCreate req);
+        Result DeleteRole(string id);
+        Result UpdateRole(SystemRoleUpdate req);
+        Result<List<SystemRole>> GetRoleList();
         Result<string> Login(SystemUserLogin req);
         Result<SystemUserInfo> GetUserInfo();
         Page<SystemUserInfo> GetUserList(SystemUserPage req);
-        Result Create(SystemUserCreate req);
-        Result Update(SystemUserUpdate req);
+        Result CreateSystemUser(SystemUserCreate req);
+        Result UpdateSystemUser(SystemUserUpdate req);
+
+        Result DeleteSystemUser(string id);
     }
 }

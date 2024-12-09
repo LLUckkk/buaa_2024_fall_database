@@ -19,7 +19,7 @@ namespace Market.Services
                 return Result<string>.Fail(ResultCode.Fail, "User already exists");
             }
             var user = CreateUser(req);
-            return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id, "User"));
         }
 
         public Result<string> Login(UserLogin req)
@@ -34,7 +34,7 @@ namespace Market.Services
                 return Result<string>.Fail(ResultCode.Fail, "User is disabled");
             }
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            return Result<string>.Ok(_tokenService.GenerateToken(user.Id));
+            return Result<string>.Ok(_tokenService.GenerateToken(user.Id, "User"));
         }
 
         public Result<User> GetUser()
@@ -186,6 +186,77 @@ namespace Market.Services
         public User? GetUserById(string id)
         {
             return _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+        }
+
+        public Result EnableUser(string id) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError, "User not found");
+            }
+            user.Status = 9;
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _dbcontext.Users.Update(user);
+            _dbcontext.SaveChanges();
+            return Result.Ok();
+        }
+        public Result DisableUser(string id) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError, "User not found");
+            }
+            user.Status = 0;
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _dbcontext.Users.Update(user);
+            _dbcontext.SaveChanges();
+            return Result.Ok();
+        }
+        public Result ApproveUserProfileUpdate(string id) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError, "User not found");
+            }
+
+            if (!string.IsNullOrEmpty(user.CheckAvatar))
+            {
+                user.Avatar = user.CheckAvatar;
+            }
+            if (!string.IsNullOrEmpty(user.CheckNickName))
+            {
+                user.Nickname = user.CheckNickName;
+            }
+            if (!string.IsNullOrEmpty(user.CheckIntro))
+            {
+                user.Intro = user.CheckIntro;
+            }
+
+            user.CheckAvatar = string.Empty;
+            user.CheckNickName = string.Empty;
+            user.CheckIntro = string.Empty;
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            user.CheckStatus = 9;
+
+            _dbcontext.Users.Update(user);
+            _dbcontext.SaveChanges();
+
+            return Result.Ok();
+        }
+        public Result RejectUserProfileUpdate(string id) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError, "User not found");
+            }
+
+            user.CheckStatus = 7;
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            _dbcontext.Users.Update(user);
+            _dbcontext.SaveChanges();
+
+            return Result.Ok();
         }
     }
 }

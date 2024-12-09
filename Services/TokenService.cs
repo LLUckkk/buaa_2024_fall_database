@@ -1,5 +1,7 @@
 using Market.Entities;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -19,12 +21,15 @@ public class TokenService : ITokenService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string GenerateToken(string user)
+    public string GenerateToken(string userid, string role)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user),
+            new Claim(ClaimTypes.NameIdentifier, userid),
+            new Claim(ClaimTypes.Role, role)
         };
+
+        HostLogin(claims);
 
         var jwtKey = _configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key is not configured.");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
@@ -40,6 +45,13 @@ public class TokenService : ITokenService
         var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
         _tokens.Add(tokenStr, token.ValidTo);
         return tokenStr;
+    }
+
+    private void HostLogin(Claim[] claims)
+    {
+        var identity = new ClaimsIdentity(claims, "Token");
+        var principal = new ClaimsPrincipal(identity);
+        _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
     }
 
     public string? ValidateToken(string? token)
