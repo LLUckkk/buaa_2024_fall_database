@@ -119,19 +119,26 @@ const validateForm = () => {
         EMPassWord.value = '';  // 清空错误信息
     }
     loginCheck();
+
 };
 const loginCheck = async () => {
     try {
-        const response = await axios.post(`${API_URL}auth/login`, {
+        const response = await axios.post(`${API_URL}public/login`, {
             username: username.value,
             password: password.value,
         });
-        EMPassWord.value = '';
-        alert('登录成功');
-        //切换页面
+        if (response.data.code != 1) {
+            EMPassWord.value = response.data.message;
+            alert('登录失败');
+        }
+        else {
+            EMPassWord.value = '';
+            alert('欢迎回来');
+            window.location.href = '/dashboard';
+            //切换页面
+        }
     } catch (error) {
-        EMPassWord.value = error.response.data.message;
-        alert('登录失败');
+    
     }
 };
 //注册部分规范
@@ -169,17 +176,21 @@ const validateFormR = () => {
 };
 const registerUser = async () => {
     try {
-        const response = await axios.post(`${API_URL}auth/register`, {
+        const response = await axios.post(`${API_URL}public/register`, {
             username: usernameR.value,
             password: passwordR.value,
             email: email.value,
             studentId: studentId.value
         });
-        alert('注册成功');
-        clickSwitch();
+        if (response.data.code != 1) {
+            EMStudentId.value = response.data.message;
+            alert('注册失败');
+        } else {
+            alert('注册成功');
+            clickSwitch();
+        }
     } catch (error) {
-        EMStudentId.value = error.response.data.message;
-        alert('注册失败');
+    
     }
 };
 
