@@ -69,6 +69,7 @@ import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 import 'vue-waterfall-plugin-next/dist/style.css'
 import Main from "@/views/main/main.vue";
 import screenUtil from "@/utils/screenUtil";
+import api from "@/api";
 
 export default {
   components: { Waterfall, LazyImg, Main },
@@ -96,8 +97,10 @@ export default {
     }
   },
   created() {
+    this.$api = api
+    console.log(this.$api)
     //this.$eventBus.$on('keyChanged', this.handleKeyChange);
-    //this.getMenuList()
+    this.getMenuList()
     this.topLoading = true
     window.addEventListener('scroll', this.windowScroll, true) //监听页面滚动
     this.getProductList()

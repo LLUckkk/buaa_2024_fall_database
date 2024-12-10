@@ -83,8 +83,7 @@
 <script setup>
 import {ref} from "vue";
 import { errorMessages } from "vue/compiler-sfc";
-import axios from 'axios';
-import { API_URL } from '../config';
+import user from "@/api/user";
 // 响应式数据,R代表注册部分相关信息
 const active = ref(1);
 const username = ref('');
@@ -123,22 +122,14 @@ const validateForm = () => {
 };
 const loginCheck = async () => {
     try {
-        const response = await axios.post(`${API_URL}public/login`, {
+        const response = await user.login({
             username: username.value,
             password: password.value,
         });
-        if (response.data.code != 1) {
-            EMPassWord.value = response.data.message;
-            alert('登录失败');
-        }
-        else {
-            EMPassWord.value = '';
             alert('欢迎回来');
             window.location.href = '/dashboard';
-            //切换页面
-        }
     } catch (error) {
-    
+        EMPassWord.value = error.message;
     }
 };
 //注册部分规范
@@ -176,21 +167,24 @@ const validateFormR = () => {
 };
 const registerUser = async () => {
     try {
-        const response = await axios.post(`${API_URL}public/register`, {
+        // const response = await axios.post(`${API_URL}public/register`, {
+        //     username: usernameR.value,
+        //     password: passwordR.value,
+        //     email: email.value,
+        //     studentId: studentId.value
+        // });
+        const data = await user.register({
             username: usernameR.value,
             password: passwordR.value,
             email: email.value,
             studentId: studentId.value
         });
-        if (response.data.code != 1) {
-            EMStudentId.value = response.data.message;
-            alert('注册失败');
-        } else {
             alert('注册成功');
-            clickSwitch();
-        }
+            window.location.href = '/dashboard';
+        
     } catch (error) {
-    
+        EMPassWord.value = error.message;
+        alert('注册失败');
     }
 };
 

@@ -1,3 +1,5 @@
+<!-- eslint-disable -->
+
 <template>
   <div style="background-color: #f7f7f7;height: 100%;width: 100%; padding: 15px;">
     <div class="user-card">
