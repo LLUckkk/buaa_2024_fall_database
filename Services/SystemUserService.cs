@@ -175,7 +175,7 @@ namespace Market.Services
         {
             if (string.IsNullOrEmpty(req.Id))
             {
-                throw new ServiceException(ResultCode.ValidateError);
+                return Result.Fail(ResultCode.ValidateError);
             }
 
             SystemUser systemUser = _dbcontext.SystemUsers.FirstOrDefault(u => u.Id == req.Id);

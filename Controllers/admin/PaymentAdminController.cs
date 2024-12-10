@@ -13,7 +13,7 @@ namespace Market.Controllers
         private readonly IPaymentService _paymentService = paymentService;
 
         [HttpGet("order/page")]
-        public IActionResult GetOrderPage([FromBody] SystemPaymentOrderPage page)
+        public IActionResult GetOrderPage([FromQuery] SystemPaymentOrderPage page)
         {
             return Ok(_paymentService.GetPaymentOrderPage(page));
         }

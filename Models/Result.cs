@@ -5,7 +5,7 @@ namespace Market.Models
     public class Empty { }
     public class Result : Result<Empty>
     {
-        public static Result Ok() => new();
+        public static Result Ok() => new() { Code = ResultCode.Success.Code, Message = ResultCode.Success.Name };
         public static Result Fail(AuthCode authCode) => new() { Code = authCode.Code, Message = authCode.Name };
         public static Result Fail(ResultCode resultCode) => new() { Code = resultCode.Code, Message = resultCode.Name };
         public static Result Fail(ResultCode resultCode, string message) => new() { Code = resultCode.Code, Message = message };

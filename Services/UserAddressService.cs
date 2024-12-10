@@ -10,11 +10,12 @@ namespace Market.Services
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly ITokenService _tokenService = tokenService;
 
-        public Result AddUserAddress(UserAddress req)
+        public Result AddUserAddress(UserAddressObj req)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
             var userAddress = new UserAddress
             {
+                Id = Guid.NewGuid().ToString(),
                 UserId = userid,
                 Address = req.Address,
                 Phone = req.Phone,

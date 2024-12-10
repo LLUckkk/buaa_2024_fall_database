@@ -32,6 +32,12 @@ namespace Market.Controllers
             return Ok(detail);
         }
 
+        [HttpPost]
+        public IActionResult CreateProduct([FromBody] ProductInfoObj product)
+        {
+            return Ok(_productInfoService.CreateProductInfo(product));
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct([FromRoute] string id)
         {

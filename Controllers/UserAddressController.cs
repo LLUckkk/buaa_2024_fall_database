@@ -1,5 +1,6 @@
 using Market.Entities;
 using Market.Interfaces;
+using Market.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace Market.Controllers
         private readonly IUserAddressService _userAddressService = userAddressService;
     
         [HttpPost]
-        public IActionResult Create([FromBody] UserAddress address)
+        public IActionResult Create([FromBody] UserAddressObj address)
         {
             return Ok(_userAddressService.AddUserAddress(address));
         }

@@ -12,7 +12,7 @@ namespace Market.Controllers
         private readonly ICommentService _commentService = commentService;
 
         [HttpGet("page")]
-        public IActionResult GetPage([FromBody]SystemCommentPage page)
+        public IActionResult GetPage([FromQuery]SystemCommentPage page)
         {
             return Ok(_commentService.GetCommentPage(page));
         }

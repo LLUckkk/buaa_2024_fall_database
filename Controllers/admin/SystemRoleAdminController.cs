@@ -30,7 +30,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("page")]
-        public IActionResult GetPage([FromBody] SystemRolePage page)
+        public IActionResult GetPage([FromQuery] SystemRolePage page)
         {
             return Ok(_systemUserService.GetRolePage(page));
         }

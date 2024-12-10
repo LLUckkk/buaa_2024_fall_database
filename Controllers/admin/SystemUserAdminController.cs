@@ -19,7 +19,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("page")]
-        public IActionResult GetUserList([FromBody] SystemUserPage page) {
+        public IActionResult GetUserList([FromQuery] SystemUserPage page) {
             return Ok(_systemUserService.GetUserList(page));
         }
 

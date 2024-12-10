@@ -16,6 +16,8 @@ namespace Market.Entities
         [Column("type_name", TypeName = "VARCHAR(20)")]
         public string TypeName { get; set; }
 
+        
+
         [Column("create_time")]
         public long CreateTime { get; set; }
 

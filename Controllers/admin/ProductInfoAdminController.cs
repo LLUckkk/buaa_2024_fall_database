@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Market.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "System")]
+    [Authorize(Roles = "Admin,System")]
     [Route("admin/product/info")]
     public class ProductInfoAdminController(IProductInfoService productInfoService) : ControllerBase {
         private readonly IProductInfoService _productInfoService = productInfoService;
 
         [HttpGet("page")]
-        public IActionResult GetPage([FromBody] SystemProductInfoPage page)
+        public IActionResult GetPage([FromQuery] SystemProductInfoPage page)
         {
             return Ok(_productInfoService.GetProductInfoPage(page));
         }

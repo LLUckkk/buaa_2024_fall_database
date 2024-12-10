@@ -12,7 +12,7 @@ namespace Market.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet("page")]
-        public IActionResult GetUserList([FromBody] UserAdminPage page) {
+        public IActionResult GetUserList([FromQuery] UserAdminPage page) {
             return Ok(_userService.getUserList(page));
         }
 
