@@ -10,6 +10,6 @@ export default {
     return http.get('/chat/list/one',{params: chaListId})
   },
   getNoReadCount(){
-    return http.get('/chat/list/noRead/total')
+    return http.get('/chat/list/unread/total')
   },
 }

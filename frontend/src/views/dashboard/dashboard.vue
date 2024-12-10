@@ -98,9 +98,10 @@ export default {
   created() {
     //this.$eventBus.$on('keyChanged', this.handleKeyChange);
     //this.getMenuList()
-    //this.topLoading = true
-    //window.addEventListener('scroll', this.windowScroll, true) //监听页面滚动
-    //this.getProductList()
+    this.topLoading = true
+    window.addEventListener('scroll', this.windowScroll, true) //监听页面滚动
+    this.getProductList()
+    //getProductList根据page_param获得产品列表
   },
 
   methods: {

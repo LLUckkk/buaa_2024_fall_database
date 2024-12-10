@@ -5,8 +5,7 @@ import Cookies from "js-cookie";
 import "../style.css";
 
 const Instance = axios.create({
-  baseURL: 'http://localhost:5050',
-
+  baseURL: 'http://http://117.50.163.143:5000/',
   timeout: 5000
 })
 

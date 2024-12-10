@@ -62,30 +62,6 @@
                   <!-- <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button> -->
 
                 </div>
-
-                <!-- <div style="margin-top: 10px" v-if="ableVoucher && voucherVisable &&productInfo.status === 9 && productInfo.userId != $store.state.user.userInfo.id ">
-                  <el-card shadow="hover" :body-style="{  'background-color': '#fef2f3',height:'90px'}">
-                    <div style="display: flex;padding: 0;margin: 0">
-                      <div class="left" style="height: 60px;width: 40%;margin-left: 10px">
-                        <div style="display: flex;flex-direction: column;">
-                          <div style="font-weight: bold;color: #e1837a;margin-top: 3px">{{ productInfo.productVoucher.title }}</div>
-                          <div style="font-size: 13px;color: #c2b8bb;margin-top: 8px">周一至周日均可使用</div>
-                          <div style="font-size: 13px;color: #c2b8bb;margin-top: 8px">剩余 <span style="color: red;">{{ productInfo.productVoucher.stock }} </span> 张</div>
-                        </div>
-                      </div>
-                      <div class="right" style="height: 70px;width: 65%;display: flex;justify-content: flex-end;align-items: flex-end;margin-right: 5px">
-                        <div style="display: flex;flex-direction: column;">
-                          <div style="display: flex;flex-direction: column;justify-content: flex-end;align-items: flex-end;">
-                            <div style="font-size: 16px;font-weight: bold">
-                              <button  style="background-color:#ff6f36;color: white;height:35px;font-size:13px;cursor: pointer; border-radius: 30px;padding: 5px" @click="sekill">限时抢购</button>
-                            </div>
-                          </div>
-                          <div style="font-size: 12px;color: #e1837a;margin-top: 5px">{{ productInfo.productVoucher.beginTime }}～{{ productInfo.productVoucher.endTime }}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-card>
-                </div> -->
               </div>
 
               <div class="divider interaction-divider"></div>

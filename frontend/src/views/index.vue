@@ -52,7 +52,6 @@
             </a>
           </li>
           <li :class="$route.path === '/followtrend' ? 'active-channel' : ''">
-            <!-- <li  :class="$route.path === '/followtrend'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toTrend()">
               <div
                 style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
@@ -65,7 +64,6 @@
             </a>
           </li>
           <li :class="$route.path === '/message' ? 'active-channel' : ''">
-            <!-- <li :class="$route.path === '/notice'?'active-channel':''" v-if="loginStatus"> -->
             <a class="link-wrapper" @click="toMessage()">
               <div
                 style="width: 1.5em; height: 1.5em; margin-right: 8px;display: flex;align-items: center;justify-content: center">
@@ -120,15 +118,6 @@
                 <div>
                   <div class="group-wrapper">
                     <div class="group-header">设置</div>
-                    <!--                    <div class="menu-item hover-effect">-->
-                    <!--                      <span>深色模式</span>-->
-                    <!--                      <div class="multistage-toggle component">-->
-                    <!--                        <button class="toggle-item active">-->
-                    <!--                          <div class="icon-wrapper">-->
-                    <!--                          </div>-->
-                    <!--                        </button>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
                     <div class="menu-item hover-effect">
                       <a @click="logout">
                         <i class="el-icon-turn-off"></i>
@@ -152,7 +141,7 @@
         <router-view />
       </div>
     </div>
-    <!-- <Login v-if="showLogin" @click-child="loginClose"></Login> -->
+    <Login v-if="showLogin" @click-child="loginClose"></Login>
   </div>
 </template>
 
@@ -161,6 +150,7 @@ import Login from "@/views/login.vue";
 import Cookies from "js-cookie";
 import user from "@/store/user";
 import { Search } from "@element-plus/icons-vue";
+import api from "@/api";
 export default {
   computed: {
     user() {
@@ -187,8 +177,8 @@ export default {
       this.showLogin = true
       this.loginStatus = false
     }
-    //this.getNoReadMessage()
-    //this.getNoReadMessageFlush()
+    this.getNoReadMessage()
+    this.getNoReadMessageFlush()
   },
   methods: {
     clearKeyword() {
@@ -234,7 +224,7 @@ export default {
       this.moreStatus = !this.moreStatus
     },
     toggleLogin() {
-      //this.showLogin = !this.showLogin
+      this.showLogin = !this.showLogin
       this.$router.push("/login")
     },
     changeInput() {
@@ -242,7 +232,7 @@ export default {
     },
     focusInput() { },
     searchPage() {
-      //this.$eventBus.$emit('keyChanged', this.key);
+      this.$eventBus.$emit('keyChanged', this.key);
     },
     loginClose(val) {
       this.showLogin = false;
