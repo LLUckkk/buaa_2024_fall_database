@@ -110,7 +110,7 @@ export default {
   methods: {
     getProductList() {
       this.$api.product.getProductList(this.page_param).then(res => {
-        let list = res.result
+        let list = res.data
         if (list.length === 0) {
           //一秒后设置为true
           setTimeout(() => {
