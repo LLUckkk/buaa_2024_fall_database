@@ -168,6 +168,7 @@ export default {
     }
   },
   created() {
+    this.$api = api;
     //this.$eventBus.$on('noReadMessage', this.handleMessage);
     let token = Cookies.get('web-token')
     if (token) {

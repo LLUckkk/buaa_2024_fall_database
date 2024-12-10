@@ -3,9 +3,10 @@ import router from '../router'
 import {Notification} from 'element-plus';
 import Cookies from "js-cookie";
 import "../style.css";
+import { API_URL } from "@/config";
 
 const Instance = axios.create({
-  baseURL: 'http://http://117.50.163.143:5000/',
+  baseURL: API_URL,
   timeout: 5000
 })
 
