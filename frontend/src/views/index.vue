@@ -141,7 +141,7 @@
         <router-view />
       </div>
     </div>
-    <Login v-if="showLogin" @click-child="loginClose"></Login>
+    <!-- <Login v-if="showLogin" @click-child="loginClose"></Login> -->
   </div>
 </template>
 
@@ -170,7 +170,6 @@ export default {
   created() {
     this.$api = api;
     //this.$eventBus.$on('noReadMessage', this.handleMessage);
-    this.$api = api;
     let token = Cookies.get('web-token')
     if (token) {
       this.showLogin = false
@@ -179,8 +178,8 @@ export default {
       this.showLogin = true
       this.loginStatus = false
     }
-    this.getNoReadMessage()
-    this.getNoReadMessageFlush()
+    //this.getNoReadMessage()
+    //this.getNoReadMessageFlush()
   },
   methods: {
     clearKeyword() {

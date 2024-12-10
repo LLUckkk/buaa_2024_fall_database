@@ -81,7 +81,7 @@ export default {
   },
   watch: {
     activeTab() {
-      this.getList()
+      //this.getList()
     }
   },
   methods: {

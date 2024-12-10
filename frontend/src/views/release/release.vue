@@ -5,7 +5,7 @@
         :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
         <div class="header"><span class="header-icon"></span><span class="header-title">发布闲置</span></div>
         <div class="img-list">
-          <el-upload v-model:file-list="fileList" action="http://127.0.0.1:5050/upload/image" list-type="picture-card"
+          <el-upload v-model:file-list="fileList" action="http://117.50.163.143:5000/upload/image" list-type="picture-card"
             :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUploadSuccess">
             <div style="line-height: 80px;font-size: 12px;color: #9999b3">+添加优质图</div>
           </el-upload>
@@ -41,7 +41,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="商品位置" prop="type" style="width:300px ">
-            <el-select v-model="formData.type" placeholder="选择商品位置">
+            <el-select v-model="formData.city" placeholder="选择商品位置">
               <el-option v-for="(item, index) in placeList" :key="item.id" :label="item.typeName"
                 :value="item.typeCode"></el-option>
             </el-select>
