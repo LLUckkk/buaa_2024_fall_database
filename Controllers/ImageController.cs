@@ -7,7 +7,7 @@ namespace Market.Controllers
         [HttpGet("{filename}")]
         public IActionResult GetImage(string filename)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "images", filename);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "images", filename.Replace("%2F", "/"));
 
             if (!System.IO.File.Exists(filePath))
             {

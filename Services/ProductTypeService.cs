@@ -1,3 +1,4 @@
+using Market.Constants;
 using Market.Entities;
 using Market.Interfaces;
 using Market.Models;
@@ -25,6 +26,38 @@ namespace Market.Services
         public List<ProductType> GetList()
         {
             return _dbContext.ProductTypes.ToList();
+        }
+
+        public Result CreateProductType(ProductTypeObj req) {
+            if (string.IsNullOrEmpty(req.TypeCode) || string.IsNullOrEmpty(req.TypeName))
+                return Result.Fail(ResultCode.ValidateError);
+
+            var productType = new ProductType
+            {
+                TypeCode = req.TypeCode,
+                TypeName = req.TypeName,
+                CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+
+            _dbContext.ProductTypes.Add(productType);
+            return Result.Ok();
+        }
+        public Result UpdateProductType(ProductTypeObj req) {
+            if (string.IsNullOrEmpty(req.TypeName))
+                return Result.Fail(ResultCode.ValidateError);
+
+            var productType = _dbContext.ProductTypes.FirstOrDefault(x => x.Id == req.Id);
+            if (productType == null)
+                return Result.Fail(ResultCode.NotFoundError);
+
+            productType.TypeName = req.TypeName;
+            productType.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            _dbContext.ProductTypes.Update(productType);
+            _dbContext.SaveChanges();
+
+            return Result.Ok();
         }
     }
 }

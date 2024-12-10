@@ -13,7 +13,7 @@ namespace Market.Controllers
 
         [HttpGet("page")]
         public IActionResult GetUserList([FromQuery] UserAdminPage page) {
-            return Ok(_userService.getUserList(page));
+            return Ok(_userService.GetUserList(page));
         }
 
         [HttpPut("able/{id}")]

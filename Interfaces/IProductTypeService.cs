@@ -7,5 +7,7 @@ namespace Market.Interfaces
     {
         Page<ProductType> GetProductTypeList(SystemProductTypePage req);
         List<ProductType> GetList();
+        Result CreateProductType(ProductTypeObj req);
+        Result UpdateProductType(ProductTypeObj req);
     }
 }

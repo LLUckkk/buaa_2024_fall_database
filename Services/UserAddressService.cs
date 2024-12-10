@@ -21,7 +21,7 @@ namespace Market.Services
                 Phone = req.Phone,
                 Name = req.Name,
                 CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             };
 
             _dbContext.UserAddresses.Add(userAddress);

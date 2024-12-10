@@ -112,6 +112,7 @@ namespace Market
 			app.UseHttpsRedirection();
 
 			app.UseAuthorization();
+			app.UseCors();
 
 
 			app.MapControllers();

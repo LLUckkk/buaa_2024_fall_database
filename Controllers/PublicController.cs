@@ -23,6 +23,16 @@ namespace Market.Controllers
             return Ok(_userService.Login(dto));
         }
 
+        [HttpPost("getValidateCode")]
+        public IActionResult GetValidateCode([FromBody] string email) {
+            return Ok(_userService.GetValidateToken(email));
+        }
+
+        [HttpPost("reset")]
+        public IActionResult ResetPassword([FromBody] ResetPasswordObj dto) {
+            return Ok(_userService.ResetPassword(dto));
+        }
+
         [HttpPost("admin/user/login")]
         public IActionResult AdminLogin([FromBody] SystemUserLogin dto)
         {

@@ -37,6 +37,33 @@ namespace Market.Services
             return Result<string>.Ok(_tokenService.GenerateToken(user.Id, "User"));
         }
 
+        public Result<string> GetValidateToken(string email) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                return Result<string>.Fail(ResultCode.NotFoundError, "User not found");
+            }
+            return Result<string>.Ok("123456");
+        }
+        public Result ResetPassword(ResetPasswordObj req) {
+            var user = _dbcontext.Users.FirstOrDefault(u => u.Email == req.Email);
+            if (user == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError, "User not found");
+            }
+            if (string.IsNullOrEmpty(req.NewPassword)) {
+                return Result.Fail(ResultCode.ValidateError, "Password is required");
+            }
+            if(req.Token != "123456") {
+                return Result.Fail(ResultCode.ValidateError, "Invalid token");
+            }
+            user.Password = _passwordHasher.HashPassword(req.NewPassword);
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _dbcontext.Users.Update(user);
+            _dbcontext.SaveChanges();
+            return Result.Ok();
+        }
+
         public Result<User> GetUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
@@ -56,7 +83,7 @@ namespace Market.Services
             }
             return Result<User>.Ok(user);
         }
-        public Page<User> getUserList(UserAdminPage req) {
+        public Page<User> GetUserList(UserAdminPage req) {
             var query = _dbcontext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.Key))

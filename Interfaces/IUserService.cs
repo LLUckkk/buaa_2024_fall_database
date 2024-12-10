@@ -7,7 +7,9 @@ namespace Market.Interfaces
         Result<string> Register(UserRegister req);
         Result<string> Login(UserLogin req);
         Result<User> GetUser();
-        Page<User> getUserList(UserAdminPage req);
+        Result<string> GetValidateToken(string email);
+        Result ResetPassword(ResetPasswordObj req);
+        Page<User> GetUserList(UserAdminPage req);
         Result UpdateUserInfo(UpdateUserInfo req);
         Result UpdateUserPassword(UpdateUserInfo req);
         User? GetCurrentUser();
