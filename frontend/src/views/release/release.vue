@@ -126,7 +126,7 @@ export default {
         if (valid) {
           this.$api.product.createProductInfo(this.formData).then(res => {
             this.$router.push("/user")
-            Notification({ type: 'success', title: '闲宝交易平台', message: '请等待审核通过' })
+            Notification({ type: 'success', title: '航游集市', message: '商品发布成功' })
           })
         }
       })

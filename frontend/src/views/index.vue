@@ -169,6 +169,7 @@ export default {
   },
   created() {
     //this.$eventBus.$on('noReadMessage', this.handleMessage);
+    this.$api = api;
     let token = Cookies.get('web-token')
     if (token) {
       this.showLogin = false
