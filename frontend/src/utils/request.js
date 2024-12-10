@@ -1,21 +1,19 @@
 import axios from "axios";
 import router from '../router'
-import {Notification} from 'element-plus';
-import Cookies from "js-cookie";
+import { ElNotification } from 'element-plus';
 import "../style.css";
 import { API_URL } from "@/config";
 
 const Instance = axios.create({
   baseURL: API_URL,
-  timeout: 5000
+  timeout: 5000,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 })
 
-// 添加请求拦截器
 Instance.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么
-
-  const token = Cookies.get('web-token')
-  config.headers.set('token', token ?? '')
   return config;
 });
 
@@ -29,13 +27,13 @@ Instance.interceptors.response.use(function (response) {
     if (response.data.code === 1001007 || response.data.code === 1001008) {
       router.push('/login')
     } else {
-      Notification({type: 'warning', title: '异常', message: response.data.msg, customClass: 'http-message'})
+      ElNotification({type: 'warning', title: '异常', message: response.data.msg, customClass: 'http-message'})
       return Promise.reject(response.data)
     }
   }
 }, function (error) {
   //状态码超过200
-  Notification({type: 'error', title: '错误', message: error.response.data.error, customClass: 'http-message'})
+  ElNotification({type: 'error', title: '错误', message: error.response.data.error, customClass: 'http-message'})
   // router.push('/404')
   return Promise.reject(error)
 });

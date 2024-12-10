@@ -1,10 +1,10 @@
 import http from "@/utils/request"
 export default {
   login(data){
-    return http.post('/public/user/login', data)
+    return http.post('/public/login', data)
   },
-  loginPwd(data) {
-    return http.post('/public/user/login/pwd', data)
+  register(data){
+    return http.post('/public/register', data)
   },
   updateUserInfo(data){
     return http.put('/user', data)
