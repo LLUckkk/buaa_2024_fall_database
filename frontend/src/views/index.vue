@@ -200,7 +200,7 @@ export default {
     },
     getNoReadMessage() {
       this.$api.chatList.getNoReadCount().then(res => {
-        if (res.result > 0) {
+        if (res.data > 0) {
           this.noReadMessage = true
         } else {
           this.noReadMessage = false

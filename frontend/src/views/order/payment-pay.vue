@@ -68,8 +68,8 @@ export default {
     },
     getPaymentOrder() {
       this.$api.paymentOrder.getPaymentOrder(this.$route.query.paymentOrderId).then(res => {
-        this.paymentOrderInfo = res.result
-        this.paymentPayId = res.result.paymentPayId
+        this.paymentOrderInfo = res.data
+        this.paymentPayId = res.data.paymentPayId
         if (this.paymentOrderInfo.paymentStatus === 0) {
           this.createPaymentPay()
         }
@@ -77,7 +77,7 @@ export default {
     },
     createPaymentPay() {
       this.$api.paymentPay.createPayOrder({paymentOrderId: this.$route.query.paymentOrderId}).then(res => {
-        this.paymentPayId = res.result
+        this.paymentPayId = res.data
       })
     }
   }

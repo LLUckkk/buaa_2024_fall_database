@@ -82,10 +82,10 @@ export default {
     },
     getUserInfo() {
       this.$api.user.getUserInfo().then(res => {
-        this.userInfo = res.result
-        this.form.nickName = res.result.nickName
-        this.form.intro = res.result.intro
-        this.form.avatar = res.result.avatar
+        this.userInfo = res.data
+        this.form.nickName = res.data.nickName
+        this.form.intro = res.data.intro
+        this.form.avatar = res.data.avatar
       })
     },
     postPass() {
@@ -108,7 +108,7 @@ export default {
       this.$emit('close-drawer')
     },
     handleUploadSuccess(res, file) {
-      this.form.avatar = res.result.url
+      this.form.avatar = res.data.url
     }
   }
 }

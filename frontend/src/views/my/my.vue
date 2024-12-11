@@ -108,12 +108,12 @@ export default {
   methods: {
     getUserInfo() {
       this.$api.user.getUserInfo().then(res => {
-        this.userInfo = res.result
+        this.userInfo = res.data
       })
     },
     getUserStat() {
       this.$api.productOrder.getUserOrderStat().then(res=>{
-        this.userStat = res.result
+        this.userStat = res.data
       })
     },
     closeDrawer() {

@@ -130,10 +130,10 @@ export default {
   methods: {
     getDetail() {
       this.$api.productOrder.getProductOrderDetail(this.$route.query.orderId).then(res => {
-        this.productOrder = res.result.productOrder
-        this.productInfo = res.result.productInfo
-        this.paymentOrder = res.result.paymentOrder
-        this.paymentPay = res.result.paymentPay
+        this.productOrder = res.data.productOrder
+        this.productInfo = res.data.productInfo
+        this.paymentOrder = res.data.paymentOrder
+        this.paymentPay = res.data.paymentPay
       })
     },
     back() {

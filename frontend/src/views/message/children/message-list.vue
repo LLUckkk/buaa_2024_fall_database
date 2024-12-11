@@ -99,7 +99,7 @@ export default {
   methods: {
     getChatList() {
       this.$api.chatList.getChatList().then(res => {
-        this.chatList = res.result
+        this.chatList = res.data
         //统计未读总数
         let noReadCount = 0
         this.chatList.forEach(item => {

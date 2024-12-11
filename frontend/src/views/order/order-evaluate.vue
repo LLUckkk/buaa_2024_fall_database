@@ -77,8 +77,8 @@ export default {
   methods: {
     getInfo() {
       this.$api.productOrder.getProductOrderInfo(this.formData.id).then(res=>{
-        this.productInfo = res.result
-        this.productInfo.image = JSON.parse(res.result.productImg)[0]
+        this.productInfo = res.data
+        this.productInfo.image = JSON.parse(res.data.productImg)[0]
       })
     },
     evaluate(){
