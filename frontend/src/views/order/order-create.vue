@@ -95,8 +95,8 @@ export default {
   methods: {
     getProductInfo() {
       this.$api.product.getProductInfo({productId: this.formData.productId}).then(res => {
-        this.productInfo = res.result
-        this.productInfo.image = JSON.parse(res.result.image)[0]
+        this.productInfo = res.data
+        this.productInfo.image = JSON.parse(res.data.image)[0]
       })
     },
     confirm(item){
@@ -107,7 +107,7 @@ export default {
     },
     confirmBuy() {
       this.$api.productOrder.createProductOrder(this.formData).then(res => {
-        this.$api.paymentOrder.createPaymentOrder({orderId:res.result}).then(ress=>{
+        this.$api.paymentOrder.createPaymentOrder({orderId:res.data}).then(ress=>{
           this.$router.push('/paymentPay?paymentOrderId='+ress.result)
         })
       })

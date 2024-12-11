@@ -98,7 +98,6 @@ export default {
   },
   created() {
     this.$api = api
-    console.log(this.$api)
     //this.$eventBus.$on('keyChanged', this.handleKeyChange);
     this.getMenuList()
     this.topLoading = true
@@ -138,7 +137,7 @@ export default {
     },
     getMenuList() {
       this.$api.productType.getTypeList().then(res => {
-        this.menuList.push(...res.result)
+        this.menuList.push(...res.data)
       })
     },
     refresh() {

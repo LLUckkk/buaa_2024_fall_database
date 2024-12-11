@@ -132,7 +132,7 @@ export default {
   methods: {
     getMessage() {
       this.$api.chatMessage.getMessageList({chatListId: this.chatListItem.id}).then(res => {
-        this.chatMessageList = res.result
+        this.chatMessageList = res.data
       })
     },
     purchase(){
@@ -160,14 +160,14 @@ export default {
     },
     getProductInfo(){
       // this.$api.product.getProductInfo({productId: this.productId}).then(res=>{
-      //   this.productInfo = res.result
+      //   this.productInfo = res.data
       //   this.productInfo.image = JSON.parse(this.productInfo.image)[0]
       // })
     },
     getUserInfo() {
       this.toUserId = this.userInfo.id === this.chatListItem.fromUserId ? this.chatListItem.toUserId : this.chatListItem.fromUserId
       this.$api.user.getUserInfoById(this.toUserId).then(res => {
-        this.toUserInfo = res.result
+        this.toUserInfo = res.data
       })
     },
     close(){

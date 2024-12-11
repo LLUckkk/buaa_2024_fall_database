@@ -8,7 +8,7 @@ export default {
     getUserInfo(context){
       return new Promise(resolve => {
         user.getUserInfo().then(res => {
-          context.commit('setUserInfo', res.result)
+          context.commit('setUserInfo', res.data)
           resolve()
         })
       })

@@ -98,7 +98,7 @@ export default {
     },
     getPublish() {
       this.$api.product.getMyProductList().then(res => {
-        this.list = res.result
+        this.list = res.data
         this.list.forEach(item => {
           if (item.image) {
             item.image = JSON.parse(item.image)[0]
@@ -167,19 +167,19 @@ export default {
     },
     getSell() {
       this.$api.productOrder.getMySellProductOrder().then(res => {
-        this.list = res.result
+        this.list = res.data
         this.handleData(this.list)
       })
     },
     getPurchase() {
       this.$api.productOrder.getMyBuyProductOrder().then(res => {
-        this.list = res.result
+        this.list = res.data
         this.handleData(this.list)
       })
     },
     getCollect(){
       this.$api.product.getCollectProduct().then(res=>{
-        this.list = res.result
+        this.list = res.data
         this.list.forEach(item => {
           if (item.image) {
             item.image = JSON.parse(item.image)[0]

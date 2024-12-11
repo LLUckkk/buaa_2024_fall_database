@@ -163,13 +163,13 @@ export default {
   methods: {
     getProductInfo() {
       this.$api.product.getProductInfo({productId: this.productId}).then(res => {
-        this.productInfo = res.result
+        this.productInfo = res.data
         // if (this.productInfo.productVoucher) {
         //   this.voucherVisable = true
         //   this.productInfo.productVoucher.beginTime = new Date(this.productInfo.productVoucher.beginTime).toLocaleString()
         //   this.productInfo.productVoucher.endTime = new Date(this.productInfo.productVoucher.endTime).toLocaleString()
         // }
-        if (res.result.image) this.productInfo.image = JSON.parse(res.result.image)
+        if (res.data.image) this.productInfo.image = JSON.parse(res.data.image)
       })
     },
     handleDel(){
@@ -177,7 +177,7 @@ export default {
     },
     getCollectList() {
       this.$api.productCollect.getCollectList().then(res => {
-        let collectList = res.result
+        let collectList = res.data
         let collect = collectList.find(item => item === this.productId)
         if (collect) {
           this.collect = true
@@ -211,8 +211,8 @@ export default {
         productImage: this.productInfo.image[0],
       }
       this.$api.chatList.createChat(data).then(res => {
-        this.$api.chatList.getChatListById({chatListId: res.result}).then(res => {
-          this.chatListItem = res.result
+        this.$api.chatList.getChatListById({chatListId: res.data}).then(res => {
+          this.chatListItem = res.data
           this.chatVisiable = true;
         })
       })
@@ -241,8 +241,8 @@ export default {
     },
     getCommentList() {
       this.$api.comment.getCommentList({productId: this.productId}).then(res => {
-        this.commentList = res.result.commentList
-        this.commentCount = res.result.commentCount
+        this.commentList = res.data.commentList
+        this.commentCount = res.data.commentCount
       })
     },
     close() {
