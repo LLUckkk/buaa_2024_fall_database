@@ -38,6 +38,9 @@ namespace Market.Services
             _dbContext.PaymentOrders.Add(paymentOrder);
             productOrder.PayOrderId = paymentOrder.Id;
             _dbContext.ProductOrders.Update(productOrder);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result<string>.Fail(ResultCode.SaveError);
             return Result<string>.Ok(paymentOrder.Id);
         }
         public void PaymentOrderStatusUpdateCallback(PaymentOrder order)
@@ -54,20 +57,21 @@ namespace Market.Services
                     _dbContext.ProductOrders.Update(o);
                 });
             }
+            _dbContext.SaveChanges();
             // Else?
         }
-        public Page<PaymentOrder> GetPaymentOrderPage(SystemPaymentOrderPage req)
+        public Result<Page<PaymentOrder>> GetPaymentOrderPage(SystemPaymentOrderPage req)
         {
             var orders = _dbContext.PaymentOrders.Where(o => req.Key != null && o.OrderNumber.Contains(req.Key))
                     .OrderByDescending(o => o.TimeCreate)
                     .Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
-            return new Page<PaymentOrder>
+            return Result<Page<PaymentOrder>>.Ok(new Page<PaymentOrder>
             {
                 Items = orders,
                 Total = orders.Count,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
-            };
+            });
         }
 
         public Result<PaymentOrderAdminDetail> GetPaymentOrderDetail(string orderId) {
@@ -127,6 +131,9 @@ namespace Market.Services
             order.PaymentPayId = pay.Id;
             order.TimeUpdate = DateTime.UtcNow;
             _dbContext.PaymentOrders.Update(order);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result<string>.Fail(ResultCode.SaveError);
             return Result<string>.Ok(pay.Id);
         }
         public Result FinishPay(string payId) {
@@ -149,8 +156,10 @@ namespace Market.Services
             pay.ProcessStatus = 1;
             pay.TimeUpdate = DateTime.UtcNow;
             _dbContext.PaymentPays.Update(pay);
-            return Result.Ok();
-        }
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
+            return Result.Ok();        }
         public void PayStatusUpdateCallback(PaymentPay pay) {
             pay.ProcessStatus = 9;
             pay.TimeFinish = DateTime.UtcNow;
@@ -167,6 +176,7 @@ namespace Market.Services
             order.TimeFinish = DateTime.UtcNow;
             order.PaymentType = pay.PaymentType;
             _dbContext.PaymentOrders.Update(order);
+            _dbContext.SaveChanges();
         }
 
         public Result<PaymentOrder> GetPaymentOrderById(string orderId) {  

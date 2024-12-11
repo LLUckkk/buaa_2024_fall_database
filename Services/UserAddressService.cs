@@ -25,8 +25,9 @@ namespace Market.Services
             };
 
             _dbContext.UserAddresses.Add(userAddress);
-            _dbContext.SaveChanges();
-
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 
@@ -45,10 +46,10 @@ namespace Market.Services
             return Result.Ok();
         }
 
-        public List<UserAddress> GetUserAddressList()
+        public Result<List<UserAddress>> GetUserAddressList()
         {
             var userId = _tokenService.GetCurrentLoginUserId();
-            return _dbContext.UserAddresses.Where(ua => userId != null && ua.UserId == userId).ToList();
+            return Result<List<UserAddress>>.Ok(_dbContext.UserAddresses.Where(ua => userId != null && ua.UserId == userId).ToList());
         }
     }
 }

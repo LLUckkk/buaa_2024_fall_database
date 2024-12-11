@@ -9,7 +9,7 @@ namespace Market.Services
     {
         private readonly IUserService _userService = userService;
         private readonly ApplicationDbContext _dbContext = dbContext;
-        public CommentListObj GetCommentList(string productId)
+        public Result<CommentListObj> GetCommentList(string productId)
         {
             var comments = _dbContext.Comments.Where(c => c.ProductId == productId).OrderBy(c => c.CreateTime).ToList().Select(c => new CommentObj
             {
@@ -23,11 +23,11 @@ namespace Market.Services
             }).ToList();
             var commentCount = comments.Count;
             ResolveCommentTree(comments);
-            return new CommentListObj
+            return Result<CommentListObj>.Ok(new CommentListObj
             {
                 CommentList = comments,
                 CommentCount = commentCount
-            };
+            });
         }
         public Result CreateComment(CreateComment req)
         {
@@ -53,6 +53,9 @@ namespace Market.Services
                 comment.ParentUserNickname = parent.PubNickname;
             }
             _dbContext.Comments.Add(comment);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 

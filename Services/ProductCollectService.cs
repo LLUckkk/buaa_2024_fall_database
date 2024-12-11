@@ -23,6 +23,7 @@ namespace Market.Services
 
             var productCollect = new ProductCollect
             {
+                Id = Guid.NewGuid().ToString(),
                 UserId = userId,
                 ProductId = req.ProductId,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
@@ -30,6 +31,9 @@ namespace Market.Services
             };
 
             _dbContext.ProductCollects.Add(productCollect);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 

@@ -24,12 +24,7 @@ namespace Market.Controllers
         [HttpGet("detail")]
         public IActionResult GetProductDetail([FromQuery] string id)
         {
-            var detail = _productInfoService.GetProductInfo(id);
-            if (detail.Code == 1)
-            {
-                detail.Data!.ProductVoucher = _voucherService.GetProductVoucher(id);
-            }
-            return Ok(detail);
+            return Ok(_productInfoService.GetProductInfo(id));
         }
 
         [HttpPost]

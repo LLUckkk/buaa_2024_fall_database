@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Market.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,System")]
     [Route("admin/web/user")]
     public class UserAdminController(IUserService userService) : ControllerBase { 
         private readonly IUserService _userService = userService;

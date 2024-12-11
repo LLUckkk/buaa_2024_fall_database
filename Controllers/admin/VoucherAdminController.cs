@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Market.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,System")]
     [Route("admin/product/voucher")]
     public class VoucherAdminController(IVoucherService voucherService) : ControllerBase
     {

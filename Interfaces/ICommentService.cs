@@ -5,7 +5,7 @@ namespace Market.Interfaces
 {
     public interface ICommentService
     {
-        CommentListObj GetCommentList(string productId);
+        Result<CommentListObj> GetCommentList(string productId);
 
         Result CreateComment(CreateComment req);
 

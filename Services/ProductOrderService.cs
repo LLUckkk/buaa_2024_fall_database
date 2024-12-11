@@ -74,6 +74,9 @@ namespace Market.Services
             {
                 _dbContext.ProductCollects.Remove(collect);
             }
+                        var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result<string>.Fail(ResultCode.SaveError);
             return Result<string>.Ok(po.Id);
         }
         public void ClearOutdatedOrder(ProductOrder order)
@@ -95,18 +98,18 @@ namespace Market.Services
             var orders = _dbContext.ProductOrders.Where(o => o.UserId == user.Id).OrderByDescending(o => o.CreateTime).ToList();
             return Result<List<ProductOrder>>.Ok(orders);
         }
-        public Page<ProductOrder> GetProductOrderList(SystemProductOrderPage req)
+        public Result<Page<ProductOrder>> GetProductOrderList(SystemProductOrderPage req)
         {
             var orders = _dbContext.ProductOrders.Where(o => req.Key != null && (o.OrderNumber.Contains(req.Key) || o.ProductInfo.Contains(req.Key)))
                 .OrderByDescending(o => o.CreateTime)
                 .Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
-            return new Page<ProductOrder>
+            return Result<Page<ProductOrder>>.Ok(new Page<ProductOrder>
             {
                 Items = orders,
                 Total = orders.Count,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
-            };
+            });
         }
         public Result<ProductOrderDetail> GetProductOrderDetail(string orderId) {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId);
@@ -138,8 +141,7 @@ namespace Market.Services
             };
             return Result<ProductOrderDetail>.Ok(detail);
         }
-
-        public Page<ProductOrder> GetProductOrderToBeApprovedList(SystemProductOrderPage req) {
+        public Result<Page<ProductOrder>> GetProductOrderToBeApprovedList(SystemProductOrderPage req) {
             var orders = _dbContext.ProductOrders
                 .Where(o => req.Key != null && (o.OrderNumber.Contains(req.Key) || o.ProductInfo.Contains(req.Key)) && o.DealStatus == 11)
                 .OrderByDescending(o => o.CreateTime)
@@ -147,13 +149,13 @@ namespace Market.Services
                 .Take(req.PageSize)
                 .ToList();
 
-            return new Page<ProductOrder>
+            return Result<Page<ProductOrder>>.Ok(new Page<ProductOrder>
             {
                 Items = orders,
                 Total = orders.Count,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
-            };
+            });
         }
 
         public Result<long> GetTodayCount() {

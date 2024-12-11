@@ -28,6 +28,7 @@ namespace Market.Services
             {
                 var voucher = new ProductVoucher
                 {
+                    Id = Guid.NewGuid().ToString(),
                     ProductId = req.ProductId,
                     Title = "下单立减 " + req.VoucherValue + " 元",
                     VoucherValue = (long)(100 * req.VoucherValue),
@@ -39,6 +40,9 @@ namespace Market.Services
                     UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds()
                 };
                 _dbContext.ProductVouchers.Add(voucher);
+                var save = _dbContext.SaveChanges();
+                if (save == 0)
+                    return Result.Fail(ResultCode.SaveError);
                 return Result.Ok();
             }
         }
@@ -67,6 +71,7 @@ namespace Market.Services
             }
             var order = new VoucherOrder
             {
+                Id = Guid.NewGuid().ToString(),
                 UserId = userid,
                 VoucherId = voucherId,
                 Status = 9,
@@ -74,12 +79,20 @@ namespace Market.Services
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds()
             };
             _dbContext.VoucherOrders.Add(order);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 
-        public ProductVoucher? GetProductVoucher(string id)
+        public Result<ProductVoucher?> GetProductVoucher(string id)
         {
-            return _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == id);
+            var voucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.Id == id);
+            if (voucher == null)
+            {
+                return Result<ProductVoucher?>.Fail(ResultCode.NotFoundError);
+            }
+            return Result<ProductVoucher?>.Ok(voucher);
         }
 
         public Result DeleteProductVoucher(string id)

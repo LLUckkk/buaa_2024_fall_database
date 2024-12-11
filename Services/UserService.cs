@@ -7,14 +7,14 @@ namespace Market.Services
 {
     public class UserService(ApplicationDbContext dbcontext, IPasswordHasher passwordHasher, ITokenService tokenService) : IUserService
     {
-        private readonly ApplicationDbContext _dbcontext = dbcontext;
+        private readonly ApplicationDbContext _dbContext = dbcontext;
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly ITokenService _tokenService = tokenService;
 
 
         public Result<string> Register(UserRegister req)
         {
-            if (_dbcontext.Users.Any(u => u.Username == req.Username || u.Email == req.Email || u.StudentId == req.StudentId))
+            if (_dbContext.Users.Any(u => u.Username == req.Username || u.Email == req.Email || u.StudentId == req.StudentId))
             {
                 return Result<string>.Fail(ResultCode.Fail, "User already exists");
             }
@@ -24,7 +24,7 @@ namespace Market.Services
 
         public Result<string> Login(UserLogin req)
         {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Username == req.Username);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Username == req.Username);
             if (user == null || !_passwordHasher.VerifyPassword(req.Password, user.Password))
             {
                 return Result<string>.Fail(ResultCode.NotFoundError, "Invalid username or password");
@@ -38,7 +38,7 @@ namespace Market.Services
         }
 
         public Result<string> GetValidateToken(string email) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Email == email);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
                 return Result<string>.Fail(ResultCode.NotFoundError, "User not found");
@@ -46,7 +46,7 @@ namespace Market.Services
             return Result<string>.Ok("123456");
         }
         public Result ResetPassword(ResetPasswordObj req) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Email == req.Email);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == req.Email);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
@@ -59,15 +59,15 @@ namespace Market.Services
             }
             user.Password = _passwordHasher.HashPassword(req.NewPassword);
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _dbcontext.Users.Update(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
 
         public Result<User> GetUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
                 return Result<User>.Fail(ResultCode.NotFoundError);
@@ -76,15 +76,15 @@ namespace Market.Services
         }
 
         public Result<User> GetUser(string id) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return Result<User>.Fail(ResultCode.NotFoundError);
             }
             return Result<User>.Ok(user);
         }
-        public Page<User> GetUserList(UserAdminPage req) {
-            var query = _dbcontext.Users.AsQueryable();
+        public Result<Page<User>> GetUserList(UserAdminPage req) {
+            var query = _dbContext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.Key))
             {
@@ -107,14 +107,14 @@ namespace Market.Services
                 PageSize = req.PageSize
             };
 
-            return page;
+            return Result<Page<User>>.Ok(page);
         }
         public Result UpdateUserInfo(UpdateUserInfo req)
         {
             try
             {
                 var uid = _tokenService.GetCurrentLoginUserId();
-                var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == uid);
                 if (user == null)
                 {
                     return Result.Fail(ResultCode.NotFoundError);
@@ -137,8 +137,8 @@ namespace Market.Services
 
                 user.CheckStatus = 0;
 
-                _dbcontext.Users.Update(user);
-                _dbcontext.SaveChanges();
+                _dbContext.Users.Update(user);
+                _dbContext.SaveChanges();
 
                 return Result.Ok();
             }
@@ -150,7 +150,7 @@ namespace Market.Services
         public Result UpdateUserPassword(UpdateUserInfo req)
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == uid);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);
@@ -183,48 +183,48 @@ namespace Market.Services
                 UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 Status = 9,
             };
-            _dbcontext.Users.Add(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
             return user;
         }
 
         public User? GetCurrentUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            return _dbcontext.Users.FirstOrDefault(u => u.Id == uid);
+            return _dbContext.Users.FirstOrDefault(u => u.Id == uid);
         }
 
         public User? GetUserById(string id)
         {
-            return _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            return _dbContext.Users.FirstOrDefault(u => u.Id == id);
         }
 
         public Result EnableUser(string id) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
             }
             user.Status = 9;
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _dbcontext.Users.Update(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
         public Result DisableUser(string id) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
             }
             user.Status = 0;
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _dbcontext.Users.Update(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
         public Result ApproveUserProfileUpdate(string id) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
@@ -249,13 +249,13 @@ namespace Market.Services
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             user.CheckStatus = 9;
 
-            _dbcontext.Users.Update(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
 
             return Result.Ok();
         }
         public Result RejectUserProfileUpdate(string id) {
-            var user = _dbcontext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
@@ -264,8 +264,8 @@ namespace Market.Services
             user.CheckStatus = 7;
             user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-            _dbcontext.Users.Update(user);
-            _dbcontext.SaveChanges();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
 
             return Result.Ok();
         }

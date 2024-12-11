@@ -7,6 +7,6 @@ namespace Market.Interfaces
     {
         Result AddUserAddress(UserAddressObj req);
         Result DeleteUserAddress(string id);
-        List<UserAddress> GetUserAddressList();
+        Result<List<UserAddress>> GetUserAddressList();
     }
 }

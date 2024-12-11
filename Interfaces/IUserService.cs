@@ -9,7 +9,7 @@ namespace Market.Interfaces
         Result<User> GetUser();
         Result<string> GetValidateToken(string email);
         Result ResetPassword(ResetPasswordObj req);
-        Page<User> GetUserList(UserAdminPage req);
+        Result<Page<User>> GetUserList(UserAdminPage req);
         Result UpdateUserInfo(UpdateUserInfo req);
         Result UpdateUserPassword(UpdateUserInfo req);
         User? GetCurrentUser();

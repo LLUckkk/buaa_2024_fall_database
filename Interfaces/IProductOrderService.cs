@@ -10,9 +10,9 @@ namespace Market.Interfaces
         Result<List<ProductOrder>> GetMySellOrderList();
         Result<List<ProductOrder>> GetMyBuyOrderList();
 
-        Page<ProductOrder> GetProductOrderList(SystemProductOrderPage req);
+        Result<Page<ProductOrder>> GetProductOrderList(SystemProductOrderPage req);
         Result<ProductOrderDetail> GetProductOrderDetail(string orderId);
-        Page<ProductOrder> GetProductOrderToBeApprovedList(SystemProductOrderPage req);
+        Result<Page<ProductOrder>> GetProductOrderToBeApprovedList(SystemProductOrderPage req);
         Result<long> GetTodayCount();
         Result<long> GetMonthCount();
         Result<long> GetTodayTurnover();

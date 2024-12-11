@@ -38,6 +38,7 @@ namespace Market.Services
                 ProductImage = req.ProductImage,
             };
             _dbContext.ChatLists.Add(chatList);
+
             var chatMessage = new ChatMessage
             {
                 Id = Guid.NewGuid().ToString(),
@@ -48,7 +49,10 @@ namespace Market.Services
                 SendTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 IsRead = 0,
             };
-            _dbContext.ChatMessages.Add(chatMessage);
+            _dbContext.ChatMessages.Add(chatMessage); 
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result<string>.Fail(ResultCode.SaveError);
             return Result<string>.Ok(chatList.Id);
         }
         public Result<List<ChatListObj>> GetList()
@@ -68,7 +72,8 @@ namespace Market.Services
             return Result<List<ChatListObj>>.Ok(list);
         }
 
-        public Result<ChatListObj> GetSingleList(string chatId) {
+        public Result<ChatListObj> GetSingleList(string chatId)
+        {
             var user = _userService.GetCurrentUser();
             var chat = _dbContext.ChatLists.FirstOrDefault(c => c.Id == chatId);
             if (chat == null)
@@ -80,7 +85,7 @@ namespace Market.Services
             obj.NoReadCount = GetListUnreadCount(chatId);
             return Result<ChatListObj>.Ok(obj);
         }
-        
+
         public Result<int> GetTotalUnreadCount()
         {
             var user = _userService.GetCurrentUser();

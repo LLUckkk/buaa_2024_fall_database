@@ -9,25 +9,25 @@ namespace Market.Services
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-        public Page<ProductType> GetProductTypeList(SystemProductTypePage req)
+        public Result<Page<ProductType>> GetProductTypeList(SystemProductTypePage req)
         {
             var query = _dbContext.ProductTypes.AsQueryable();
             if (!string.IsNullOrEmpty(req.Key))
                 query = query.Where(x => x.TypeCode.Contains(req.Key) || x.TypeName.Contains(req.Key));
             var total = query.Count();
             var list = query.Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
-            return new Page<ProductType>
+            return Result<Page<ProductType>>.Ok(new Page<ProductType>
             {
                 Items = list,
                 Total = total,
                 PageNumber = req.PageNumber,
                 PageSize = req.PageSize
-            };
+            });
         }
 
-        public List<ProductType> GetList()
+        public Result<List<ProductType>> GetList()
         {
-            return _dbContext.ProductTypes.ToList();
+            return Result<List<ProductType>>.Ok(_dbContext.ProductTypes.ToList());
         }
 
         public Result CreateProductType(ProductTypeObj req) {
@@ -36,6 +36,7 @@ namespace Market.Services
 
             var productType = new ProductType
             {
+                Id = Guid.NewGuid().ToString(),
                 TypeCode = req.TypeCode,
                 TypeName = req.TypeName,
                 CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
@@ -43,6 +44,9 @@ namespace Market.Services
             };
 
             _dbContext.ProductTypes.Add(productType);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
         public Result UpdateProductType(ProductTypeObj req) {

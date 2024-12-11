@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Market.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,System")]
     [Route("admin/comment")]
     public class CommentAdminController(ICommentService commentService) : ControllerBase { 
         private readonly ICommentService _commentService = commentService;
 
         [HttpGet("page")]
-        public IActionResult GetPage([FromQuery]SystemCommentPage page)
+        public IActionResult GetPage([FromQuery] SystemCommentPage page)
         {
             return Ok(_commentService.GetCommentPage(page));
         }

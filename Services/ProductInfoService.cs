@@ -41,6 +41,9 @@ namespace Market.Services
                 }
             }
             _dbContext.ProductInfos.Add(pi);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
         public Result<List<ProductInfoDetail>> GetProductInfoList(ProductInfoPage req)

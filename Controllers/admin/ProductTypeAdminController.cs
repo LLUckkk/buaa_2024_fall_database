@@ -7,12 +7,12 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("admin/product/type")]
-    [Authorize(Roles = "System")]
+    [Authorize(Roles = "Admin,System")]
     public class ProductTypeAdminController(IProductTypeService productTypeService) : ControllerBase {
         private readonly IProductTypeService _productTypeService = productTypeService;
 
         [HttpGet("page")]
-        public IActionResult GetTypePage(SystemProductTypePage dto) {
+        public IActionResult GetTypePage([FromQuery] SystemProductTypePage dto) {
             return Ok(_productTypeService.GetProductTypeList(dto));
         }
 
