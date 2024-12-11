@@ -24,16 +24,16 @@ Instance.interceptors.response.use(function (response) {
     return response.data;
   } else {
     //2.操作失败
-    if (response.data.code === 1001007 || response.data.code === 1001008) {
+    if (response.data.Code === 1001007 || response.data.Code === 1001008) {
       router.push('/login')
     } else {
-      ElNotification({type: 'warning', title: '异常', message: response.data.msg, customClass: 'http-message'})
+      ElNotification({type: 'warning', title: '异常', message: response.data.Message, customClass: 'http-message'})
       return Promise.reject(response.data)
     }
   }
 }, function (error) {
   //状态码超过200
-  ElNotification({type: 'error', title: '错误', message: error.response.data.error, customClass: 'http-message'})
+  ElNotification({type: 'error', title: '错误', message: error.response.data.Message, customClass: 'http-message'})
   // router.push('/404')
   return Promise.reject(error)
 });
