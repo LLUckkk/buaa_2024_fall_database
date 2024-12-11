@@ -22,7 +22,7 @@ namespace Market.Services
             {
                 return Result<string>.Fail(ResultCode.BusinessError, "商品目前不可购买");
             }
-            if (product.UserId == user.Id)
+            if (product.UserId == user!.Id)
             {
                 return Result<string>.Fail(ResultCode.BusinessError, "不能购买自己的商品");
             }
@@ -89,13 +89,13 @@ namespace Market.Services
         public Result<List<ProductOrder>> GetMySellOrderList()
         {
             var user = _userService.GetCurrentUser();
-            var orders = _dbContext.ProductOrders.Where(o => o.ProductUserId == user.Id).OrderByDescending(o => o.CreateTime).ToList();
+            var orders = _dbContext.ProductOrders.Where(o => o.ProductUserId == user!.Id).OrderByDescending(o => o.CreateTime).ToList();
             return Result<List<ProductOrder>>.Ok(orders);
         }
         public Result<List<ProductOrder>> GetMyBuyOrderList()
         {
             var user = _userService.GetCurrentUser();
-            var orders = _dbContext.ProductOrders.Where(o => o.UserId == user.Id).OrderByDescending(o => o.CreateTime).ToList();
+            var orders = _dbContext.ProductOrders.Where(o => o.UserId == user!.Id).OrderByDescending(o => o.CreateTime).ToList();
             return Result<List<ProductOrder>>.Ok(orders);
         }
         public Result<Page<ProductOrder>> GetProductOrderList(SystemProductOrderPage req)
@@ -245,7 +245,7 @@ namespace Market.Services
         }
         public Result UserFeedback(ProductOrderEvaluate req) {
             var user = _userService.GetCurrentUser();
-            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.Id && o.UserId == user.Id && o.DealStatus == 9);
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.Id && o.UserId == user!.Id && o.DealStatus == 9);
             if (order == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);

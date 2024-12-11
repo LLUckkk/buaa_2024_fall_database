@@ -27,7 +27,7 @@ namespace Market.Services
                 OriginalPrice = (long)req.OriginalPrice * 100,
                 Status = 1,
                 LikeCount = 0,
-                UserId = user.Id,
+                UserId = user!.Id,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
             };
@@ -129,7 +129,7 @@ namespace Market.Services
             var user = _userService.GetCurrentUser();
 
             var list = _dbContext.ProductInfos
-                .Where(pi => pi.UserId == user.Id && pi.Status != 10)
+                .Where(pi => pi.UserId == user!.Id && pi.Status != 10)
                 .OrderByDescending(pi => pi.CreateTime)
                 .ToList();
 
@@ -157,7 +157,7 @@ namespace Market.Services
 
             if (!string.IsNullOrEmpty(req.Key))
             {
-                query = query.Where(pi => pi.Title.Contains(req.Key) || pi.TypeName.Contains(req.Key));
+                query = query.Where(pi => pi.Title.Contains(req.Key) || pi.TypeName!.Contains(req.Key));
             }
 
             query = query.Where(pi => pi.Status != 10)
@@ -217,7 +217,7 @@ namespace Market.Services
         {
             var user = _userService.GetCurrentUser();
 
-            var collectList = _dbContext.ProductCollects.Where(pc => pc.UserId == user.Id).ToList();
+            var collectList = _dbContext.ProductCollects.Where(pc => pc.UserId == user!.Id).ToList();
             var collectInfoList = collectList.Select(collect =>
             {
                 var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == collect.ProductId);
@@ -252,7 +252,7 @@ namespace Market.Services
                 return detail;
             }).Where(pi => pi != null).ToList();
 
-            return Result<List<ProductInfoDetail>>.Ok(collectInfoList);
+            return Result<List<ProductInfoDetail>>.Ok(collectInfoList!);
         }
         public Result ApproveProduct(string id)
         {

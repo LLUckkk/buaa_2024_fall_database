@@ -2,9 +2,9 @@ namespace Market.Models
 {
     public class ProductInfoObj
     {
-        public string Title { get; set; }
-        public string Intro { get; set; }
-        public string Image { get; set; }
+        public required string Title { get; set; }
+        public required string Intro { get; set; }
+        public required string Image { get; set; }
         public double Price { get; set; }
         public double OriginalPrice { get; set; }
         public int PostType { get; set; }

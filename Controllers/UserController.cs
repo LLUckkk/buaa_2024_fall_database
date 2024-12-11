@@ -19,14 +19,7 @@ namespace Market.Controllers
         public IActionResult Logout()
         {
             _tokenService.LogoutCurrentUser(false);
-            if (_tokenService.GetCurrentLoginUserId() == null)
-            {
-                return Ok(Result.Ok());
-            }
-            else
-            {
-                return Ok(Result.Fail(AuthCode.UserPermissionUnauthorized));
-            }
+            return Ok(Result.Ok());
         }
 
         // GET /user/getUserInfo

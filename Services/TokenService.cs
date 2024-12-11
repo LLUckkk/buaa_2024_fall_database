@@ -50,7 +50,7 @@ public class TokenService : ITokenService
     {
         var identity = new ClaimsIdentity(claims, "Token");
         var principal = new ClaimsPrincipal(identity);
-        _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
     }
 
     public string? ValidateToken(string? token)
@@ -90,7 +90,7 @@ public class TokenService : ITokenService
         // }
     }
 
-    public string? GetCurrentLoginUserId()
+    public string GetCurrentLoginUserId()
     {
         // var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
         // if (string.IsNullOrEmpty(token) || !_tokens.ContainsKey(token))
@@ -98,8 +98,8 @@ public class TokenService : ITokenService
         //     return null;
         // }
         // return ValidateToken(token);
-        var user = _httpContextAccessor.HttpContext.User;
-        return user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var user = _httpContextAccessor.HttpContext!.User;
+        return user.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
     }
 
     public void LogoutCurrentUser(bool isSystemUser)
@@ -110,7 +110,7 @@ public class TokenService : ITokenService
         //     return;
         // }
         // _tokens.Remove(token);
-        var isCurrentUserNormalUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value == "User";
+        var isCurrentUserNormalUser = _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Role)?.Value == "User";
         if (isSystemUser && isCurrentUserNormalUser || !isSystemUser && !isCurrentUserNormalUser)
         {
             return;

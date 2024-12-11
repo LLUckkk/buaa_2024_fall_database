@@ -11,10 +11,10 @@ namespace Market.Models
         public long Price { get; set; }
         public long OriginalPrice { get; set; }
         public int PostType { get; set; }
-        public string Adcode { get; set; }
-        public string Province { get; set; }
-        public string City { get; set; }
-        public string District { get; set; }
+        public string? Adcode { get; set; }
+        public string? Province { get; set; }
+        public string? City { get; set; }
+        public string? District { get; set; }
         public int Status { get; set; }
         public string UserId { get; set; }
         public int? LikeCount { get; set; }

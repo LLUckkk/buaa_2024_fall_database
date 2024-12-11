@@ -7,7 +7,7 @@ namespace Market.Tasks
     {
         private readonly ILogger<ClearOldTokenTask> _logger;
         private readonly ITokenService _tokenService;
-        private Timer _timer;
+        private Timer? _timer;
 
         public ClearOldTokenTask(ILogger<ClearOldTokenTask> logger, ITokenService tokenService)
         {
@@ -21,7 +21,7 @@ namespace Market.Tasks
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        private void DoWork(object? state)
         {
             _logger.LogInformation("Clearing old tokens.");
             _tokenService.ClearOldToken();

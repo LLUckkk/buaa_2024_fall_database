@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
 {
+    [ApiController]
     [Authorize(Roles = "User")]
-    [Authorize]
     [Route("/voucher/order")]
     public class VoucherOrderController(IVoucherService voucherService) : ControllerBase
     {

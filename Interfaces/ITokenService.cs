@@ -4,7 +4,7 @@ namespace Market.Interfaces
     {
         string GenerateToken(string userid, string role);
         string? ValidateToken(string token);
-        string? GetCurrentLoginUserId();
+        string GetCurrentLoginUserId();
         void LogoutCurrentUser(bool isSystemUser);
         void ClearOldToken();
     }

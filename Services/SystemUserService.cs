@@ -96,7 +96,7 @@ namespace Market.Services
 
         public Result<string> Login(SystemUserLogin req)
         {
-            SystemUser user = _dbContext.SystemUsers.FirstOrDefault(x => x.Username == req.Username);
+            var user = _dbcontext.SystemUsers.FirstOrDefault(x => x.Username == req.Username);
             if (user == null)
             {
                 return Result<string>.Fail(ResultCode.NotFoundError);
@@ -141,7 +141,7 @@ namespace Market.Services
         }
         public Result CreateSystemUser(SystemUserCreate req)
         {
-            SystemRole role = _dbContext.SystemRoles.FirstOrDefault(r => r.RoleCode == req.RoleCode);
+            var role = _dbcontext.SystemRoles.FirstOrDefault(r => r.RoleCode == req.RoleCode);
             if (role == null)
             {
                 return Result.Fail(ResultCode.ValidateError);
@@ -179,13 +179,13 @@ namespace Market.Services
                 return Result.Fail(ResultCode.ValidateError);
             }
 
-            SystemUser systemUser = _dbContext.SystemUsers.FirstOrDefault(u => u.Id == req.Id);
+            var systemUser = _dbcontext.SystemUsers.FirstOrDefault(u => u.Id == req.Id);
             if (systemUser == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);
             }
 
-            SystemRole role = _dbContext.SystemRoles.FirstOrDefault(r => r.RoleCode == req.RoleCode);
+            var role = _dbcontext.SystemRoles.FirstOrDefault(r => r.RoleCode == req.RoleCode);
             if (role == null)
             {
                 return Result.Fail(ResultCode.ValidateError);
@@ -209,7 +209,7 @@ namespace Market.Services
 
         public Result DeleteSystemUser(string id)
         {
-            SystemUser systemUser = _dbContext.SystemUsers.FirstOrDefault(u => u.Id == id);
+            var systemUser = _dbcontext.SystemUsers.FirstOrDefault(u => u.Id == id);
             if (systemUser == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);

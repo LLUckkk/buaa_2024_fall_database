@@ -142,7 +142,7 @@ namespace Market.Services
 
                 return Result.Ok();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Result.Fail(ResultCode.UpdateError);
             }
@@ -172,12 +172,12 @@ namespace Market.Services
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                Username = request.Username,
-                Password = _passwordHasher.HashPassword(request.Password),
+                Username = request.Username!,
+                Password = _passwordHasher.HashPassword(request.Password!),
                 Avatar = "default.png",
-                Email = request.Email,
-                Nickname = request.Username,
-                StudentId = request.StudentId,
+                Email = request.Email!,
+                Nickname = request.Username!,
+                StudentId = request.StudentId!,
                 Address = "Somewhere",
                 CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
