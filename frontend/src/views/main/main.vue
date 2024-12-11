@@ -24,24 +24,21 @@
                     style="width: 40px; height: 40px"
                     :src="productInfo.userInfo.avatar"
                     alt=""/>
-                <!-- <span class="name">{{ productInfo.userInfo.nickName }}</span> -->
-                <span class="name">user</span>
-              </div>
-              <div class="follow-btn">
-                <!--                <el-button type="danger" size="large" round>关注</el-button>-->
+                <span class="name">{{ productInfo.userInfo.nickName }}</span>
+                <!-- <span class="name">user</span> -->
               </div>
             </div>
 
             <div class="note-scroller">
               <div class="note-content">
                 <div class="title">
-                  <!-- {{ productInfo.title }} -->
-                    麦当劳
+                  {{ productInfo.title }}
+                    <!-- 麦当劳 -->
                 </div>
 
                 <div class="desc">
-                  <!-- <span>{{ productInfo.intro }} <br/></span> -->
-                  <span>肯德基疯狂星期四v我50 <br/></span>
+                  <span>{{ productInfo.intro }} <br/></span>
+                  <!-- <span>肯德基疯狂星期四v我50 <br/></span> -->
                   <!--                  <a class="tag tag-search">#海贼王</a>-->
                 </div>
                 <!-- <div class="post-container">
@@ -50,25 +47,25 @@
                 </div> -->
                 <div class="post-container">
                   <div class="post">
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">99</span></span>
+                    <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">99</span></span> -->
                     <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span> -->
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{productInfo.price }}</span></span>
                   </div>
                 </div>
 
                 <div class="bottom-container" style="margin-top: 5px">
-                  <span class="date">2024-12-06</span>
-                  <!-- <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span> -->
+                  <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
 
-                  <!-- <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button> -->
+                  <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button>
 
                 </div>
               </div>
 
               <div class="divider interaction-divider"></div>
               <!-- 评论 -->
-              <!-- <div class="comments-el">
+              <div class="comments-el">
                 <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status" :delshow="productInfo.userId === $store.state.user.userInfo.id" @reply="handleReply" @del="handleDel"></Comment>
-              </div> -->
+              </div>
             </div>
             <div class="interactions-footer" v-if="productInfo.status === 9">
               <div class="buttons">
@@ -122,6 +119,9 @@ import Comment from "@/components/Comment.vue";
 import Chat from '@/components/Chat.vue'
 import websocket from "@/utils/websocket";
 import {Notification} from "element-plus";
+import api from "@/api";
+import utils from "@/utils";
+import store from "@/store";
 
 export default {
   components: {Comment, Chat},
@@ -156,9 +156,11 @@ export default {
     }
   },
   created() {
-    //this.getProductInfo()
-    //this.getCommentList()
-    //this.getCollectList()
+    this.$api = api
+    this.$utils = utils
+    this.getProductInfo()
+    this.getCommentList()
+    this.getCollectList()
   },
   methods: {
     getProductInfo() {
@@ -186,20 +188,20 @@ export default {
     },
     sekill() {
       this.$api.product.seckillVoucher(this.productInfo.productVoucher.id).then(res => {
-        Notification({type: 'success', title: '闲宝交易平台', message: '抢购成功'})
+        Notification({type: 'success', title: '航游集市', message: '抢购成功'})
         this.getProductInfo()
       })
     },
     cancelCollect() {
       this.$api.productCollect.deleteCollect(this.productId).then(res => {
         this.collect = false
-        Notification({type: 'success', title: '闲宝交易平台', message: '取消收藏'})
+        Notification({type: 'success', title: '航游集市', message: '取消收藏'})
       })
     },
     setCollect() {
       this.$api.productCollect.saveCollect({productId: this.productId}).then(res => {
         this.collect = true
-        Notification({type: 'success', title: '闲宝交易平台', message: '收藏成功'})
+        Notification({type: 'success', title: '航游集市', message: '收藏成功'})
       })
     },
     chatUser() {
