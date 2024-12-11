@@ -85,6 +85,9 @@ namespace Market.Services
                 return Result.Fail(ResultCode.NotFoundError);
             }
             _dbContext.Comments.Remove(comment);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 

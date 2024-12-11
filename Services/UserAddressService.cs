@@ -41,8 +41,9 @@ namespace Market.Services
             }
 
             _dbContext.UserAddresses.Remove(userAddress);
-            _dbContext.SaveChanges();
-
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
 

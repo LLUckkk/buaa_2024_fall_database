@@ -74,7 +74,7 @@ namespace Market.Services
             {
                 _dbContext.ProductCollects.Remove(collect);
             }
-                        var save = _dbContext.SaveChanges();
+            var save = _dbContext.SaveChanges();
             if (save == 0)
                 return Result<string>.Fail(ResultCode.SaveError);
             return Result<string>.Ok(po.Id);
