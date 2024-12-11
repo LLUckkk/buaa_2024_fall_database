@@ -11,7 +11,9 @@ namespace Market.Services
 
         public Page<ProductType> GetProductTypeList(SystemProductTypePage req)
         {
-            var query = _dbContext.ProductTypes.AsQueryable().Where(x => x.TypeCode.Contains(req.Key) || x.TypeName.Contains(req.Key));
+            var query = _dbContext.ProductTypes.AsQueryable();
+            if (!string.IsNullOrEmpty(req.Key))
+                query = query.Where(x => x.TypeCode.Contains(req.Key) || x.TypeName.Contains(req.Key));
             var total = query.Count();
             var list = query.Skip((req.PageNumber - 1) * req.PageSize).Take(req.PageSize).ToList();
             return new Page<ProductType>

@@ -28,12 +28,14 @@ namespace Market
 
 			builder.Services.AddCors(options =>
 			{
-				options.AddDefaultPolicy(builder =>
+				options.AddDefaultPolicy(policy =>
 				{
-					builder.AllowAnyOrigin()
+					policy.WithOrigins("http://localhost:8080")
 						.AllowAnyHeader()
-						.AllowAnyMethod();
+						.AllowAnyMethod()
+						.AllowCredentials();
 				});
+
 			});
 			// Add services to the container.
 

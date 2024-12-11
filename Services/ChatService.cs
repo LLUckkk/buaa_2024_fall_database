@@ -86,6 +86,7 @@ namespace Market.Services
             var user = _userService.GetCurrentUser();
             var count = _dbContext.ChatLists
                         .Where(c => c.FromUserId == user.Id || c.ToUserId == user.Id)
+                        .AsEnumerable()
                         .Sum(c => GetListUnreadCount(c.Id));
             return Result<int>.Ok(count);
         }
