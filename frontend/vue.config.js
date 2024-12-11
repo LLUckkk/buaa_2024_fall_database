@@ -15,5 +15,8 @@ module.exports = {
         pathRewrite: { '^/api': '' },
       },
     },
+    client: {
+      overlay: false,
+    },
   },
 }

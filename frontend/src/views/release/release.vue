@@ -5,7 +5,7 @@
         :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
         <div class="header"><span class="header-icon"></span><span class="header-title">发布闲置</span></div>
         <div class="img-list">
-          <el-upload v-model:file-list="fileList" action="http://117.50.163.143:5000/upload/image" list-type="picture-card"
+          <el-upload v-model:file-list="fileList" action="/api/upload/image" list-type="picture-card"
             :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUploadSuccess">
             <div style="line-height: 80px;font-size: 12px;color: #9999b3">+添加优质图</div>
           </el-upload>
@@ -77,6 +77,7 @@
 //import gdMapUtil from "@/utils/gdMapUtil";
 //import Address_edit from "@/views/release/address_edit.vue";
 import { Notification } from "element-plus";
+import api from "@/api";
 
 export default {
   //components: {Address_edit},
@@ -114,12 +115,16 @@ export default {
   created() {
     //this.getCity()
     //this.getMenuList()
+    this.$api = api;
   },
   methods: {
     publish() {
       //图片处理
       if (this.fileList.length > 0) {
+        //alert(this.fileList[0].url);
         let _fileList = this.fileList.map(file => file.response.result.url);
+        //let _fileList = this.fileList.map(file => file.url);
+        //console.log(_fileList);
         this.formData.image = JSON.stringify(_fileList)
       }
       this.$refs.form.validate(valid => {
@@ -133,7 +138,7 @@ export default {
     },
     getMenuList() {
       this.$api.productType.getTypeList().then(res => {
-        this.menuList = res.result
+        this.menuList = res.data
       })
     },
     selectAdd() {
@@ -148,7 +153,9 @@ export default {
     },
 
     handlePreview(file) {
+      //alert("preview will exe!!");
       this.dialog.imageUrl = file.url;
+      //alert(file.url);
       this.dialog.visible = true;
     },
     handleRemove(file, fileList) {
@@ -157,6 +164,7 @@ export default {
       })
     },
     handleUploadSuccess(response, file, fileList) {
+      //alert("success!");
       this.fileList = fileList
     },
     closeDrawer(changeAddress) {

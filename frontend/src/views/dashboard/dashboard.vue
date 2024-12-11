@@ -100,17 +100,10 @@ export default {
     this.$api = api
     console.log(this.$api)
     //this.$eventBus.$on('keyChanged', this.handleKeyChange);
-<<<<<<< HEAD
-    //this.getMenuList()
-    //this.topLoading = true
-    //window.addEventListener('scroll', this.windowScroll, true)
-    //this.getProductList()
-=======
     this.getMenuList()
     this.topLoading = true
     window.addEventListener('scroll', this.windowScroll, true) //监听页面滚动
     this.getProductList()
->>>>>>> f787fdb7278890d8726f8e31b0fb31a4f74ae8b1
     //getProductList根据page_param获得产品列表
   },
 

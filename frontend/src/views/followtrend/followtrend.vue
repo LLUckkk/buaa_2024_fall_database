@@ -5,7 +5,7 @@
       <!--下面的trendList 为了便于显示自己新建了一个-->
       <!-- <el-timeline-item v-for="(trend, index) in test_trends" :key="index" type="primary" :color="trend.color"
         size="normal" placement="top" :timestamp="$utils.convert.parseTime(String(trend.createTime))"> -->
-      <el-timeline-item v-for="(trend, index) in test_trends" :key="index" type="primary" :color="trend.color"
+      <el-timeline-item v-for="(trend, index) in trendList" :key="index" type="primary" :color="trend.color"
         size="normal" placement="top" :timestamp="trend.createTime">
         <div class="trend-type" v-if="trend.type === 'publish'">上新了一件宝贝</div>
         <div class="trend-type" v-if="trend.type === 'sell'">卖出了一件宝贝</div>
@@ -78,6 +78,7 @@ const test_trends = [
 <script>
 import image from "@/api/image";
 import Main from "@/views/main/main.vue";
+import api from "@/api";
 
 export default {
   components: { Main },
@@ -89,12 +90,18 @@ export default {
     }
   },
   created() {
-    //this.getTrend()
+    this.$api = api;
+    this.getTrend()
   },
   methods: {
     getTrend() {
       this.$api.trend.getTrendProduct().then(res => {
-        this.trendList = res.result
+        this.trendList = res.data;
+        // if(this.trendList.length === 0){
+        //   alert("is empty!!");
+        // } else {
+        //   alert("not empty!!");
+        // }
         this.trendList.forEach(item => {
           if (item.image) {
             item.image = JSON.parse(item.image)[0]

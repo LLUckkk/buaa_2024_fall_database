@@ -241,7 +241,9 @@ export default {
       this.loginStatus = val;
     },
     logout() {
+      alert("will exit!!1");
       this.$api.user.logout().then(res => {
+        alert("will exit!!2");
         Cookies.remove("web-token")
         sessionStorage.clear();
         this.$store.commit("clearUserInfo")
