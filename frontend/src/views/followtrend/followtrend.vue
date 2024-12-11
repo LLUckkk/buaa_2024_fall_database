@@ -97,11 +97,11 @@ export default {
     getTrend() {
       this.$api.trend.getTrendProduct().then(res => {
         this.trendList = res.data;
-        // if(this.trendList.length === 0){
-        //   alert("is empty!!");
-        // } else {
-        //   alert("not empty!!");
-        // }
+        if(this.trendList.length === 0){
+          alert("is empty!!");
+        } else {
+          alert("not empty!!");
+        }
         this.trendList.forEach(item => {
           if (item.image) {
             item.image = JSON.parse(item.image)[0]

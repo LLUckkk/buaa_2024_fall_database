@@ -16,11 +16,11 @@
             <div class="basic-info">
               <div class="user-basic">
                 <div class="user-nickname ">
-                  <div class="user-name">{{ userInfo.nickName }}</div>
+                  <div class="user-name">{{ userInfo.nickname }}</div>
                 </div>
                 <div class="user-content">
-                  <span class="user-redId">ID：{{ userInfo.number }}</span>
-                  <span class="user-IP"> 位置：{{ userInfo.province }} {{ userInfo.city }}</span>
+                  <span class="user-redId">ID：{{ userInfo.studentId }}</span>
+                  <span class="user-IP"> 位置：{{ userInfo.address}}</span>
                 </div>
               </div>
             </div>
@@ -88,6 +88,7 @@ import UserProduct from "@/components/UserProduct.vue";
 //import Address_edit from "@/views//address_edit.vue";
 import User_edit from "@/views/my/user_edit.vue";
 //import User_address from "@/views/user/user_address.vue";
+import api from "@/api";
 
 export default {
   //components: {User_address, User_edit, Address_edit, UserProduct},
@@ -102,18 +103,19 @@ export default {
     }
   },
   created() {
-    //this.getUserInfo()
-    //this.getUserStat()
+    this.$api = api;
+    this.getUserInfo()
+    this.getUserStat()
   },
   methods: {
     getUserInfo() {
       this.$api.user.getUserInfo().then(res => {
-        this.userInfo = res.result
+        this.userInfo = res.data
       })
     },
     getUserStat() {
       this.$api.productOrder.getUserOrderStat().then(res=>{
-        this.userStat = res.result
+        this.userStat = res.data
       })
     },
     closeDrawer() {

@@ -6,7 +6,7 @@
         <el-upload
             style="display: flex;align-items: center;justify-content: center;padding: 10px"
             class="avatar-uploader"
-            action="http://127.0.0.1:5050/upload/image"
+            action="/api/upload/image"
             :on-success="handleUploadSuccess"
             :show-file-list="false"
             :limit="1"
@@ -16,9 +16,9 @@
         </el-upload>
         <div class="description">
           <el-descriptions :column="1" :colon="false" direction="vertical">
-            <el-descriptions-item label="闲宝号">{{ userInfo.number }}</el-descriptions-item>
-            <el-descriptions-item label="手机号">{{ userInfo.phone }}</el-descriptions-item>
-            <el-descriptions-item label="IP地址">{{ userInfo.province }} {{ userInfo.city }}</el-descriptions-item>
+            <el-descriptions-item label="学号">{{ userInfo.studentId }}</el-descriptions-item>
+            <el-descriptions-item label="邮箱">{{ userInfo.email }}</el-descriptions-item>
+            <el-descriptions-item label="地址">{{ userInfo.address }}</el-descriptions-item>
             <el-descriptions-item label="昵称">
               <input class="input" type="text" :placeholder="form.nickName" v-model="form.nickName"/>
             </el-descriptions-item>
@@ -54,9 +54,11 @@
 </template>
 <script>
 import {Notification} from "element-plus";
+import api from "@/api";
 
 export default {
   created() {
+    this.$api = api
     this.getUserInfo()
   },
   data() {
@@ -82,10 +84,10 @@ export default {
     },
     getUserInfo() {
       this.$api.user.getUserInfo().then(res => {
-        this.userInfo = res.result
-        this.form.nickName = res.result.nickName
-        this.form.intro = res.result.intro
-        this.form.avatar = res.result.avatar
+        this.userInfo = res.data
+        this.form.nickName = res.data.nickName
+        this.form.intro = res.data.intro
+        this.form.avatar = res.data.avatar
       })
     },
     postPass() {
@@ -108,7 +110,7 @@ export default {
       this.$emit('close-drawer')
     },
     handleUploadSuccess(res, file) {
-      this.form.avatar = res.result.url
+      this.form.avatar = res.data.url
     }
   }
 }

@@ -76,7 +76,7 @@
 <script>
 //import gdMapUtil from "@/utils/gdMapUtil";
 //import Address_edit from "@/views/release/address_edit.vue";
-import { Notification } from "element-plus";
+import { ElNotification } from "element-plus";
 import api from "@/api";
 
 export default {
@@ -97,19 +97,18 @@ export default {
       placeList: [{ typeCode: '1', typeName: '新北区' }, { typeCode: '2', typeName: '大运村' },
       { typeCode: '3', typeName: '合一区' }, { typeCode: '4', typeName: '沙河西区' }, { typeCode: '5', typeName: '沙河东区' }],
       formData: {
-        id: '',
-        type: '',
-        title: '',
-        intro: '',
-        image: '',
-        price: '',
-        originalPrice: '',
-        postType: '1',
-        province: '',
-        city: '',
-        adcode: '',
+        title: "string",
+        intro: "string",
+        image: "string",
+        price: 0,
+        originalPrice: 0,
+        postType: 0,
+        adcode: "string",
+        province: "string",
+        city: "string",
+        district: "string",
+        type: "string"
       },
-
     }
   },
   created() {
@@ -122,16 +121,16 @@ export default {
       //图片处理
       if (this.fileList.length > 0) {
         //alert(this.fileList[0].url);
-        let _fileList = this.fileList.map(file => file.response.result.url);
-        //let _fileList = this.fileList.map(file => file.url);
+        //let _fileList = this.fileList.map(file => file.response.result.url);
+        let _fileList = this.fileList.map(file => file.url);
         //console.log(_fileList);
         this.formData.image = JSON.stringify(_fileList)
       }
       this.$refs.form.validate(valid => {
         if (valid) {
           this.$api.product.createProductInfo(this.formData).then(res => {
-            this.$router.push("/user")
-            Notification({ type: 'success', title: '航游集市', message: '商品发布成功' })
+            this.$router.push("/my")
+            ElNotification({ type: 'success', title: '航游集市', message: '商品发布成功' })
           })
         }
       })
