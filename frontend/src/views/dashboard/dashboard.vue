@@ -90,9 +90,10 @@ export default {
         typeCode: '',
         key: '',
       },
-      menuList: [{ typeCode: '', typeName: '全部' }, { typeCode: '1', typeName: '电子产品' }, { typeCode: '2', typeName: '书籍资料' }, 
-      { typeCode: '3', typeName: '服装首饰' }, { typeCode: '4', typeName: '食物饮品' }, { typeCode: '5', typeName: '生活用品' },
-       { typeCode: '6', typeName:"学习用品"}, {typeCode: '7', typeName: "其他"}],
+      // menuList: [{ typeCode: '', typeName: '全部' }, { typeCode: '1', typeName: '电子产品' }, { typeCode: '2', typeName: '书籍资料' }, 
+      // { typeCode: '3', typeName: '服装首饰' }, { typeCode: '4', typeName: '食物饮品' }, { typeCode: '5', typeName: '生活用品' },
+      //  { typeCode: '6', typeName:"学习用品"}, {typeCode: '7', typeName: "其他"}],
+      menuList:[],
       list: [],
     }
   },
