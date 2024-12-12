@@ -122,8 +122,7 @@ export default {
       if (this.fileList.length > 0) {
         //alert(this.fileList[0].url);
         //let _fileList = this.fileList.map(file => file.response.result.url);
-        let _fileList = this.fileList.map(file => file.url);
-        //console.log(_fileList);
+        let _fileList = this.fileList.map(file => file.data);
         this.formData.image = JSON.stringify(_fileList)
       }
       this.$refs.form.validate(valid => {

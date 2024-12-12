@@ -78,7 +78,7 @@ export default {
     onSubmit() {
       this.$api.user.updateUserInfo(this.form).then(res => {
         this.cancel();
-        Notification({type: 'success', title: '修改个人信息', message: '请等待审核通过'})
+        Notification({type: 'success', title: '修改个人信息'})
         this.$store.dispatch('getUserInfo')
       })
     },

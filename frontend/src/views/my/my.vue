@@ -85,9 +85,9 @@
 </template>
 <script>
 import UserProduct from "@/components/UserProduct.vue";
-//import Address_edit from "@/views//address_edit.vue";
+//import Address_edit from "@/views/my/address_edit.vue";
 import User_edit from "@/views/my/user_edit.vue";
-//import User_address from "@/views/user/user_address.vue";
+//import User_address from "@/views/my/user_address.vue";
 import api from "@/api";
 
 export default {

@@ -24,7 +24,7 @@
                     style="width: 40px; height: 40px"
                     :src="productInfo.userInfo.avatar"
                     alt=""/>
-                <span class="name">{{ productInfo.userInfo.nickName }}</span>
+                <span class="name">{{ productInfo.userInfo.nickname }}</span>
                 <!-- <span class="name">user</span> -->
               </div>
             </div>
@@ -56,7 +56,7 @@
                 <div class="bottom-container" style="margin-top: 5px">
                   <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
 
-                  <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 9">我想要</el-button>
+                  <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 1">我想要</el-button>
 
                 </div>
               </div>
@@ -120,8 +120,6 @@ import Chat from '@/components/Chat.vue'
 import websocket from "@/utils/websocket";
 import {Notification} from "element-plus";
 import api from "@/api";
-import utils from "@/utils";
-import store from "@/store";
 
 export default {
   components: {Comment, Chat},
@@ -157,7 +155,6 @@ export default {
   },
   created() {
     this.$api = api
-    this.$utils = utils
     this.getProductInfo()
     this.getCommentList()
     this.getCollectList()

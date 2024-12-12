@@ -17,7 +17,7 @@
             <!--            </a>-->
             <div class="main" v-if="trend.id">
               <div class="details-box">
-                <el-image style="border-radius: 10px;width: 100%;height: 100%" :src="trend.image"
+                <el-image style="border-radius: 10px;width: 100%;height: 100%" :src=getImage(trend.image)
                   fit="cover"></el-image>
               </div>
               <div class="info">
@@ -41,7 +41,7 @@
       </el-timeline-item>
     </el-timeline>
     <!--点击后展示商品详情-->
-    <Main @main_close="closeMain" v-if="mainShow" :productId="productId"></Main>
+    <!-- <Main @main_close="closeMain" v-if="mainShow" :productId="productId"></Main> -->
   </div>
 </template>
 <script setup>
@@ -98,16 +98,21 @@ export default {
       this.$api.trend.getTrendProduct().then(res => {
         this.trendList = res.data;
         if(this.trendList.length === 0){
-          alert("is empty!!");
+          console.log("is empty!");
         } else {
-          alert("not empty!!");
+          console.log("not empty!");
         }
-        this.trendList.forEach(item => {
-          if (item.image) {
-            item.image = JSON.parse(item.image)[0]
-          }
-        })
+        // this.trendList.forEach(item => {
+        //   if (item.image) {
+        //     item.image = JSON.parse(item.image)[0]
+        //   }
+        // })
       })
+    },
+    getImage(imageName){
+      //console.log(imageName);
+      //console.log(this.$api.image.showImage(imageName));
+      return this.$api.image.showImage(imageName);
     },
     toMain(val) {
       this.productId = val
