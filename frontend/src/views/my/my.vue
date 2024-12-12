@@ -87,12 +87,12 @@
 import UserProduct from "@/components/UserProduct.vue";
 //import Address_edit from "@/views/my/address_edit.vue";
 import User_edit from "@/views/my/user_edit.vue";
-//import User_address from "@/views/my/user_address.vue";
+import User_address from "@/views/my/user_address.vue";
 import api from "@/api";
 
 export default {
-  //components: {User_address, User_edit, Address_edit, UserProduct},
-  components: {User_edit, UserProduct},
+  components: {User_address, User_edit, UserProduct},
+  //components: {User_edit, UserProduct},
   data() {
     return {
       drawer: false,

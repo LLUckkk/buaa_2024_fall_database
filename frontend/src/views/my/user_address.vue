@@ -1,17 +1,17 @@
 <template>
-  <div style="padding: 20px;" >
+  <div style="padding: 20px;">
     <div style="display: flex;align-items: center;justify-content: space-between">
       <div style="font-size: 25px;color: black;">我的地址</div>
-      <div >
+      <div>
         <el-button size="mini" type="primary" @click="toAdd" style="margin-left: 20px">
           添加地址
         </el-button>
       </div>
     </div>
     <div style="margin-top: 20px">
-      <div v-for="(item,index) in addressList" @click="select(item)"
-           style="margin-bottom: 15px;background-color: #f7f7f7" :key="item.uuid"
-           class="depot-item" :class="item.id===address.id?'active':''">
+      <div v-for="(item, index) in addressList" @click="select(item)"
+        style="margin-bottom: 15px;background-color: #f7f7f7" :key="item.uuid" class="depot-item"
+        :class="item.id === address.id ? 'active' : ''">
         <div class="ok-box-flex">
           <div class="depotFont" style="padding: 10px;width: 100%;display: flex">
             <div style="width: 5px">
@@ -21,17 +21,27 @@
               <div style="margin-left: 5px;">
                 <div style="display: flex">
                   <div style="width: 90px;">
-                    <i class="el-icon-s-custom" style="margin-right: 8px; color: #727272"></i>
+                    <i style="margin-right: 8px; color: #727272">
+                      <el-icon><User /></el-icon>
+                    </i>
                     {{ item.name }}
                   </div>
                   <div style="margin-left: 20px;width: 200px">
-                    <i class="el-icon-phone" style="margin-right: 8px; color: #727272"></i>
+                    <i style="margin-right: 8px; color: #727272">
+                      <el-icon><Phone /></el-icon>
+                    </i>
                     {{ item.phone }}
                   </div>
                 </div>
                 <div>
-                  <i class="el-icon-s-home" style=" color: #727272;margin-top: 20px"></i>
-                  {{ item.address }} <i class="el-icon-delete" style="color: #727272;margin-left: 10px" @click="del(item)"></i>
+                  <i style=" color: #727272;margin-top: 20px">
+                    <el-icon><LocationInformation /></el-icon>
+                  </i>
+                  {{ item.address }} <i style="color: #727272;margin-left: 10px" @click="del(item)">
+                    <el-icon>
+                      <Delete />
+                    </el-icon>
+                  </i>
                 </div>
               </div>
             </div>
@@ -46,7 +56,7 @@
     </div>
 
     <div class="add">
-      <el-dialog title="添加地址" :visible.sync="dialog" append-to-body>
+      <el-dialog title="添加地址" v-model="dialog" append-to-body>
         <el-form :model="form">
           <el-form-item label="姓名" :label-width="'100px'">
             <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -60,7 +70,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialog = false">取 消</el-button>
-          <el-button type="primary"  @click="add()">确 定</el-button>
+          <el-button type="primary" @click="add()">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -70,18 +80,21 @@
 <script>
 
 
-import {Notification} from "element-plus";
+import { Notification } from "element-plus";
+import api from "@/api";
 
 export default {
-props:{
-  button:{
-    type:Boolean,
-    default:false
-  }
-},
+  props: {
+    button: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       dialog: false,
+      // addressList: [{ name: '1', address: '新北区', phone: "1234" },
+      // { name: '2', address: '合一区', phone: "123456" }],
       addressList: [],
       address: {
         id: "",
@@ -98,30 +111,31 @@ props:{
     }
   },
   created() {
-  this.form = {
-    name: '',
-    phone: '',
-    address: '',
-  }
+    this.$api = api;
+    this.form = {
+      name: '',
+      phone: '',
+      address: '',
+    }
     this.getList()
   },
   methods: {
     getList() {
       this.$api.userAddress.getAddressList().then(res => {
-        this.addressList = res.result;
+        this.addressList = res.data;
       })
     },
     add() {
       this.$api.userAddress.saveAddress(this.form).then(res => {
         this.getList()
         this.dialog = false
-        Notification({type: 'success', title: '我的地址', message: '添加成功'})
+        Notification({ type: 'success', title: '我的地址', message: '添加成功' })
       })
     },
-    del(item){
-      this.$api.userAddress.deleteAddress(item.id).then(res=>{
+    del(item) {
+      this.$api.userAddress.deleteAddress(item.id).then(res => {
         this.getList()
-        Notification({type: 'success', title: '我的地址', message: '删除成功'})
+        Notification({ type: 'success', title: '我的地址', message: '删除成功' })
       })
     },
     toAdd() {
@@ -130,24 +144,26 @@ props:{
     select(item) {
       this.address = item
     },
-    confirm(){
-      this.$emit('confirm',this.address)
+    confirm() {
+      this.$emit('confirm', this.address)
     },
-    cancel(){
+    cancel() {
       this.$emit('close-drawer')
     },
   }
 }
 </script>
 <style scoped>
- .add .el-dialog__wrapper {
-  z-index: 90000000 ;
+.add .el-dialog__wrapper {
+  z-index: 90000000;
 }
+
 .depot-item {
   /* 初始状态样式 */
   border: 1px solid transparent;
   border-radius: 3px;
-  transition: border-color 0.3s ease-in-out; /* 添加过渡效果 */
+  transition: border-color 0.3s ease-in-out;
+  /* 添加过渡效果 */
   /* 设置可点击样式，可根据需要自定义 */
   cursor: pointer;
 }
@@ -157,7 +173,8 @@ props:{
 }
 
 .depotFont {
-  transition: border-color 0.3s ease-in-out; /* 添加过渡效果 */
+  transition: border-color 0.3s ease-in-out;
+  /* 添加过渡效果 */
   /* 设置可点击样式，可根据需要自定义 */
   cursor: pointer;
 }
@@ -181,5 +198,4 @@ props:{
   padding-left: 30px;
   background-color: #eeeeee
 }
-
 </style>
