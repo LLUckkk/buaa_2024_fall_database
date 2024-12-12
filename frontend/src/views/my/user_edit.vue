@@ -55,19 +55,28 @@
   </div>
 
   <!-- 修改密码对话框 -->
-  <el-dialog title="设置密码" :visible.sync="dialog" width="400px">
-    <el-form :model="form" class="password-form">
+  <el-dialog title="设置密码" v-model="dialog" width="400px">
+    <el-form :model="form" class="password-form" label-width="120px" label-position="right">
       <el-form-item label="设置密码">
-        <el-input type="password" v-model="form.password"/>
+        <el-input type="password" v-model="form.password" @input="validatePassword"/>
       </el-form-item>
       <el-form-item label="重新输入密码">
-        <el-input type="password" v-model="form.passwordCheck"/>
+        <el-input 
+          type="password" 
+          v-model="form.passwordCheck" 
+          @input="validatePassword"
+        />
       </el-form-item>
+      <div class="password-tip" v-if="passwordError" style="color: #F56C6C; font-size: 12px; text-align: center;">
+        两次输入的密码不一致
+      </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialog = false">取 消</el-button>
-      <el-button type="primary" @click="postPass()">确 定</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialog = false">取 消</el-button>
+        <el-button type="primary" @click="postPass()" :disabled="passwordError">确 定</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -91,6 +100,7 @@ export default {
       },
       dialog: false,
       userInfo: {},
+      passwordError: false,
     }
   },
   methods: {
@@ -109,13 +119,20 @@ export default {
         this.form.avatar = res.data.avatar
       })
     },
+    validatePassword() {
+      if (this.form.password && this.form.passwordCheck) {
+        this.passwordError = this.form.password !== this.form.passwordCheck;
+      } else {
+        this.passwordError = false;
+      }
+    },
     postPass() {
       if(!this.form.password) {
         Notification({type: 'warning', title: '异常', message: '请输入密码'})
         return
       }
-      if (this.form.password !== this.form.passwordCheck) {
-        Notification({type: 'warning', title: '异常', message: '输入密码不一致'})
+      if (this.passwordError) {
+        Notification({type: 'warning', title: '异常', message: '两次输入的密码不一致'})
         return
       }
       this.$api.user.updateUserPassword(this.form).then(res => {
@@ -259,19 +276,28 @@ export default {
 }
 
 .password-form {
-  padding: 0 20px;
+  padding: 20px;
   
-  .el-form-item__label {
-    width: 100px;
-  }
-  
-  .el-input {
-    width: 100%;
+  :deep(.el-form-item) {
+    margin-bottom: 20px;
+    
+    .el-form-item__label {
+      font-weight: normal;
+      color: #606266;
+    }
+    
+    .el-input {
+      width: 100%;
+    }
   }
 }
 
 .dialog-footer {
   text-align: right;
-  padding-top: 20px;
+  padding-top: 10px;
+  
+  .el-button + .el-button {
+    margin-left: 12px;
+  }
 }
 </style>

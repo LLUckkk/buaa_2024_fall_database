@@ -5,7 +5,7 @@
         :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
         <div class="header"><span class="header-icon"></span><span class="header-title">发布闲置</span></div>
         <div class="img-list">
-          <el-upload v-model:file-list="fileList" action="/api/upload/image" list-type="picture-card"
+          <el-upload v-model:file-list="fileList" :http-request="uploadImage" list-type="picture-card"
             :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUploadSuccess">
             <div style="line-height: 80px;font-size: 12px;color: #9999b3">+添加优质图</div>
           </el-upload>
@@ -117,12 +117,23 @@ export default {
     this.$api = api;
   },
   methods: {
+    uploadImage(options) {
+      const { file } = options
+      this.$api.upload.uploadImage(file).then(res => {
+        alert(res.data)
+        this.fileList.push({
+          url: res.data,
+          data: res.data
+        })
+      })
+    },
     publish() {
       //图片处理
       if (this.fileList.length > 0) {
         //alert(this.fileList[0].url);
         //let _fileList = this.fileList.map(file => file.response.result.url);
-        let _fileList = this.fileList.map(file => file.data);
+        let _fileList = this.fileList.map(file => file.url);
+        //alert(this.fileList[0].data)
         this.formData.image = JSON.stringify(_fileList)
       }
       this.$refs.form.validate(valid => {
@@ -162,7 +173,7 @@ export default {
       })
     },
     handleUploadSuccess(response, file, fileList) {
-      //alert("success!");
+      alert("success!");
       this.fileList = fileList
     },
     closeDrawer(changeAddress) {

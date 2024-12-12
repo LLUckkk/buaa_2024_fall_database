@@ -111,6 +111,7 @@ export default {
     getProductList() {
       this.$api.product.getProductList(this.page_param).then(res => {
         let list = res.data
+        alert(list.length)
         if (list.length === 0) {
           //一秒后设置为true
           setTimeout(() => {

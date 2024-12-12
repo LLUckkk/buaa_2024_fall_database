@@ -1,19 +1,16 @@
 <template>
   <div>
     <div class="message-container">
-      <!-- <div class="message-item" @click="toChat(item)" v-for="item in chatList"> -->
-      <div class="message-item" @click="toChat(item)" v-for="item in testChat">
+      <div class="message-item" @click="toChat(item)" v-for="item in chatList">
         <div class="user-avatar">
-          <el-image class="avatar-item" src="@/assets/logo.jpg"></el-image>
-          <!-- <el-image class="avatar-item" :src="userInfo.id === item.fromUserId?item.toUserAvatar:item.fromUserAvatar"></el-image> -->
+          <el-image class="avatar-item" :src="userInfo.id === item.fromUserId?item.toUserAvatar:item.fromUserAvatar"></el-image>
         </div>
         <div class="main">
           <div class="info">
 
             <div class="user-info">
-              <!-- <a class>用户名</a> -->
-              <a class>{{ item.fromUserNick }}</a>
-              <!-- <a class>{{ userInfo.id === item.fromUserId ? item.toUserNick : item.fromUserNick }}</a> -->
+              <!-- <a class>{{ item.fromUserNick }}</a> -->
+              <a class>{{ userInfo.id === item.fromUserId ? item.toUserNick : item.fromUserNick }}</a>
             </div>
 
             <div class="interaction-content" style="height: 20px">
@@ -22,8 +19,8 @@
               <div class="msg-count" v-show="item.noReadCount > 0">{{ item.noReadCount }}</div>
             </div>
             <div class="user-info">
-              <div class="interaction-hint"><span>{{ item.updateTime }}</span></div>
-              <!-- <div class="interaction-hint"><span>{{ $utils.convert.formatTime(item.updateTime) }}</span></div> -->
+              <!-- <div class="interaction-hint"><span>{{ item.updateTime }}</span></div> -->
+              <div class="interaction-hint"><span>{{ $utils.convert.formatTime(item.updateTime) }}</span></div>
             </div>
           </div>
           <div class="product-image">
@@ -76,10 +73,11 @@ import Chat from '@/components/Chat.vue'
 //import Address_edit from "@/views/publish/address_edit.vue";
 import websocket from "@/utils/websocket";
 import Main from "@/views/main/main.vue";
+import api from "@/api";
 
 export default {
-  //components: {Main, Address_edit, Chat},
-  components: { Main, Chat },
+  components: {Main, Chat},
+  //components: { Main, Chat },
   data() {
     return {
       productId: '',
@@ -91,16 +89,24 @@ export default {
       timer: null,
     }
   },
+  created() {
+    this.$api = api;
+  },
   mounted() {
     //this.userInfo = this.$store.state.user.userInfo
-    //this.getChatList()
-    //this.getChatListFlush()
+    this.getUserInfo()
+    this.getChatList()
+    this.getChatListFlush()
   },
   methods: {
+    getUserInfo() {
+      this.$api.user.getUserInfo().then(res => {
+        this.userInfo = res.data
+      })
+    },
     getChatList() {
       this.$api.chatList.getChatList().then(res => {
         this.chatList = res.data
-        //统计未读总数
         let noReadCount = 0
         this.chatList.forEach(item => {
           noReadCount += item.noReadCount
@@ -114,11 +120,11 @@ export default {
       }, 1000)
     },
     toChat(item) {
-      // this.$api.chatMessage.updateChatMessageIsRead(item.id).then(res => {
-      //   item.noReadCount = 0
-      //   this.chatListItem = item
-      //   this.chatVisiable = true;
-      // })
+      this.$api.chatMessage.updateChatMessageIsRead(item.id).then(res => {
+        item.noReadCount = 0
+        this.chatListItem = item
+        this.chatVisiable = true;
+      })
       item.noReadCount = 0;
       this.chatListItem = item;
       this.chatVisiable = true;

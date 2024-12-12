@@ -22,9 +22,9 @@
                 <img
                     class="avatar-item"
                     style="width: 40px; height: 40px"
-                    :src="productInfo.userInfo.avatar"
+                    :src="this.productInfo.userInfo.avatar"
                     alt=""/>
-                <span class="name">{{ productInfo.userInfo.nickname }}</span>
+                <span class="name">{{ this.productInfo.userInfo.nickname }}</span>
                 <!-- <span class="name">user</span> -->
               </div>
             </div>
@@ -32,12 +32,12 @@
             <div class="note-scroller">
               <div class="note-content">
                 <div class="title">
-                  {{ productInfo.title }}
+                  {{ this.productInfo.title }}
                     <!-- 麦当劳 -->
                 </div>
 
                 <div class="desc">
-                  <span>{{ productInfo.intro }} <br/></span>
+                  <span>{{ this.productInfo.intro }} <br/></span>
                   <!-- <span>肯德基疯狂星期四v我50 <br/></span> -->
                   <!--                  <a class="tag tag-search">#海贼王</a>-->
                 </div>
@@ -54,9 +54,9 @@
                 </div>
 
                 <div class="bottom-container" style="margin-top: 5px">
-                  <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
+                    <span class="date">{{ productInfo.createTime }}</span>
 
-                  <el-button type="danger" round @click="chatUser" v-if="productInfo.userId != $store.state.user.userInfo.id && productInfo.status === 1">我想要</el-button>
+                  <el-button type="danger" round @click="chatUser" v-if="canChat" >我想要</el-button>
 
                 </div>
               </div>
@@ -64,16 +64,16 @@
               <div class="divider interaction-divider"></div>
               <!-- 评论 -->
               <div class="comments-el">
-                <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status" :delshow="productInfo.userId === $store.state.user.userInfo.id" @reply="handleReply" @del="handleDel"></Comment>
+                <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status" :delshow="productInfo.userId === currentUserId" @reply="handleReply" @del="handleDel"></Comment>
               </div>
             </div>
             <div class="interactions-footer" v-if="productInfo.status === 9">
               <div class="buttons">
                 <div class="left">
                   <div class="like-wrapper">
-                    <span v-if="productInfo.userId != $store.state.user.userInfo.id ">收藏</span>
+                    <span v-if="productInfo.userId != currentUserId ">收藏</span>
                     <div class="like-lottie" style="margin-left: 10px">
-                      <div v-if="productInfo.userId != $store.state.user.userInfo.id">
+                      <div v-if="productInfo.userId != currentUserId">
                         <img src="@/assets/image/collect.png" style="width: 15px;height: 15px;cursor: pointer" alt="" v-if="collect" @click="cancelCollect">
                         <img src="@/assets/image/notCollect.png" style="width: 15px;height: 15px;cursor: pointer" alt="" @click="setCollect" v-else>
                       </div>
@@ -150,26 +150,33 @@ export default {
         productId: "",
         content: "",
         parentId: "",
-      }
+      },
+      currentUserId: null,
     }
   },
   created() {
     this.$api = api
+    this.getCurrentUserId()
     this.getProductInfo()
     this.getCommentList()
     this.getCollectList()
   },
+  computed: {
+    canChat() {
+      return this.productInfo.userId !== this.currentUserId
+        && this.productInfo.status === 1;
+    }
+  },
   methods: {
     getProductInfo() {
-      this.$api.product.getProductInfo({productId: this.productId}).then(res => {
-        this.productInfo = res.data
-        // if (this.productInfo.productVoucher) {
-        //   this.voucherVisable = true
-        //   this.productInfo.productVoucher.beginTime = new Date(this.productInfo.productVoucher.beginTime).toLocaleString()
-        //   this.productInfo.productVoucher.endTime = new Date(this.productInfo.productVoucher.endTime).toLocaleString()
-        // }
-        if (res.data.image) this.productInfo.image = JSON.parse(res.data.image)
-      })
+      //alert(this.productId);
+      this.$api.product.getProductInfo({id: this.productId})
+        .then(res => {
+          this.productInfo = res.data;
+        })
+        .catch(error => {
+          console.error('API 请求失败', error);
+        });
     },
     handleDel(){
       this.getCommentList()
@@ -195,26 +202,55 @@ export default {
         Notification({type: 'success', title: '航游集市', message: '取消收藏'})
       })
     },
-    setCollect() {
-      this.$api.productCollect.saveCollect({productId: this.productId}).then(res => {
+    async setCollect() {
+      try {
+        const response = await this.$api.user.getUserInfo()
+        const userId = response.data.id
+        
+        if (!userId) {
+          Notification({
+            type: 'warning',
+            title: '航游集市',
+            message: '请先登录'
+          })
+          return
+        }
+
+        const collectData = {
+          UserId: userId,
+          Id: this.productId,
+          productId: this.productId
+        }
+        
+        await this.$api.productCollect.saveCollect(collectData)
         this.collect = true
         Notification({type: 'success', title: '航游集市', message: '收藏成功'})
-      })
+        
+      } catch (error) {
+        console.error('收藏失败:', error)
+        Notification({
+          type: 'error',
+          title: '航游集市',
+          message: '收藏失败，请重试'
+        })
+      }
     },
-    chatUser() {
+    async chatUser() {
       this.$api.product.addProductLike(this.productId)
       let data = {
-        fromUserId: this.$store.state.user.userInfo.id,
+        fromUserId: this.currentUserId,
         toUserId: this.productInfo.userId,
         productId: this.productInfo.id,
         productImage: this.productInfo.image[0],
       }
-      this.$api.chatList.createChat(data).then(res => {
-        this.$api.chatList.getChatListById({chatListId: res.data}).then(res => {
-          this.chatListItem = res.data
-          this.chatVisiable = true;
-        })
-      })
+      try {
+        const chatListId = await this.$api.chatList.createChat(data)
+        const chatListData = await this.$api.chatList.getChatListById({chatListId: chatListId.data})
+        this.chatListItem = chatListData.data
+        this.chatVisiable = true
+      } catch (error) {
+        console.error('创建聊天失败:', error)
+      }
     },
     closeChat() {
       this.chatVisiable = false;
@@ -246,6 +282,14 @@ export default {
     },
     close() {
       this.$emit('main_close')
+    },
+    async getCurrentUserId() {
+      try {
+        const response = await this.$api.user.getUserInfo()
+        this.currentUserId = response.data.id
+      } catch (error) {
+        console.error('获取用户信息失败:', error)
+      }
     },
   }
 }
@@ -454,12 +498,8 @@ export default {
           }
         }
 
-        .interaction-divider {
-
-        }
 
         .divider {
-
           list-style: none;
           height: 0;
           border: solid rgba(0, 0, 0, 0.08);

@@ -41,6 +41,7 @@
   </template>
   <script>
   import Message_list from "@/views/message/children/message-list.vue";
+  import api from "@/api";
   
   export default {
     components: {Message_list},
@@ -48,6 +49,9 @@
       return {
         messageCount: 0,
       }
+    },
+    created() {
+      this.$api = api;
     },
     methods: {
       setMessageCount(val){
