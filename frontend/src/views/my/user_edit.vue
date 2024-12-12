@@ -1,57 +1,76 @@
 <template>
-  <div style="background-color: #f7f7f7;height: 100%;width: 100%; padding: 15px;">
-    <div class="user-card">
+  <div class="user-card">
+    <!-- 添加标题区域 -->
+    <div class="title-section">
+      <h2 class="page-title">修改资料</h2>
+      <div class="title-divider"></div>
+    </div>
 
-      <el-form ref="form" :model="form">
+    <el-form ref="form" :model="form">
+      <!-- 头像上传区域 -->
+      <div class="avatar-section">
         <el-upload
-            style="display: flex;align-items: center;justify-content: center;padding: 10px"
-            class="avatar-uploader"
-            action="/api/upload/image"
-            :on-success="handleUploadSuccess"
-            :show-file-list="false"
-            :limit="1"
+          class="avatar-uploader"
+          action="/api/upload/image"
+          :on-success="handleUploadSuccess"
+          :show-file-list="false"
+          :limit="1"
         >
           <img v-if="form.avatar" :src="form.avatar" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <div class="description">
-          <el-descriptions :column="1" :colon="false" direction="vertical">
-            <el-descriptions-item label="学号">{{ userInfo.studentId }}</el-descriptions-item>
-            <el-descriptions-item label="邮箱">{{ userInfo.email }}</el-descriptions-item>
-            <el-descriptions-item label="地址">{{ userInfo.address }}</el-descriptions-item>
-            <el-descriptions-item label="昵称">
-              <input class="input" type="text" :placeholder="form.nickName" v-model="form.nickName"/>
-            </el-descriptions-item>
-            <el-descriptions-item label="我的密码">
-             <el-link type="primary" @click="dialog = true">修改密码</el-link>
-            </el-descriptions-item>
-            <el-descriptions-item label="个人简介">
-              <textarea class="textarea" :placeholder="form.intro" v-model="form.intro"></textarea>
-            </el-descriptions-item>
-          </el-descriptions>
-        </div>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" size="mini">确认修改</el-button>
-          <el-button size="mini" @click="cancel">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <el-dialog title="设置密码" :visible.sync="dialog" append-to-body>
-      <el-form :model="form">
-        <el-form-item label="设置密码" :label-width="'100px'">
-          <el-input type="password" v-model="form.password"/>
-        </el-form-item>
-        <el-form-item label="重新输入密码" :label-width="'100px'">
-          <el-input  type="password" v-model="form.passwordCheck"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="postPass()">确 定</el-button>
+        <div class="avatar-tip">点击更换头像</div>
       </div>
-    </el-dialog>
+
+      <!-- 用户信息区域 -->
+      <div class="user-info">
+        <el-descriptions :column="1" :colon="false" direction="vertical">
+          <el-descriptions-item label="学号">
+            <span class="info-text">{{ userInfo.studentId }}</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="邮箱">
+            <span class="info-text">{{ userInfo.email }}</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="地址">
+            <span class="info-text">{{ userInfo.address }}</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="昵称">
+            <input class="custom-input" type="text" :placeholder="form.nickName" v-model="form.nickName"/>
+          </el-descriptions-item>
+          <el-descriptions-item label="我的密码">
+            <el-link type="primary" @click="dialog = true" class="password-link">修改密码</el-link>
+          </el-descriptions-item>
+          <el-descriptions-item label="个人简介">
+            <textarea class="custom-textarea" :placeholder="form.intro" v-model="form.intro"></textarea>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+
+      <!-- 按钮区域 -->
+      <div class="button-group">
+        <el-button type="primary" @click="onSubmit">确认修改</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
+    </el-form>
   </div>
+
+  <!-- 修改密码对话框 -->
+  <el-dialog title="设置密码" :visible.sync="dialog" width="400px">
+    <el-form :model="form" class="password-form">
+      <el-form-item label="设置密码">
+        <el-input type="password" v-model="form.password"/>
+      </el-form-item>
+      <el-form-item label="重新输入密码">
+        <el-input type="password" v-model="form.passwordCheck"/>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialog = false">取 消</el-button>
+      <el-button type="primary" @click="postPass()">确 定</el-button>
+    </div>
+  </el-dialog>
 </template>
+
 <script>
 import {Notification} from "element-plus";
 import api from "@/api";
@@ -115,70 +134,144 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="less">
+.title-section {
+  margin-bottom: 20px;
+  text-align: center;
+  
+  .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0 0 12px 0;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    margin-top: -30px;
+  }
+
+  .title-divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+    width: 100px;
+    margin: 0 auto;
+  }
+}
+
 .user-card {
-  height: 100%;
-  border-radius: 10px;
-  background-color: white;
-  padding: 10px;
+  max-width: 560px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
 
-  .description {
+.avatar-section {
+  text-align: center;
+  margin-bottom: 30px;
 
+  .avatar-tip {
+    margin-top: 8px;
+    color: #909399;
+    font-size: 13px;
+  }
+}
 
-    .input {
-      padding: 12px 16px 12px 16px;
-      width: 60%;
-      height: 25px;
-      line-height: 25px;
-      background: rgba(0, 0, 0, 0.03);
-      caret-color: rgba(51, 51, 51, 0.3);
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      resize: none;
-      color: #333;
+.user-info {
+  :deep(.el-descriptions) {
+    .el-descriptions-item__label {
+      width: 80px;
+      color: #606266;
+      font-weight: normal;
+      padding: 16px 0;
     }
 
-    .textarea {
-      padding: 12px 16px 12px 16px;
-      width: 100%;
-      height: 70px;
-      line-height: 16px;
-      background: rgba(0, 0, 0, 0.03);
-      caret-color: rgba(51, 51, 51, 0.3);
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      resize: none;
-      color: #333;
+    .el-descriptions-item__content {
+      padding: 16px 0;
     }
   }
 }
 
-/deep/ .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 100%;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+.custom-input {
+  width: 100%;
+  max-width: 300px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  transition: all 0.2s;
+  
+  &:focus {
+    border-color: #409EFF;
+    outline: none;
+  }
 }
 
-/deep/ .avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
+.custom-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  height: 80px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  resize: vertical;
+  transition: all 0.2s;
+  
+  &:focus {
+    border-color: #409EFF;
+    outline: none;
+  }
 }
 
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
+.button-group {
+  margin-top: 30px;
   text-align: center;
+  
+  .el-button {
+    padding: 9px 20px;
+    margin: 0 10px;
+  }
 }
 
-/deep/ .avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
+:deep(.avatar-uploader) {
+  .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 50%;
+    cursor: pointer;
+    
+    &:hover {
+      border-color: #409EFF;
+    }
+  }
+
+  .avatar-uploader-icon {
+    font-size: 24px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.password-form {
+  padding: 0 20px;
+  
+  .el-form-item__label {
+    width: 100px;
+  }
+  
+  .el-input {
+    width: 100%;
+  }
+}
+
+.dialog-footer {
+  text-align: right;
+  padding-top: 20px;
 }
 </style>

@@ -86,7 +86,8 @@ export default {
     return {
       mainShow: false,
       productId: '',
-      trendList: []
+      trendList: [],
+      blobUrls: [] // 用于存储创建的 blob URLs
     }
   },
   created() {
@@ -109,10 +110,27 @@ export default {
         // })
       })
     },
-    getImage(imageName){
-      //console.log(imageName);
-      //console.log(this.$api.image.showImage(imageName));
-      return this.$api.image.showImage(imageName);
+    getImage(imageName) {
+      if (!imageName) {
+        return ''; 
+      }
+      try {
+        let imageUrl = imageName;
+        if (imageName.startsWith('[') && imageName.endsWith(']')) {
+          const urls = JSON.parse(imageName);
+          imageUrl = urls[0] || '';
+        }
+        
+        // 存储 blob URL 以便后续清理
+        if (imageUrl.startsWith('blob:')) {
+          this.blobUrls.push(imageUrl);
+        }
+        
+        return imageUrl;
+      } catch (error) {
+        console.error('获取图片失败:', error);
+        return ''; 
+      }
     },
     toMain(val) {
       this.productId = val
@@ -121,6 +139,12 @@ export default {
     closeMain() {
       this.mainShow = false
     }
+  },
+  beforeDestroy() {
+    // 组件销毁前清理所有 blob URLs
+    this.blobUrls.forEach(url => {
+      URL.revokeObjectURL(url);
+    });
   }
 }
 </script>
