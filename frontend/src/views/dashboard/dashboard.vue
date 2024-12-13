@@ -19,36 +19,39 @@
     <div class="feeds-container">
       <el-backtop target=".feeds-container" @click="refresh"></el-backtop>
       <div class="feeds-loading-top" v-show="topLoading">
-        <i class="el-icon-loading" style="width: 1.2em; height: 1.2em"></i>
+        <i class="el-icon-loading" style="width: 1.2em; height: 1.2em">
+
+        </i>
       </div>
       <Waterfall :list="list" :width="230" :hasAroundGutter="false" style="max-width: 1260px; " :delay="1000"
         :animationEffect="'animate__zoomIn'">
-        <template #item="{ item, url }">
-          <div class="card" @click="toMain(item.id)">
-            <el-image style="border-radius: 10px;width: 230px;" :src="item.image" fit="cover"></el-image>
+        <template #default="{ item, url }">
+          <!-- <div class="card" @click="toMain(item.id)"> -->
+          <div class="card">
+            <!-- <el-image style="border-radius: 10px;width: 230px;" :src="item.image" fit="cover"></el-image> -->
             <div class="footer">
-              <a class="title"><span>{{ item.title }}</span></a>
+              <!-- <a class="title"><span>{{ item.title }}</span></a> -->
+              <a class="title"><span>test</span></a>
               <div class="price">
-                <span>￥{{ $utils.convert.to_price(item.price) }}</span>
-                <span
+                <!-- <span>￥{{ $utils.convert.to_price(item.price) }}</span> -->
+                <span>￥100</span>
+                <!-- <span
                   style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;text-decoration: line-through">￥{{
-                    $utils.convert.to_price(item.originalPrice) }}</span>
-                <span style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;">{{ item.postType === 0
-                  ? '邮寄' : '自提' }}</span>
+                    $utils.convert.to_price(item.originalPrice) }}</span> -->
               </div>
               <div class="author-wrapper">
                 <a class="author">
-                  <img class="author-avatar" :src="item.avatar" />
-                  <span class="name">{{ item.city }}{{ item.district }}</span>
+                  <!-- <img class="author-avatar" :src="item.avatar" /> -->
+                  <!-- <span class="name">{{ item.city }}{{ item.district }}</span> -->
                 </a>
                 <span class="like-wrapper"><i class="el-icon-thumb"></i>
-                  <span class="count">{{ item.likeCount }}人想要</span>
+                  <!-- <span class="count">{{ item.likeCount }}人想要</span> -->
+                  <span class="count">0人想要</span>
                 </span>
               </div>
             </div>
           </div>
         </template>
-
       </Waterfall>
       <!--loading-->
       <el-collapse-transition>
@@ -64,128 +67,122 @@
 
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
 import 'vue-waterfall-plugin-next/dist/style.css'
-import Main from "@/views/main/main.vue";
-import screenUtil from "@/utils/screenUtil";
-import api from "@/api";
+import Main from "@/views/main/main.vue"
+import screenUtil from "@/utils/screenUtil"
+import api from "@/api"
+import utils from "@/utils"
 
-export default {
-  components: { Waterfall, LazyImg, Main },
+// 状态定义
+const show = ref(false)
+const skeleton = ref(true)
+const busy = ref(false)
+const topLoading = ref(false)
+const mainShow = ref(false)
+const noMore = ref(false)
+const productId = ref('')
+const activeMenu = ref('')
+const list = ref([])
+const menuList = ref([{ typeCode: '', typeName: '全部' }])
 
-  data() {
-    return {
-      show: false,
-      skeleton: true,
-      busy: false,
-      topLoading: false,
-      mainShow: false,
-      noMore: false,
-      productId: '',
-      activeMenu: '',
-      page_param: {
-        pageNumber: 1,
-        pageSize: 15,
-        typeCode: '',
-        key: '',
-      },
-      // menuList: [{ typeCode: '', typeName: '全部' }, { typeCode: '1', typeName: '电子产品' }, { typeCode: '2', typeName: '书籍资料' }, 
-      // { typeCode: '3', typeName: '服装首饰' }, { typeCode: '4', typeName: '食物饮品' }, { typeCode: '5', typeName: '生活用品' },
-      //  { typeCode: '6', typeName:"学习用品"}, {typeCode: '7', typeName: "其他"}],
-      menuList:[],
-      list: [],
+const page_param = ref({
+  pageNumber: 1,
+  pageSize: 15,
+  typeCode: '',
+  key: '',
+})
+
+// 方法定义
+const getProductList = () => {
+  api.product.getProductList(page_param.value).then(res => {
+    let productList = res.data
+    alert(productList.length)
+    if (productList.length === 0) {
+      setTimeout(() => {
+        noMore.value = true
+      }, 1000)
+    } else {
+      productList.forEach(item => {
+        if (item.image) {
+          item.image = JSON.parse(item.image)[0]
+        }
+      })
+      list.value.push(...productList)
+      busy.value = false
     }
-  },
-  created() {
-    this.$api = api
-    //this.$eventBus.$on('keyChanged', this.handleKeyChange);
-    this.getMenuList()
-    this.topLoading = true
-    window.addEventListener('scroll', this.windowScroll, true) //监听页面滚动
-    this.getProductList()
-    //getProductList根据page_param获得产品列表
-  },
+    topLoading.value = false
+  })
+}
 
-  methods: {
-    getProductList() {
-      this.$api.product.getProductList(this.page_param).then(res => {
-        let list = res.data
-        alert(list.length)
-        if (list.length === 0) {
-          //一秒后设置为true
-          setTimeout(() => {
-            this.noMore = true
-          }, 1000)
-        } else {
-          list.forEach(item => {
-            if (item.image) {
-              item.image = JSON.parse(item.image)[0]
-            }
-          })
-          this.list.push(...list)
-          this.busy = false
-        }
-        this.topLoading = false
-      })
+const handleKeyChange = (newKey) => {
+  page_param.value.pageNumber = 1
+  busy.value = false
+  list.value = []
+  page_param.value.key = newKey
+  getProductList()
+}
 
-    },
-    handleKeyChange(newKey) {
-      this.page_param.pageNumber = 1
-      this.busy = false
-      this.list = []
-      this.page_param.key = newKey
-      this.getProductList();
-    },
-    getMenuList() {
-      this.$api.productType.getTypeList().then(res => {
-        this.menuList.push(...res.data)
-      })
-    },
-    refresh() {
-      // this.topLoading = true;
-    },
-    changeMenu(item) {
-      this.page_param.pageNumber = 1
-      this.list = []
-      this.busy = false
-      this.page_param.typeCode = item.typeCode
-      this.activeMenu = item.typeCode
-      this.getProductList();
-    },
-    windowScroll() {
-      //获取三个值
-      let scrollTop = screenUtil.getScrollTop()
-      let clientHeight = screenUtil.getClientHeight()
-      let scrollHeight = screenUtil.getScrollHeight()
-      //如果满足公式则，确实到底了
-      if (scrollTop + clientHeight >= scrollHeight - 1) {
-        if (!this.busy) {
-          this.busy = true
-          this.loadMoreData()
-        }
-      }
-    },
-    loadMoreData() {
+const getMenuList = () => {
+  api.productType.getTypeList().then(res => {
+    menuList.value.push(...res.data)
+  })
+}
 
-      this.page_param.pageNumber += 1;
-      this.getProductList();
+const refresh = () => {
+  topLoading.value = true;
+}
 
-    },
-    closeMain() {
-      this.mainShow = false
-    },
-    toMain(val) {
-      this.productId = val
-      this.mainShow = true
-    },
+const changeMenu = (item) => {
+  page_param.value.pageNumber = 1
+  list.value = []
+  busy.value = false
+  page_param.value.typeCode = item.typeCode
+  activeMenu.value = item.typeCode
+  getProductList()
+}
 
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.windowScroll);//销毁滚动事件
-    this.$eventBus.$off('keyChanged', this.handleKeyChange);
+const windowScroll = () => {
+  //获取三个值
+  let scrollTop = screenUtil.getScrollTop()
+  let clientHeight = screenUtil.getClientHeight()
+  let scrollHeight = screenUtil.getScrollHeight()
+  //如果满足公式则，确实到底了
+  if (scrollTop + clientHeight >= scrollHeight - 1) {
+    if (!busy.value) {
+      busy.value = true
+      loadMoreData()
+    }
   }
 }
+
+const loadMoreData = () => {
+  page_param.value.pageNumber += 1;
+  getProductList();
+}
+
+const closeMain = () => {
+  mainShow.value = false
+}
+
+const toMain = (val) => {
+  productId.value = val
+  mainShow.value = true
+}
+
+// 生命周期钩子
+onMounted(() => {
+  getMenuList()
+  topLoading.value = true
+  window.addEventListener('scroll', windowScroll, true)
+  getProductList()
+})
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", windowScroll)
+})
 </script>
 
 <style lang="less" scoped>

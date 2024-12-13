@@ -97,17 +97,18 @@ export default {
       placeList: [{ typeCode: '1', typeName: '新北区' }, { typeCode: '2', typeName: '大运村' },
       { typeCode: '3', typeName: '合一区' }, { typeCode: '4', typeName: '沙河西区' }, { typeCode: '5', typeName: '沙河东区' }],
       formData: {
-        title: "string",
-        intro: "string",
-        image: "string",
+        title: "",
+        intro: "",
+        image: "",
         price: 0,
         originalPrice: 0,
         postType: 0,
-        adcode: "string",
-        province: "string",
-        city: "string",
-        district: "string",
-        type: "string"
+        adcode: "",
+        province: "",
+        city: "",
+        district: "",
+        type: "",
+        likeCount: 0
       },
     }
   },
@@ -130,17 +131,33 @@ export default {
     publish() {
       //图片处理
       if (this.fileList.length > 0) {
-        //alert(this.fileList[0].url);
-        //let _fileList = this.fileList.map(file => file.response.result.url);
         let _fileList = this.fileList.map(file => file.url);
-        //alert(this.fileList[0].data)
         this.formData.image = JSON.stringify(_fileList)
       }
+
+      // 添加数据验证
+      if (!this.formData.price) {
+        this.formData.price = 0
+      }
+      if (!this.formData.originalPrice) {
+        this.formData.originalPrice = this.formData.price // 如果未设置原价，使用当前价格
+      }
+      if (!this.formData.likeCount) {
+        this.formData.likeCount = 0
+      }
+
       this.$refs.form.validate(valid => {
         if (valid) {
+          // 打印发送的数据，用于调试
+          console.log('准备发送的商品数据:', this.formData)
+          
           this.$api.product.createProductInfo(this.formData).then(res => {
+            console.log('创建商品响应:', res) // 添加响应日志
             this.$router.push("/my")
             ElNotification({ type: 'success', title: '航游集市', message: '商品发布成功' })
+          }).catch(err => {
+            console.error('创建商品失败:', err) // 添加错误日志
+            ElNotification({ type: 'error', title: '航游集市', message: '商品发布失败，请重试' })
           })
         }
       })

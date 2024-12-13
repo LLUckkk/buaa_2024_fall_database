@@ -6,7 +6,7 @@
       <!-- <el-timeline-item v-for="(trend, index) in test_trends" :key="index" type="primary" :color="trend.color"
         size="normal" placement="top" :timestamp="$utils.convert.parseTime(String(trend.createTime))"> -->
       <el-timeline-item v-for="(trend, index) in trendList" :key="index" type="primary" :color="trend.color"
-        size="normal" placement="top" :timestamp="trend.createTime">
+        size="normal" placement="top" :timestamp="$utils.convert.parseTime(String(trend.createTime))">
         <div class="trend-type" v-if="trend.type === 'publish'">上新了一件宝贝</div>
         <div class="trend-type" v-if="trend.type === 'sell'">卖出了一件宝贝</div>
         <div class="trend-type" v-if="trend.type === 'buy'">买到了一件宝贝</div>
@@ -29,7 +29,7 @@
                 <div class="interaction-content">{{ trend.intro }}</div>
                 <!-- <div class="interaction-content">肯德基疯狂星期五V我四十</div> -->
                 <!-- <div class="interaction-price">￥40</div> -->
-                <div class="interaction-price">￥{{ trend.price }}</div>
+                <div class="interaction-price">￥{{ this.$utils.convert.to_price(trend.price) }}</div>
                 <!-- <div class="interaction-price">￥{{ $utils.convert.to_price(trend.price) }}</div> -->
               </div>
             </div>
@@ -45,41 +45,13 @@
   </div>
 </template>
 <script setup>
-const test_trends = [
-  {
-    id: 1,
-    type: "publish",
-    createTime: '2024-12-07',
-    intro: "this is an introduction",
-    title: "麦当劳",
-    image: "@/assets/logo.jpg",
-    price: 99,
-  },
-  {
-    id: 2,
-    type: "sell",
-    createTime: '2024-12-07',
-    intro: "this is an introduction",
-    title: "麦当劳",
-    image: "@/assets/logo.jpg",
-    price: 99,
-  },
-  {
-    id: 3,
-    type: "buy",
-    createTime: '2024-12-07',
-    intro: "this is an introduction",
-    title: "麦当劳",
-    image: "@/assets/logo.jpg",
-    price: 99,
-  }
-]
+
 </script>
 <script>
 import image from "@/api/image";
 import Main from "@/views/main/main.vue";
 import api from "@/api";
-
+import utils from "@/utils";
 export default {
   components: { Main },
   data() {
@@ -91,6 +63,7 @@ export default {
   },
   created() {
     this.$api = api;
+    this.$utils = utils;
     this.getTrend()
   },
   methods: {

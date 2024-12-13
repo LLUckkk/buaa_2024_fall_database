@@ -49,12 +49,12 @@
                   <div class="post">
                     <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">99</span></span> -->
                     <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span> -->
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{productInfo.price }}</span></span>
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{this.$utils.convert.to_price(productInfo.price) }}</span></span>
                   </div>
                 </div>
 
                 <div class="bottom-container" style="margin-top: 5px">
-                    <span class="date">{{ productInfo.createTime }}</span>
+                    <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
 
                   <el-button type="danger" round @click="chatUser" v-if="canChat" >我想要</el-button>
 
@@ -120,7 +120,7 @@ import Chat from '@/components/Chat.vue'
 import websocket from "@/utils/websocket";
 import {Notification} from "element-plus";
 import api from "@/api";
-
+import utils from "@/utils";
 export default {
   components: {Comment, Chat},
   props: {
@@ -156,6 +156,7 @@ export default {
   },
   created() {
     this.$api = api
+    this.$utils = utils
     this.getCurrentUserId()
     this.getProductInfo()
     this.getCommentList()

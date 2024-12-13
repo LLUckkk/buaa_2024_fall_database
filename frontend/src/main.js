@@ -7,6 +7,7 @@ import router from './router'
 import { createStore } from 'vuex'
 import store from './store'
 
+
 const app = createApp(App);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
