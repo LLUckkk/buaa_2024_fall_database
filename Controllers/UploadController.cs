@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Market.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Market.Models;
 
 namespace Market.Controllers
 {
@@ -26,11 +27,12 @@ namespace Market.Controllers
                 return BadRequest("File is empty.");
 
             var fileName = await _fileService.UploadImageAsync(file);
-            if (fileName.Code != 0)
+            if (fileName.Code != 1)
                 return Ok(fileName);
-            else 
-                return Ok(new { FileName = "http://localhost:8080/api/image/" + fileName.Data });
+            else
+                return Ok(Result<string>.Ok("http://localhost:8080/api/image/" + fileName.Data));
         }
+
 
         [HttpGet("image/delete")]
         public async Task<IActionResult> DeleteImage([FromQuery] string fileName)
