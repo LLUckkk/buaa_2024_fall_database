@@ -12,7 +12,7 @@ namespace Market.Controllers
         private readonly IProductCollectService _productCollectService = productCollectService;
 
         [HttpPost]
-        public IActionResult Create([FromBody] ProductCollect req)
+        public IActionResult Create([FromBody] string req)
         {
             return Ok(_productCollectService.Create(req));
         }

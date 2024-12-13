@@ -5,7 +5,7 @@ namespace Market.Interfaces
 {
     public interface IProductCollectService
     {
-        Result Create(ProductCollect req);
+        Result Create(string req);
         Result Delete(string id);
         Result<List<string>> GetCollectionProductIdList();
     }

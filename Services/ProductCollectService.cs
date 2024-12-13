@@ -10,11 +10,11 @@ namespace Market.Services
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly ITokenService _tokenService = tokenService;
 
-        public Result Create(ProductCollect req)
+        public Result Create(string req)
         {
             var userId = _tokenService.GetCurrentLoginUserId();
             var existingCollect = _dbContext.ProductCollects
-                .FirstOrDefault(pc => pc.UserId == userId && pc.ProductId == req.ProductId);
+                .FirstOrDefault(pc => pc.UserId == userId && pc.ProductId == req);
 
             if (existingCollect != null)
             {
@@ -25,7 +25,7 @@ namespace Market.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 UserId = userId,
-                ProductId = req.ProductId,
+                ProductId = req,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
             };
@@ -39,8 +39,8 @@ namespace Market.Services
 
         public Result Delete(string id)
         {
-            var userid = _tokenService.GetCurrentLoginUserId();
-            ProductCollect collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.Id == id && pc.UserId == userid);
+            var userId = _tokenService.GetCurrentLoginUserId();
+            var collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.Id == id && pc.UserId == userId);
             if (collect == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);

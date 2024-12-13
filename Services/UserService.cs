@@ -164,6 +164,9 @@ namespace Market.Services
                 return Result.Fail(ResultCode.ValidateError, "Password not match");
             }
             user.Password = _passwordHasher.HashPassword(req.Password);
+            user.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
 
@@ -174,7 +177,7 @@ namespace Market.Services
                 Id = Guid.NewGuid().ToString(),
                 Username = request.Username!,
                 Password = _passwordHasher.HashPassword(request.Password!),
-                Avatar = "default.png",
+                Avatar = "http://localhost:8080/image/default.png",
                 Email = request.Email!,
                 Nickname = request.Username!,
                 StudentId = request.StudentId!,

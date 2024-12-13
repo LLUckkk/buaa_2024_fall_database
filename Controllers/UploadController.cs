@@ -26,7 +26,10 @@ namespace Market.Controllers
                 return BadRequest("File is empty.");
 
             var fileName = await _fileService.UploadImageAsync(file);
-            return Ok(new { FileName = fileName });
+            if (fileName.Code != 0)
+                return Ok(fileName);
+            else 
+                return Ok(new { FileName = "http://localhost:8080/image/" + fileName.Data });
         }
 
         [HttpGet("image/delete")]

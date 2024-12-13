@@ -25,7 +25,7 @@ namespace Market.Services
                 District = req.District,
                 Price = (long)req.Price * 100,
                 OriginalPrice = (long)req.OriginalPrice * 100,
-                Status = 1,
+                Status = 9, // TODO
                 LikeCount = 0,
                 UserId = user!.Id,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
@@ -182,9 +182,12 @@ namespace Market.Services
                                 UserId = pi.UserId,
                                 CreateTime = pi.CreateTime,
                                 UpdateTime = pi.UpdateTime,
-                                UserInfo = _userService.GetUserById(pi.UserId)
                             })
                             .ToList();
+            page.ForEach(pi =>
+            {
+                pi.UserInfo = _userService.GetUserById(pi.UserId);
+            });
 
             return Result<Page<ProductInfoDetail>>.Ok(new Page<ProductInfoDetail>
             {
@@ -242,16 +245,19 @@ namespace Market.Services
                     UserId = productInfo.UserId,
                     CreateTime = productInfo.CreateTime,
                     UpdateTime = productInfo.UpdateTime,
-                    UserInfo = _userService.GetUserById(productInfo.UserId)
                 };
-                var productVoucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.ProductId == productInfo.Id);
-                if (productVoucher != null)
-                {
-                    detail.ProductVoucher = productVoucher;
-                }
+
                 return detail;
             }).Where(pi => pi != null).ToList();
-
+            collectInfoList.ForEach(pi =>
+            {
+                pi.UserInfo = _userService.GetUserById(pi.UserId);
+                var productVoucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.ProductId == pi.Id);
+                if (productVoucher != null)
+                {
+                    pi.ProductVoucher = productVoucher;
+                }
+            });
             return Result<List<ProductInfoDetail>>.Ok(collectInfoList!);
         }
         public Result ApproveProduct(string id)
