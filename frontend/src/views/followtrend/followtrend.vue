@@ -46,13 +46,15 @@
     <!--点击后展示商品详情-->
     <transition 
       name="main-transition"
-      enter-active-class="animate__animated animate__fadeIn animate__faster"
-      leave-active-class="animate__animated animate__fadeOut animate__faster"
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
     >
       <Main 
         @main_close="closeMain" 
         v-if="mainShow" 
         :productId="productId"
+        class="main-component animate__faster"
+        style="--animate-duration: 0.3s;"
       ></Main>
     </transition>
   </div>
@@ -274,26 +276,8 @@ export default {
     }
   }
 
-  // Main 组件的过渡动画样式
-  .main-transition {
-    &-enter-active,
-    &-leave-active {
-      transition: all 0.3s ease-out;
-    }
-
-    &-enter-from {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-
-    &-leave-to {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-  }
-
   .trend-item-animation {
-    animation: slideInUp 0.3s ease-out forwards;
+    animation: slideInUp 0.1s ease-out forwards;
     opacity: 0;
   }
 
@@ -309,7 +293,6 @@ export default {
   }
 }
 
-// 确保 Main 组件的动画层级正确
 :deep(.main-component) {
   z-index: 1000;
   position: fixed;
@@ -318,7 +301,7 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(255, 255, 255, 0.98);
-  animation-duration: 0.3s !important;
+  animation-duration: 0.2s !important;
 }
 
 @keyframes fadeIn {

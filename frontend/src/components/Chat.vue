@@ -50,7 +50,6 @@
                     <el-image class="avatar-item" style="width: 40px;height: 40px;border-radius: 100%"
                       :src="toUserInfo.avatar"></el-image>
                   </div>
-                  <!-- <div class="message-conent">这是一条消息内容</div> -->
                   <div class="message-conent">{{ item.content }}</div>
                 </div>
               </div>
@@ -87,6 +86,8 @@
 <script>
 import websocket from "@/utils/websocket";
 import Main from "@/views/main/main.vue";
+import utils from "@/utils";
+import { timePanelSharedProps } from "element-plus/es/components/time-picker/src/props/shared";
 
 export default {
   components: { Main },
@@ -114,6 +115,9 @@ export default {
         image: ''
       }
     }
+  },
+  created(){
+    this.$utils = utils
   },
   mounted() {
     this.getProductInfo()

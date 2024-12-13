@@ -17,7 +17,7 @@
               <div class="content">{{ oneComment.content }}</div>
               <div class="info">
                 <div class="date">
-                  <span>{{ $utils.convert.formatTime(oneComment.createTime) }}</span> <span>{{ oneComment.pubProvince }}</span>
+                  <span>{{ this.$utils.convert.formatTime(oneComment.createTime) }}</span> <span>{{ oneComment.pubProvince }}</span>
                   <span class="reply" @click="reply(oneComment)" v-if="productStatus === 9">回复</span>
                   <span class="reply" v-if="delshow && productStatus === 9" style="color: #3a64ff;margin-left: 10px" @click="del(oneComment)">删除</span>
                 </div>
@@ -54,7 +54,7 @@
                           @click="saveComment(twoComment, oneIndex, twoIndex)"
                       >
                         <span class="date">
-                            <span>{{ $utils.convert.formatTime(twoComment.createTime) }}</span> <span>{{ twoComment.pubProvince }}</span>
+                            <span>{{ this.$utils.convert.formatTime(twoComment.createTime) }}</span> <span>{{ twoComment.pubProvince }}</span>
                           <!--                          <ChatRound style="width: 1.2em; height: 1.2em" />-->
                           <span class="reply" @click="reply(twoComment)" v-if="productStatus === 9">回复</span>
                           <span class="reply" style="color: #3a64ff;margin-left: 10px" v-if="delshow && productStatus === 9" @click="del(twoComment)" >删除</span>
@@ -75,7 +75,8 @@
 </template>
 <script>
 import {Notification} from "element-plus";
-
+import utils from "@/utils";
+import api from "@/api";
 export default {
   props: {
     dataList: {
@@ -93,6 +94,10 @@ export default {
   },
   data() {
     return {}
+  },
+  created() {
+    this.$utils = utils
+    this.$api = api
   },
   methods: {
     likeComment() {
@@ -121,119 +126,86 @@ export default {
 <style lang="less" scoped>
 .comments-container {
   padding: 16px;
+  max-width: 680px;
+  margin: 0 auto;
 
   .total {
     font-size: 14px;
-    color: rgba(51, 51, 51, 0.6);
-    margin-left: 8px;
-    margin-bottom: 12px;
+    color: #666;
+    margin: 0 8px 12px 8px;
+    text-align: center;
   }
 
   .list-container {
     position: relative;
 
     .parent-comment {
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+
       .comment-item {
-        position: relative;
         display: flex;
-        padding: 8px;
+        align-items: flex-start;
+        padding: 8px 0;
 
         .comment-inner-container {
-          position: relative;
           display: flex;
-          z-index: 1;
           width: 100%;
-          flex-shrink: 0;
 
           .avatar {
-            flex: 0 0 auto;
-
             .avatar-item {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              cursor: pointer;
-              border-radius: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.08);
-              object-fit: cover;
               width: 40px;
               height: 40px;
+              border-radius: 50%;
+              margin-right: 8px;
             }
           }
 
           .right {
-            margin-left: 12px;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-            flex-grow: 1;
+            flex: 1;
 
             .author-wrapper {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-
               .author {
-                display: flex;
-                align-items: center;
-
                 .name {
-                  color: rgba(51, 51, 51, 0.6);
-                  line-height: 18px;
+                  font-size: 14px;
+                  font-weight: bold;
+                  color: #333;
+                  margin-bottom: 4px;
                 }
               }
             }
 
             .content {
-              margin-top: 4px;
-              line-height: 140%;
+              font-size: 15px;
+              line-height: 1.6;
               color: #333;
-              word-break: break-all;
-              width: 90%;
+              word-break: break-word;
             }
 
             .info {
               display: flex;
-              flex-direction: column;
-              justify-content: space-between;
+              align-items: center;
               font-size: 12px;
-              line-height: 16px;
-              color: rgba(51, 51, 51, 0.6);
+              color: #999;
+              margin-top: 4px;
 
               .date {
-                margin: 5px 0;
-
-                .reply {
-                  margin-left: 2px;
-                  font-weight: 500;
-                  cursor: pointer;
-                  color: rgba(51, 51, 51, 0.8);
-                }
+                margin-right: 8px;
               }
 
-              .interactions {
-                display: flex;
-                margin-left: -2px;
+              .reply {
+                color: #3a64ff;
+                cursor: pointer;
+                margin-left: 8px;
+                transition: color 0.3s ease;
 
-                .like-wrapper {
-                  padding: 0 4px;
-                  color: rgba(51, 51, 51, 0.8);
-                  font-weight: 500;
-                  position: relative;
-                  cursor: pointer;
-                  display: flex;
-                  align-items: center;
-
-                  .like-lottie {
-                    width: 16px;
-                    height: 16px;
-                    left: 4px;
-                  }
-
-                  .count {
-                    margin-left: 2px;
-                    font-weight: 500;
-                  }
+                &:hover {
+                  color: #2a50d4;
                 }
               }
             }
@@ -242,16 +214,39 @@ export default {
       }
 
       .reply-container {
-        margin-left: 52px;
+        margin-left: 48px;
+        margin-top: 8px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        padding: 8px;
 
-        .show-more {
-          margin-left: 44px;
-          height: 32px;
-          line-height: 32px;
-          color: #13386c;
-          cursor: pointer;
-          font-weight: 500;
-          font-size: 14px;
+        .comment-item {
+          padding: 8px 0;
+
+          .comment-inner-container {
+            .avatar {
+              .avatar-item {
+                width: 36px;
+                height: 36px;
+              }
+            }
+
+            .right {
+              margin-left: 8px;
+
+              .content {
+                font-size: 14px;
+                color: #666;
+              }
+
+              .info {
+                .date {
+                  font-size: 12px;
+                  color: #999;
+                }
+              }
+            }
+          }
         }
       }
     }

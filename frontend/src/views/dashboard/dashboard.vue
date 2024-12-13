@@ -93,6 +93,7 @@
         @main_close="closeMain" 
         v-if="mainShow" 
         :productId="productId"
+        style="--animate-duration: 0.3s;"
       ></Main>
     </transition>
   </div>

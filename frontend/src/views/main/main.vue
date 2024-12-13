@@ -34,8 +34,8 @@
                 </div>
                 <div class="post-container">
                   <div class="post">
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span
-                        style="font-size: 16px">{{ this.$utils.convert.to_price(productInfo.price) }}</span></span>
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{
+                      this.$utils.convert.to_price(productInfo.price) }}</span></span>
                   </div>
                 </div>
 
@@ -48,7 +48,7 @@
               <div class="divider interaction-divider"></div>
               <!-- 评论 -->
               <div class="comments-el">
-                <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status"
+                <Comment :dataList="commentList" :commentCount="commentCount" :productStatus="productInfo.status"
                   :delshow="productInfo.userId === currentUserId" @reply="handleReply" @del="handleDel"></Comment>
               </div>
             </div>
@@ -83,17 +83,11 @@
           </div>
         </div>
       </div>
-      <el-button 
-        class="close-button" 
-        type="danger" 
-        icon="el-icon-close" 
-        circle
-        @click="close()"
-      ></el-button>
+      <el-button class="close-button" type="danger" icon="el-icon-close" circle @click="close()"></el-button>
     </div>
     <!--抽屉 聊天侧边栏-->
     <div>
-      <el-drawer @close="closeChat" :show-close="false" destroy-on-close :visible.sync="chatVisiable" direction="rtl">
+      <el-drawer @close="closeChat" :show-close="false" destroy-on-close v-model="chatVisiable" direction="rtl">
         <Chat :chat-list-item="chatListItem" @close="closeChat" :product-id="productInfo.id"></Chat>
       </el-drawer>
     </div>
@@ -134,7 +128,7 @@ export default {
       chatVisiable: false,
       collect: false,
       voucherVisable: false,
-      placeholder: '回复内容',
+      placeholder: '请留下你的评论',
       chatListItem: {},
       productInfo: {
         userInfo: {
@@ -193,48 +187,52 @@ export default {
     cancelCollect() {
       this.$api.productCollect.deleteCollect(this.productId).then(res => {
         this.collect = false
-        ElNotification({ 
-          type: 'success', 
-          title: '航游集市', 
-          message: '取消收藏' 
+        ElNotification({
+          type: 'success',
+          title: '航游集市',
+          message: '取消收藏'
         })
       })
     },
     async setCollect() {
       try {
-        const response = await this.$api.user.getUserInfo()
-        const userId = response.data.id
+        const response = await this.$api.user.getUserInfo();
+        const userId = response.data.id;
 
         if (!userId) {
-          ElNotification({ 
+          ElNotification({
             type: 'warning',
             title: '航游集市',
             message: '请先登录'
-          })
-          return
+          });
+          return;
         }
 
         const collectData = {
           UserId: userId,
           Id: this.productId,
           productId: this.productId
-        }
+        };
 
-        await this.$api.productCollect.saveCollect(collectData)
-        this.collect = true
-        ElNotification({ 
-          type: 'success', 
-          title: '航游集市', 
+        console.log('Collect Data:', collectData);
+
+        const result = await this.$api.productCollect.saveCollect(this.productId);
+        console.log('API Response:', result);
+
+        this.collect = true;
+        ElNotification({
+          type: 'success',
+          title: '航游集市',
           message: '收藏成功'
-        })
+        });
 
       } catch (error) {
-        console.error('收藏失败:', error)
-        ElNotification({ 
+        console.error('收藏失败:', error);
+        ElNotification({
           type: 'error',
           title: '航游集市',
           message: '收藏失败，请重试'
-        })
+        });
       }
     },
     async chatUser() {
@@ -246,9 +244,9 @@ export default {
         productImage: this.productInfo.image[0],
       }
       try {
-        const chatListId = await this.$api.chatList.createChat(data)
-        const chatListData = await this.$api.chatList.getChatListById({ chatListId: chatListId.data })
-        this.chatListItem = chatListData.data
+        //const chatListId = await this.$api.chatList.createChat(data)
+        //const chatListData = await this.$api.chatList.getChatListById({ chatListId: chatListId.data })
+        //this.chatListItem = chatListData.data
         this.chatVisiable = true
       } catch (error) {
         console.error('创建聊天失败:', error)
@@ -271,10 +269,11 @@ export default {
 
       this.$api.comment.saveComment(this.commentForm)
         .then(res => {
-          if (res.code === 200) {
+          if (res.code === 1) {
+            //alert("success this api")
             this.commentForm.content = '';
             this.commentForm.parentId = '';
-            this.placeholder = '回复内容';
+            this.placeholder = '请输入你的评论';
             this.getCommentList();
             ElMessage.success('评论成功');
           } else {
@@ -293,12 +292,13 @@ export default {
     removeContent() {
       this.commentForm.content = ''
       this.commentForm.parentId = ''
-      this.placeholder = '回复内容'
+      this.placeholder = '请输入你的评论'
     },
     getCommentList() {
       this.$api.comment.getCommentList({ productId: this.productId }).then(res => {
         this.commentList = res.data.commentList
         this.commentCount = res.data.commentCount
+        console.log('父组件 commentCount:', this.commentCount)
       })
     },
     async getCurrentUserId() {
@@ -325,6 +325,11 @@ export default {
   beforeUnmount() {
     // 清理所有可能的副作用
     // 比如定时器、事件监听器等
+  },
+  watch: {
+    commentCount(newVal) {
+      console.log('评论数更新:', newVal)
+    }
   }
 }
 </script>
@@ -371,13 +376,13 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
       0 1px 2px 0 rgba(0, 0, 0, 0.02);
-    
+
     // 添加图标样式
     i {
       font-size: 20px;
       font-weight: bold;
     }
-    
+
     &:hover {
       background: #f56c6c;
       border-color: #f56c6c;
