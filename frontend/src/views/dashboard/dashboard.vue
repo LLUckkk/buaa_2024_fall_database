@@ -26,32 +26,26 @@
       <Waterfall :list="list" :width="230" :hasAroundGutter="false" style="max-width: 1260px; " :delay="1000"
         :animationEffect="'animate__zoomIn'">
         <template #default="{ item, url }">
-          <!-- <div class="card" @click="toMain(item.id)"> -->
-          <div class="card">
+          <div class="card" @click="toMain(item.id)">
             <!-- <el-image style="border-radius: 10px;width: 230px;" :src="item.image" fit="cover"></el-image> -->
             <div class="footer">
-              <!-- <a class="title"><span>{{ item.title }}</span></a> -->
-              <a class="title"><span>test</span></a>
+              <a class="title"><span>{{ item.title }}</span></a>
               <div class="price">
-                <!-- <span>￥{{ $utils.convert.to_price(item.price) }}</span> -->
-                <span>￥100</span>
-                <!-- <span
-                  style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;text-decoration: line-through">￥{{
-                    $utils.convert.to_price(item.originalPrice) }}</span> -->
+                <span>￥{{ item.price }}</span>
               </div>
               <div class="author-wrapper">
                 <a class="author">
-                  <!-- <img class="author-avatar" :src="item.avatar" /> -->
-                  <!-- <span class="name">{{ item.city }}{{ item.district }}</span> -->
+                  <img class="author-avatar" :src="item.avatar" />
+                  <span class="name">{{ item.city }}{{ item.district }}</span>
                 </a>
                 <span class="like-wrapper"><i class="el-icon-thumb"></i>
-                  <!-- <span class="count">{{ item.likeCount }}人想要</span> -->
-                  <span class="count">0人想要</span>
+                  <span class="count">{{ item.likeCount }}人想要</span>
                 </span>
               </div>
             </div>
           </div>
         </template>
+
       </Waterfall>
       <!--loading-->
       <el-collapse-transition>
@@ -95,25 +89,81 @@ const page_param = ref({
   key: '',
 })
 
+// 添加测试数据
+const mockList = ref([
+  {
+    id: 1,
+    title: "测试商品1",
+    price: 100,
+    image: "https://picsum.photos/230/300?random=1",
+    avatar: "https://picsum.photos/50/50?random=1",
+    city: "北京",
+    district: "朝阳区",
+    likeCount: 10
+  },
+  {
+    id: 2, 
+    title: "测试商品2",
+    price: 200,
+    image: "https://picsum.photos/230/300?random=2", 
+    avatar: "https://picsum.photos/50/50?random=2",
+    city: "上海",
+    district: "浦东新区",
+    likeCount: 20
+  },
+  {
+    id: 3,
+    title: "测试商品3", 
+    price: 300,
+    image: "https://picsum.photos/230/300?random=3",
+    avatar: "https://picsum.photos/50/50?random=3", 
+    city: "广州",
+    district: "天河区",
+    likeCount: 30
+  }
+]);
+
 // 方法定义
 const getProductList = () => {
   api.product.getProductList(page_param.value).then(res => {
     let productList = res.data
-    alert(productList.length)
+    console.log('接口返回的原始数据：', productList)
+    
     if (productList.length === 0) {
       setTimeout(() => {
         noMore.value = true
       }, 1000)
     } else {
       productList.forEach(item => {
-        if (item.image) {
-          item.image = JSON.parse(item.image)[0]
-        }
+        // 检查每个商品的关键属性
+        console.log(`商品ID ${item.id} 的属性检查:`)
+        console.log({
+          id: item.id,
+          title: item.title,
+          price: item.price,
+          //image: item.image ? JSON.parse(item.image)[0] : null,
+          image:  null,
+          avatar: item.avatar,
+          city: item.city,
+          district: item.district,
+          likeCount: item.likeCount
+        })
+
+        // if (item.image) {
+        //   item.image = JSON.parse(item.image)[0]
+        // }
       })
+      
       list.value.push(...productList)
       busy.value = false
     }
+    
     topLoading.value = false
+    console.log('最终处理后的list数据：', list.value)
+  }).catch(error => {
+    console.error('获取商品列表失败:', error)
+    topLoading.value = false
+    busy.value = false
   })
 }
 
