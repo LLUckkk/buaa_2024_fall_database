@@ -125,11 +125,6 @@ export default {
       this.$api.upload.uploadImage(formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then(res => {
-        alert(res.data)
-        this.fileList.push({
-          url: res.data,
-          data: res.data
-        })
         options.onSuccess(res.data, file)
       }).catch(() => {
         options.onError(new Error('Upload failed'), file)
@@ -198,6 +193,8 @@ export default {
     },
     handleUploadSuccess(response, file, fileList) {
       alert("success!");
+      file.url = response
+      alert(file.url)
       this.fileList = fileList
     },
     closeDrawer(changeAddress) {

@@ -133,7 +133,11 @@ const getProductList = async () => {
   try {
     const res = await api.product.getProductList(page_param.value)
     let productList = res.data
-    
+    productList.forEach(item => {
+      if (item.image) {
+        item.image = JSON.parse(item.image)[0]
+      }
+    })
     if (productList.length === 0) {
       noMore.value = true
     } else {

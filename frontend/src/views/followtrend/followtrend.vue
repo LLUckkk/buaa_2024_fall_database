@@ -17,7 +17,7 @@
             <!--            </a>-->
             <div class="main" v-if="trend.id">
               <div class="details-box">
-                <el-image style="border-radius: 10px;width: 100%;height: 100%" :src=getImage(trend.image)
+                <el-image style="border-radius: 10px;width: 100%;height: 100%" :src=trend.image
                   fit="cover"></el-image>
               </div>
               <div class="info">
@@ -85,17 +85,12 @@ export default {
         } else {
           console.log("not empty!");
         }
-        // this.trendList.forEach(item => {
-        //   if (item.image) {
-        //     item.image = JSON.parse(item.image)[0]
-        //   }
-        // })
+        this.trendList.forEach(item => {
+          if (item.image) {
+            item.image = JSON.parse(item.image)[0]
+          }
+        })
       })
-    },
-    getImage(imageName) {
-      //console.log(imageName);
-      //console.log(this.$api.image.showImage(imageName));
-      return this.$api.image.showImage(imageName);
     },
     toMain(val) {
       this.productId = val
