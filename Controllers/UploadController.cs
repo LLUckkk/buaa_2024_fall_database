@@ -29,7 +29,7 @@ namespace Market.Controllers
             if (fileName.Code != 0)
                 return Ok(fileName);
             else 
-                return Ok(new { FileName = "http://localhost:8080/image/" + fileName.Data });
+                return Ok(new { FileName = "http://localhost:8080/api/image/" + fileName.Data });
         }
 
         [HttpGet("image/delete")]
