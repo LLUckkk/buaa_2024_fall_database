@@ -5,12 +5,8 @@
       <div class="note-container">
         <div class="media-container">
           <el-carousel height="90vh">
-            <el-carousel-item v-for="item in productInfo.image" :key="item">
-              <el-image
-                  style="width: 100%; height: 100%"
-                  :src=item
-                  fit="cover"
-              />
+            <el-carousel-item v-for="item in productInfo.image">
+              <el-image style="width: 100%; height: 100%" :src="item" fit="cover" />
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -19,11 +15,8 @@
           <div class="author-container">
             <div class="author-me">
               <div class="info">
-                <img
-                    class="avatar-item"
-                    style="width: 40px; height: 40px"
-                    :src="this.productInfo.userInfo.avatar"
-                    alt=""/>
+                <img class="avatar-item" style="width: 40px; height: 40px" :src="this.productInfo.userInfo.avatar"
+                  alt="" />
                 <span class="name">{{ this.productInfo.userInfo.nickname }}</span>
                 <!-- <span class="name">user</span> -->
               </div>
@@ -33,49 +26,43 @@
               <div class="note-content">
                 <div class="title">
                   {{ this.productInfo.title }}
-                    <!-- 麦当劳 -->
+                  <!-- 麦当劳 -->
                 </div>
 
                 <div class="desc">
-                  <span>{{ this.productInfo.intro }} <br/></span>
-                  <!-- <span>肯德基疯狂星期四v我50 <br/></span> -->
-                  <!--                  <a class="tag tag-search">#海贼王</a>-->
+                  <span>{{ this.productInfo.intro }} <br /></span>
                 </div>
-                <!-- <div class="post-container">
-                  <span class="post" v-if="productInfo.postType ===0 ">发货方式：邮寄 </span>
-                  <span class="post" v-if="productInfo.postType ===1 ">发货方式：自提 </span>
-                </div> -->
                 <div class="post-container">
                   <div class="post">
-                    <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">99</span></span> -->
-                    <!-- <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{ $utils.convert.to_price(productInfo.price) }}</span></span> -->
-                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{this.$utils.convert.to_price(productInfo.price) }}</span></span>
+                    <span style="font-weight: bold;color: red;font-size: 11px">￥<span
+                        style="font-size: 16px">{{ this.$utils.convert.to_price(productInfo.price) }}</span></span>
                   </div>
                 </div>
 
                 <div class="bottom-container" style="margin-top: 5px">
-                    <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
-
-                  <el-button type="danger" round @click="chatUser" v-if="canChat" >我想要</el-button>
-
+                  <span class="date">{{ $utils.convert.parseTime(productInfo.createTime) }}</span>
+                  <el-button type="danger" round @click="chatUser" v-if="canChat">我想要</el-button>
                 </div>
               </div>
 
               <div class="divider interaction-divider"></div>
               <!-- 评论 -->
               <div class="comments-el">
-                <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status" :delshow="productInfo.userId === currentUserId" @reply="handleReply" @del="handleDel"></Comment>
+                <Comment :data-list="commentList" :commentCount="commentCount" :productStatus="productInfo.status"
+                  :delshow="productInfo.userId === currentUserId" @reply="handleReply" @del="handleDel"></Comment>
               </div>
             </div>
             <div class="interactions-footer" v-if="productInfo.status === 9">
               <div class="buttons">
                 <div class="left">
                   <div class="like-wrapper">
-                    <span v-if="productInfo.userId != currentUserId ">收藏</span>
+                    <span v-if="productInfo.userId != currentUserId">收藏</span>
                     <div class="like-lottie" style="margin-left: 10px">
                       <div v-if="productInfo.userId != currentUserId">
-                        <img src="@/assets/image/collect.png" style="width: 15px;height: 15px;cursor: pointer" alt="" v-if="collect" @click="cancelCollect">
-                        <img src="@/assets/image/notCollect.png" style="width: 15px;height: 15px;cursor: pointer" alt="" @click="setCollect" v-else>
+                        <img src="@/assets/image/collect.png" style="width: 15px;height: 15px;cursor: pointer" alt=""
+                          v-if="collect" @click="cancelCollect">
+                        <img src="@/assets/image/notCollect.png" style="width: 15px;height: 15px;cursor: pointer" alt=""
+                          @click="setCollect" v-else>
                       </div>
                     </div>
                   </div>
@@ -84,7 +71,8 @@
               </div>
               <div class="comment-wrapper active comment-comp">
                 <div class="input-wrapper">
-                  <input class="comment-input" v-model="commentForm.content" type="text" :placeholder="placeholder" @keyup.enter="submitComment"/>
+                  <input class="comment-input" v-model="commentForm.content" type="text" :placeholder="placeholder"
+                    @keyup.enter="submitComment" />
                   <div class="input-buttons" @click="removeContent">
                     <i class="el-icon-circle-close"></i>
                   </div>
@@ -95,14 +83,13 @@
           </div>
         </div>
       </div>
-      <div class="close-cricle" @click="close()">
-        <div class="close close-mask-white">
-          <i class="el-icon-close" style="color: rgba(51, 51, 51, 0.8)">
-            <el-icon size="large"><Close /></el-icon>
-          </i>
-        </div>
-      </div>
-      <div class="back-desk" @click="close"></div>
+      <el-button 
+        class="close-button" 
+        type="danger" 
+        icon="el-icon-close" 
+        circle
+        @click="close()"
+      ></el-button>
     </div>
     <!--抽屉 聊天侧边栏-->
     <div>
@@ -114,18 +101,26 @@
 
 </template>
 
+<script setup>
+import { defineEmits } from 'vue'
+
+const emit = defineEmits(['main_close'])
+
+const close = () => {
+  emit('main_close')
+}
+</script>
+
 <script>
 import Comment from "@/components/Comment.vue";
 import Chat from '@/components/Chat.vue'
 import websocket from "@/utils/websocket";
-import {Notification} from "element-plus";
+import { ElNotification, ElMessage } from 'element-plus'
 import api from "@/api";
 import utils from "@/utils";
-import { ElMessage } from 'element-plus'
 
 export default {
-  components: {Comment, Chat},
-  emits: ['main_close'],
+  components: { Comment, Chat },
   props: {
     productId: {
       default: ''
@@ -169,22 +164,21 @@ export default {
   },
   computed: {
     canChat() {
-      return this.productInfo.userId !== this.currentUserId
-        && this.productInfo.status === 1;
+      return this.productInfo.userId !== this.currentUserId;
     }
   },
   methods: {
     getProductInfo() {
-      //alert(this.productId);
-      this.$api.product.getProductInfo({id: this.productId})
+      this.$api.product.getProductInfo({ id: this.productId })
         .then(res => {
           this.productInfo = res.data;
+          this.productInfo.image = JSON.parse(this.productInfo.image)
         })
         .catch(error => {
           console.error('API 请求失败', error);
         });
     },
-    handleDel(){
+    handleDel() {
       this.getCommentList()
     },
     getCollectList() {
@@ -196,25 +190,23 @@ export default {
         }
       })
     },
-    sekill() {
-      this.$api.product.seckillVoucher(this.productInfo.productVoucher.id).then(res => {
-        Notification({type: 'success', title: '航游集市', message: '抢购成功'})
-        this.getProductInfo()
-      })
-    },
     cancelCollect() {
       this.$api.productCollect.deleteCollect(this.productId).then(res => {
         this.collect = false
-        Notification({type: 'success', title: '航游集市', message: '取消收藏'})
+        ElNotification({ 
+          type: 'success', 
+          title: '航游集市', 
+          message: '取消收藏' 
+        })
       })
     },
     async setCollect() {
       try {
         const response = await this.$api.user.getUserInfo()
         const userId = response.data.id
-        
+
         if (!userId) {
-          Notification({
+          ElNotification({ 
             type: 'warning',
             title: '航游集市',
             message: '请先登录'
@@ -227,14 +219,18 @@ export default {
           Id: this.productId,
           productId: this.productId
         }
-        
+
         await this.$api.productCollect.saveCollect(collectData)
         this.collect = true
-        Notification({type: 'success', title: '航游集市', message: '收藏成功'})
-        
+        ElNotification({ 
+          type: 'success', 
+          title: '航游集市', 
+          message: '收藏成功'
+        })
+
       } catch (error) {
         console.error('收藏失败:', error)
-        Notification({
+        ElNotification({ 
           type: 'error',
           title: '航游集市',
           message: '收藏失败，请重试'
@@ -242,7 +238,7 @@ export default {
       }
     },
     async chatUser() {
-      this.$api.product.addProductLike(this.productId)
+      //this.$api.product.addProductLike(this.productId)
       let data = {
         fromUserId: this.currentUserId,
         toUserId: this.productInfo.userId,
@@ -251,7 +247,7 @@ export default {
       }
       try {
         const chatListId = await this.$api.chatList.createChat(data)
-        const chatListData = await this.$api.chatList.getChatListById({chatListId: chatListId.data})
+        const chatListData = await this.$api.chatList.getChatListById({ chatListId: chatListId.data })
         this.chatListItem = chatListData.data
         this.chatVisiable = true
       } catch (error) {
@@ -267,12 +263,12 @@ export default {
         ElMessage.warning('请输入评论内容');
         return;
       }
-      
+
       this.commentForm.productId = this.productId;
-      
+
       console.log('当前商品ID:', this.productId);
       console.log('评论表单数据:', this.commentForm);
-      
+
       this.$api.comment.saveComment(this.commentForm)
         .then(res => {
           if (res.code === 200) {
@@ -300,13 +296,10 @@ export default {
       this.placeholder = '回复内容'
     },
     getCommentList() {
-      this.$api.comment.getCommentList({productId: this.productId}).then(res => {
+      this.$api.comment.getCommentList({ productId: this.productId }).then(res => {
         this.commentList = res.data.commentList
         this.commentCount = res.data.commentCount
       })
-    },
-    close() {
-      this.$emit('main_close')
     },
     async getCurrentUserId() {
       try {
@@ -367,29 +360,28 @@ export default {
     z-index: 30;
   }
 
-  .close-cricle {
+  .close-button {
+    position: fixed;
     right: 3.3vw;
     top: 1.3vw;
-    position: fixed;
-    display: flex;
     z-index: 100;
-    cursor: pointer;
-
-    .close-mask-white {
-      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
       0 1px 2px 0 rgba(0, 0, 0, 0.02);
-      border: 1px solid rgba(0, 0, 0, 0.08);
+    
+    // 添加图标样式
+    i {
+      font-size: 20px;
+      font-weight: bold;
     }
-
-    .close {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 100%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      transition: all 0.3s;
+    
+    &:hover {
+      background: #f56c6c;
+      border-color: #f56c6c;
+      color: white;
     }
   }
 
@@ -837,12 +829,12 @@ export default {
 .main-component {
   // 添加过渡效果
   transition: all 0.05s ease-out;
-  
+
   // 优化初始显示效果
   &.animate__fadeIn {
     animation-duration: 0.05s !important;
   }
-  
+
   &.animate__fadeOut {
     animation-duration: 0.05s !important;
   }

@@ -62,8 +62,8 @@
               <div class="price">￥{{ item.price }}</div>
               <div class="author-wrapper">
                 <div class="author">
-                  <img class="author-avatar" :src="item.avatar" />
-                  <span class="name">{{ item.city }}{{ item.district }}</span>
+                  <img class="author-avatar" :src="item.userInfo.avatar" />
+                  <span class="name">{{ item.userInfo.nickname }}</span>
                 </div>
                 <div class="like-wrapper">
                   <i class="el-icon-thumb"></i>
@@ -78,11 +78,11 @@
       <!--loading-->
       <el-collapse-transition>
         <div class="feeds-loading" v-show="busy && !noMore">
-          <span style="text-align: center;color:#cacdd5;font-size: 12px;">加载中</span><i class="el-icon-loading"
-            style="font-size: 12px;margin-left: 10px"></i>
+          <span style="text-align: center;color:#cacdd5;font-size: 13px;">加载中</span><i class="el-icon-loading"
+            style="font-size: 13px;margin-left: 10px"></i>
         </div>
       </el-collapse-transition>
-      <div v-show="noMore" style="text-align: center;color:#cacdd5;font-size: 12px;margin: 3vh">没有更多了</div>
+      <div v-show="noMore" style="text-align: center;color:#cacdd5;font-size: 13px;margin: 3vh">没有更多了</div>
     </div>
     <transition 
       name="main-transition"
@@ -258,7 +258,7 @@ onUnmounted(() => {
       user-select: none;
       -webkit-user-select: none;
       align-items: center;
-      font-size: 16px;
+      font-size: 14px;
       color: rgba(51, 51, 51, 0.8);
       height: 40px;
       white-space: nowrap;
@@ -283,11 +283,11 @@ onUnmounted(() => {
         }
 
         .channel {
-          height: 40px;
+          height: 45px;
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 0 16px;
+          padding: 0 20px;
           cursor: pointer;
           -webkit-user-select: none;
           user-select: none;
@@ -369,7 +369,7 @@ onUnmounted(() => {
     }
 
     .footer {
-      padding: 12px;
+      padding: 10px 12px;
 
       .title {
         margin-bottom: 6px;
@@ -379,10 +379,10 @@ onUnmounted(() => {
         -webkit-line-clamp: 2;
         overflow: hidden;
         font-weight: 500;
-        font-size: 14px;
-        line-height: 1.3;
-        height: 36px;
-        color: black;
+        font-size: 15px;
+        line-height: 1.4;
+        height: 42px;
+        color: #333;
       }
 
       .price {
@@ -392,17 +392,17 @@ onUnmounted(() => {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        font-weight: bolder;
-        font-size: 16px;
-        color: red;
-        line-height: 140%;
+        font-weight: 600;
+        font-size: 17px;
+        color: #ff4d4f;
+        line-height: 1.2;
       }
 
       .author-wrapper {
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 20px;
         color: rgba(51, 51, 51, 0.8);
         font-size: 12px;
         transition: color 1s;
@@ -418,20 +418,21 @@ onUnmounted(() => {
 
           .author-avatar {
             margin-right: 6px;
-            width: 20px;
-            height: 20px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #f0f0f0;
             flex-shrink: 0;
             object-fit: cover;
           }
 
           .name {
-            color: #9e9e9e;
+            color: #666;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 12px;
+            font-size: 13px;
+            max-width: 80px;
           }
         }
 
@@ -439,10 +440,18 @@ onUnmounted(() => {
           position: relative;
           display: flex;
           align-items: center;
+          padding-left: 8px;
 
           .count {
-            color: #9e9e9e;
+            color: #666;
             margin-left: 2px;
+            white-space: nowrap;
+          }
+
+          i {
+            font-size: 15px;
+            color: #666;
+            margin-right: 2px;
           }
         }
       }
@@ -619,38 +628,44 @@ onUnmounted(() => {
     }
 
     .footer {
-      padding: 6px 10px;
-
+      padding: 8px 10px;    
+      
       .title {
-        margin-bottom: 3px;
-        word-break: break-all;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        font-weight: 500;
-        font-size: 13px;
-        line-height: 1.2;
-        height: 28px;
+        font-size: 17px;             
+        line-height: 1.3;    
+        height: 42px;                
+        margin-bottom: 4px;  
+        color: #2c2c2c;            
+        font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+        font-weight: 600;          
+        letter-spacing: 0.3px;      
+        transition: color 0.2s;     
+        
+        &:hover {
+          color: #000000;         
+        }
       }
-
+      
       .price {
-        margin-bottom: 4px;
+        margin-bottom: 8px;
         word-break: break-all;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        font-weight: bolder;
-        font-size: 14px;
-        color: red;
-        line-height: 140%;
+        font-weight: 600;
+        font-size: 17px;
+        color: #ff4d4f;
+        line-height: 1.2;
       }
 
       .author-wrapper {
-        height: 16px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         color: rgba(51, 51, 51, 0.8);
-        font-size: 11px;
+        font-size: 12px;
         transition: color 1s;
 
         .author {
@@ -663,21 +678,22 @@ onUnmounted(() => {
           margin-right: 12px;
 
           .author-avatar {
-            margin-right: 4px;
-            width: 14px;
-            height: 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            margin-right: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #f0f0f0;
             flex-shrink: 0;
             object-fit: cover;
           }
 
           .name {
-            color: #9e9e9e;
+            color: #666;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 11px;
+            font-size: 13px;
+            max-width: 80px;
           }
         }
 
@@ -685,14 +701,18 @@ onUnmounted(() => {
           position: relative;
           display: flex;
           align-items: center;
+          padding-left: 8px;
 
           .count {
-            color: #9e9e9e;
+            color: #666;
             margin-left: 2px;
+            white-space: nowrap;
           }
 
           i {
-            font-size: 11px;
+            font-size: 15px;
+            color: #666;
+            margin-right: 2px;
           }
         }
       }

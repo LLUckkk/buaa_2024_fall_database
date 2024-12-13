@@ -23,11 +23,11 @@
               <div class="user-meta">
                 <span class="meta-item">
                   <el-icon><User /></el-icon>
-                  ID：{{ userInfo.studentId }}
+                  ID:{{ userInfo.studentId }}
                 </span>
                 <span class="meta-item">
                   <el-icon><Location /></el-icon>
-                  位置：{{ userInfo.address }}
+                  位置:{{ userInfo.address }}
                 </span>
               </div>
             </div>
