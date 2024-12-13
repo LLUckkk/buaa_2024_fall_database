@@ -41,7 +41,17 @@
       </el-timeline-item>
     </el-timeline>
     <!--点击后展示商品详情-->
-    <Main @main_close="closeMain" v-if="mainShow" :productId="productId"></Main>
+    <transition 
+      name="main-transition"
+      enter-active-class="animate__animated animate__fadeIn animate__faster"
+      leave-active-class="animate__animated animate__fadeOut animate__faster"
+    >
+      <Main 
+        @main_close="closeMain" 
+        v-if="mainShow" 
+        :productId="productId"
+      ></Main>
+    </transition>
   </div>
 </template>
 <script setup>
@@ -247,6 +257,75 @@ export default {
         }
       }
     }
+  }
+
+  .card {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    transition: all 0.2s ease-out;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: all 0.2s ease-out;
+
+      .card-overlay {
+        opacity: 1;
+        transition: opacity 0.2s ease-out;
+      }
+    }
+  }
+
+  // Main 组件的过渡动画样式
+  .main-transition {
+    &-enter-active,
+    &-leave-active {
+      transition: all 0.3s ease-out;
+    }
+
+    &-enter-from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+
+    &-leave-to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+}
+
+// 确保 Main 组件的动画层级正确
+:deep(.main-component) {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98);
+  animation-duration: 0.3s !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.95, 0.95, 0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
   }
 }
 </style>

@@ -121,6 +121,8 @@ import websocket from "@/utils/websocket";
 import {Notification} from "element-plus";
 import api from "@/api";
 import utils from "@/utils";
+import { ElMessage } from 'element-plus'
+
 export default {
   components: {Comment, Chat},
   props: {
@@ -258,17 +260,36 @@ export default {
 
     },
     submitComment() {
-      this.commentForm.productId = this.productId
-      this.$api.comment.saveComment(this.commentForm).then(res => {
-        this.commentForm.content = ''
-        this.commentForm.parentId = ''
-        this.placeholder = '回复内容'
-        this.getCommentList()
-      })
+      if (!this.commentForm.content) {
+        ElMessage.warning('请输入评论内容');
+        return;
+      }
+      
+      this.commentForm.productId = this.productId;
+      
+      console.log('当前商品ID:', this.productId);
+      console.log('评论表单数据:', this.commentForm);
+      
+      this.$api.comment.saveComment(this.commentForm)
+        .then(res => {
+          if (res.code === 200) {
+            this.commentForm.content = '';
+            this.commentForm.parentId = '';
+            this.placeholder = '回复内容';
+            this.getCommentList();
+            ElMessage.success('评论成功');
+          } else {
+            ElMessage.error(res.message || '评论失败');
+          }
+        })
+        .catch(error => {
+          console.error('评论失败:', error);
+          ElMessage.error('评论失败，请重试');
+        });
     },
     handleReply(item) {
-      this.commentForm.parentId = item.id
-      this.placeholder = '回复：' + item.pubNickname
+      this.commentForm.parentId = item.id;
+      this.placeholder = '回复：' + item.pubNickname;
     },
     removeContent() {
       this.commentForm.content = ''
@@ -791,6 +812,20 @@ export default {
         }
       }
     }
+  }
+}
+
+.main-component {
+  // 添加过渡效果
+  transition: all 0.05s ease-out;
+  
+  // 优化初始显示效果
+  &.animate__fadeIn {
+    animation-duration: 0.05s !important;
+  }
+  
+  &.animate__fadeOut {
+    animation-duration: 0.05s !important;
   }
 }
 </style>

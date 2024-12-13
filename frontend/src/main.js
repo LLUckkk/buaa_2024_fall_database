@@ -6,6 +6,7 @@ import 'element-plus/dist/index.css'
 import router from './router'
 import { createStore } from 'vuex'
 import store from './store'
+import { ElMessage } from 'element-plus'
 
 
 const app = createApp(App);
@@ -15,3 +16,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.use(router).use(ElementPlus).use(store).mount('#app')
+
+app.config.globalProperties.$message = ElMessage

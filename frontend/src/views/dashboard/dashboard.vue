@@ -1,13 +1,28 @@
 <!--主页，推荐页-->
 <template>
   <div class="feeds-page">
+    <!-- 添加全屏loading -->
+    <div class="fullscreen-loading" v-if="skeleton">
+      <div class="loading-spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+
     <!--top-->
     <div class="channel-container">
       <div class="scroll-container channel-scroll-container">
-        <div class="content-container " style="margin-left: 3vh">
-          <div class="channel " :class="activeMenu === item.typeCode ? 'active' : ''" v-for="(item, index) in menuList"
-            :key="item.typeCode" @click="changeMenu(item)">
-            {{ item.typeName }}
+        <div class="content-container">
+          <div class="channel-wrapper">
+            <div class="channel" 
+                 v-for="item in menuList"
+                 :key="item.typeCode"
+                 :class="{'active': activeMenu === item.typeCode}"
+                 @click="changeMenu(item)">
+              <span class="channel-text">{{ item.typeName }}</span>
+              <div class="active-bar" v-show="activeMenu === item.typeCode"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -23,24 +38,37 @@
 
         </i>
       </div>
-      <Waterfall :list="list" :width="230" :hasAroundGutter="false" style="max-width: 1260px; " :delay="1000"
+      <Waterfall :list="list" :width="180" :hasAroundGutter="false" style="max-width: 1200px; margin: 0 auto;" :delay="1000"
         :animationEffect="'animate__zoomIn'">
-        <template #default="{ item, url }">
-          <div class="card" @click="toMain(item.id)">
-            <!-- <el-image style="border-radius: 10px;width: 230px;" :src="item.image" fit="cover"></el-image> -->
-            <div class="footer">
-              <a class="title"><span>{{ item.title }}</span></a>
-              <div class="price">
-                <span>￥{{ item.price }}</span>
+        <template #default="{ item }">
+          <div class="card animate__animated animate__zoomIn" @click="toMain(item.id)">
+            <div class="card-img-wrapper">
+              <el-image 
+                class="card-img"
+                :src="item.image" 
+                fit="cover">
+                <template #placeholder>
+                  <div class="image-placeholder">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </template>
+              </el-image>
+              <div class="card-overlay">
+                <span class="view-detail">查看详情</span>
               </div>
+            </div>
+            <div class="footer">
+              <h3 class="title">{{ item.title }}</h3>
+              <div class="price">￥{{ item.price }}</div>
               <div class="author-wrapper">
-                <a class="author">
+                <div class="author">
                   <img class="author-avatar" :src="item.avatar" />
                   <span class="name">{{ item.city }}{{ item.district }}</span>
-                </a>
-                <span class="like-wrapper"><i class="el-icon-thumb"></i>
+                </div>
+                <div class="like-wrapper">
+                  <i class="el-icon-thumb"></i>
                   <span class="count">{{ item.likeCount }}人想要</span>
-                </span>
+                </div>
               </div>
             </div>
           </div>
@@ -56,7 +84,17 @@
       </el-collapse-transition>
       <div v-show="noMore" style="text-align: center;color:#cacdd5;font-size: 12px;margin: 3vh">没有更多了</div>
     </div>
-    <Main @main_close="closeMain" v-if="mainShow" :productId="productId"></Main>
+    <transition 
+      name="main-transition"
+      enter-active-class="animate__animated animate__fadeIn animate__faster"
+      leave-active-class="animate__animated animate__fadeOut animate__faster"
+    >
+      <Main 
+        @main_close="closeMain" 
+        v-if="mainShow" 
+        :productId="productId"
+      ></Main>
+    </transition>
   </div>
 
 </template>
@@ -69,6 +107,7 @@ import Main from "@/views/main/main.vue"
 import screenUtil from "@/utils/screenUtil"
 import api from "@/api"
 import utils from "@/utils"
+import 'animate.css'
 
 // 状态定义
 const show = ref(false)
@@ -89,82 +128,25 @@ const page_param = ref({
   key: '',
 })
 
-// 添加测试数据
-const mockList = ref([
-  {
-    id: 1,
-    title: "测试商品1",
-    price: 100,
-    image: "https://picsum.photos/230/300?random=1",
-    avatar: "https://picsum.photos/50/50?random=1",
-    city: "北京",
-    district: "朝阳区",
-    likeCount: 10
-  },
-  {
-    id: 2, 
-    title: "测试商品2",
-    price: 200,
-    image: "https://picsum.photos/230/300?random=2", 
-    avatar: "https://picsum.photos/50/50?random=2",
-    city: "上海",
-    district: "浦东新区",
-    likeCount: 20
-  },
-  {
-    id: 3,
-    title: "测试商品3", 
-    price: 300,
-    image: "https://picsum.photos/230/300?random=3",
-    avatar: "https://picsum.photos/50/50?random=3", 
-    city: "广州",
-    district: "天河区",
-    likeCount: 30
-  }
-]);
-
 // 方法定义
-const getProductList = () => {
-  api.product.getProductList(page_param.value).then(res => {
+const getProductList = async () => {
+  try {
+    const res = await api.product.getProductList(page_param.value)
     let productList = res.data
-    console.log('接口返回的原始数据：', productList)
     
     if (productList.length === 0) {
-      setTimeout(() => {
-        noMore.value = true
-      }, 1000)
+      noMore.value = true
     } else {
-      productList.forEach(item => {
-        // 检查每个商品的关键属性
-        console.log(`商品ID ${item.id} 的属性检查:`)
-        console.log({
-          id: item.id,
-          title: item.title,
-          price: item.price,
-          //image: item.image ? JSON.parse(item.image)[0] : null,
-          image:  null,
-          avatar: item.avatar,
-          city: item.city,
-          district: item.district,
-          likeCount: item.likeCount
-        })
-
-        // if (item.image) {
-        //   item.image = JSON.parse(item.image)[0]
-        // }
-      })
-      
       list.value.push(...productList)
-      busy.value = false
     }
-    
-    topLoading.value = false
-    console.log('最终处理后的list数据：', list.value)
-  }).catch(error => {
+  } catch (error) {
     console.error('获取商品列表失败:', error)
-    topLoading.value = false
+  } finally {
+    // 关闭加载动画
+    skeleton.value = false
     busy.value = false
-  })
+    topLoading.value = false
+  }
 }
 
 const handleKeyChange = (newKey) => {
@@ -185,13 +167,24 @@ const refresh = () => {
   topLoading.value = true;
 }
 
-const changeMenu = (item) => {
-  page_param.value.pageNumber = 1
-  list.value = []
-  busy.value = false
-  page_param.value.typeCode = item.typeCode
-  activeMenu.value = item.typeCode
-  getProductList()
+const changeMenu = async (item) => {
+  try {
+    // 重置状态
+    page_param.value.pageNumber = 1
+    list.value = []
+    busy.value = true // 设置为 true 显示加载状态
+    noMore.value = false // 重置没有更多数据的状态
+    
+    page_param.value.typeCode = item.typeCode
+    activeMenu.value = item.typeCode
+    
+    // 显示顶部加载动画
+    topLoading.value = true
+    
+    await getProductList()
+  } catch (error) {
+    console.error('切换菜单失败:', error)
+  }
 }
 
 const windowScroll = () => {
@@ -227,6 +220,8 @@ onMounted(() => {
   getMenuList()
   topLoading.value = true
   window.addEventListener('scroll', windowScroll, true)
+  // 初始化时设置 skeleton 为 true
+  skeleton.value = true
   getProductList()
 })
 
@@ -303,6 +298,19 @@ onUnmounted(() => {
     margin: 0 auto;
     overflow-y: auto;
     height: 77vh;
+    padding: 16px;
+
+    @media screen and (max-width: 1200px) {
+      max-width: 900px;
+    }
+    
+    @media screen and (max-width: 992px) {
+      max-width: 720px;
+    }
+    
+    @media screen and (max-width: 768px) {
+      max-width: 540px;
+    }
 
     .feeds-loading {
       text-align: center;
@@ -360,7 +368,7 @@ onUnmounted(() => {
       padding: 12px;
 
       .title {
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         word-break: break-all;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -368,7 +376,8 @@ onUnmounted(() => {
         overflow: hidden;
         font-weight: 500;
         font-size: 14px;
-        line-height: 140%;
+        line-height: 1.3;
+        height: 36px;
         color: black;
       }
 
@@ -418,6 +427,7 @@ onUnmounted(() => {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-size: 12px;
           }
         }
 
@@ -474,6 +484,286 @@ onUnmounted(() => {
       //transition: background 0.2s;
       cursor: pointer;
     }
+  }
+
+  // 添加全屏加载动画
+  .fullscreen-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loading-spinner {
+      > div {
+        width: 12px;
+        height: 12px;
+        background-color: #409EFF;
+        border-radius: 100%;
+        display: inline-block;
+        animation: bounce 1.4s infinite ease-in-out both;
+        margin: 0 3px;
+      }
+      .bounce1 { animation-delay: -0.32s; }
+      .bounce2 { animation-delay: -0.16s; }
+    }
+  }
+
+  // 优化分类菜单样式
+  .channel-container {
+    .channel-scroll-container {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      
+      .channel-wrapper {
+        display: flex;
+        padding: 0 20px;
+
+        .channel {
+          position: relative;
+          padding: 0 24px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: all 0.3s;
+
+          &:hover {
+            color: #409EFF;
+          }
+
+          &.active {
+            color: #409EFF;
+            font-weight: 600;
+
+            .active-bar {
+              position: absolute;
+              bottom: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 20px;
+              height: 3px;
+              background: #409EFF;
+              border-radius: 2px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 优化商品卡片样式
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    animation-duration: 0.8s;
+    animation-fill-mode: both;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: all 0.2s ease-out;
+
+      .card-overlay {
+        opacity: 1;
+        transition: opacity 0.2s ease-out;
+      }
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      padding-top: 75%;
+
+      .card-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease-out;
+
+        .view-detail {
+          color: #fff;
+          font-size: 14px;
+          padding: 6px 16px;
+          border: 1px solid #fff;
+          border-radius: 20px;
+        }
+      }
+    }
+
+    .footer {
+      padding: 6px 10px;
+
+      .title {
+        margin-bottom: 3px;
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 1.2;
+        height: 28px;
+      }
+
+      .price {
+        margin-bottom: 4px;
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        font-weight: bolder;
+        font-size: 14px;
+        color: red;
+        line-height: 140%;
+      }
+
+      .author-wrapper {
+        height: 16px;
+        color: rgba(51, 51, 51, 0.8);
+        font-size: 11px;
+        transition: color 1s;
+
+        .author {
+          display: flex;
+          align-items: center;
+          color: inherit;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-right: 12px;
+
+          .author-avatar {
+            margin-right: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+            object-fit: cover;
+          }
+
+          .name {
+            color: #9e9e9e;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+          }
+        }
+
+        .like-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          .count {
+            color: #9e9e9e;
+            margin-left: 2px;
+          }
+
+          i {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+
+  // 添加 Main 组件的过渡动画样式
+  .main-transition {
+    &-enter-active,
+    &-leave-active {
+      transition: all 0.3s ease-out;
+    }
+
+    &-enter-from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+
+    &-leave-to {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+}
+
+// 确保 Main 组件的动画层级正确
+:deep(.main-component) {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98);
+  animation-duration: 0.3s !important;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
   }
 }
 </style>
