@@ -192,9 +192,9 @@ export default {
       })
     },
     handleUploadSuccess(response, file, fileList) {
-      alert("success!");
+      //alert("success!");
       file.url = response
-      alert(file.url)
+      //alert(file.url)
       this.fileList = fileList
     },
     closeDrawer(changeAddress) {

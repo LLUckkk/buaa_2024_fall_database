@@ -1,6 +1,6 @@
 <!--商品详情页-->
 <template>
-  <div>
+  <div v-if="productInfo">
     <div class="note-detail-mask animate__animated animate__zoomIn  animate__delay-0.5s">
       <div class="note-container">
         <div class="media-container">
@@ -95,7 +95,7 @@
           </div>
         </div>
       </div>
-      <div class="close-cricle" @click="close">
+      <div class="close-cricle" @click="close()">
         <div class="close close-mask-white">
           <i class="el-icon-close" style="color: rgba(51, 51, 51, 0.8)">
             <el-icon size="large"><Close /></el-icon>
@@ -125,6 +125,7 @@ import { ElMessage } from 'element-plus'
 
 export default {
   components: {Comment, Chat},
+  emits: ['main_close'],
   props: {
     productId: {
       default: ''
@@ -154,6 +155,8 @@ export default {
         parentId: "",
       },
       currentUserId: null,
+      someData: null,
+      loading: false
     }
   },
   created() {
@@ -313,6 +316,22 @@ export default {
         console.error('获取用户信息失败:', error)
       }
     },
+    async someAsyncMethod() {
+      try {
+        this.loading = true
+        // 异步操作
+      } catch (error) {
+        console.error(error)
+      } finally {
+        if (this.$el) {  // 检查组件是否还存在
+          this.loading = false
+        }
+      }
+    }
+  },
+  beforeUnmount() {
+    // 清理所有可能的副作用
+    // 比如定时器、事件监听器等
   }
 }
 </script>

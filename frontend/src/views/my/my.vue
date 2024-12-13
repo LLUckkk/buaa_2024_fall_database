@@ -122,6 +122,7 @@ import UserProduct from "@/components/UserProduct.vue"
 import User_edit from "@/views/my/user_edit.vue"
 import User_address from "@/views/my/user_address.vue"
 import api from "@/api"
+import { ElMessage } from "element-plus"
 
 export default {
   components: {

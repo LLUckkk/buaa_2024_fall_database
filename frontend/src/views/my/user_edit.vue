@@ -11,7 +11,7 @@
       <div class="avatar-section">
         <el-upload
           class="avatar-uploader"
-          action="/api/upload/image"
+          :http-request="uploadImage"
           :on-success="handleUploadSuccess"
           :show-file-list="false"
           :limit="1"
@@ -81,8 +81,9 @@
 </template>
 
 <script>
-import {Notification} from "element-plus";
+import { ElNotification } from 'element-plus'
 import api from "@/api";
+
 
 export default {
   created() {
@@ -95,8 +96,8 @@ export default {
         nickName: '',
         intro: "",
         avatar: "",
-        password: '',
-        passwordCheck: '',
+        password: null,
+        passwordCheck: null,
       },
       dialog: false,
       userInfo: {},
@@ -104,17 +105,42 @@ export default {
     }
   },
   methods: {
+    uploadImage(options) {
+      const { file } = options
+      let formData = new FormData();
+      formData.append('file', file)
+      this.$api.upload.uploadImage(formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then(res => {
+        options.onSuccess(res.data, file)
+      }).catch(() => {
+        options.onError(new Error('Upload failed'), file)
+      })
+    },
     onSubmit() {
+      console.log('onSubmit 被调用')
       this.$api.user.updateUserInfo(this.form).then(res => {
+        console.log('API 调用成功', res)
+        alert(this.form.nickName)
         this.cancel();
-        Notification({type: 'success', title: '修改个人信息'})
-        this.$store.dispatch('getUserInfo')
+        ElNotification({
+          type: 'success',
+          title: '修改个人信息',
+          message: '修改成功'
+        })
+      }).catch(err => {
+        console.error('API 调用失败', err)
+        ElNotification({
+          type: 'error',
+          title: '修改失败',
+          message: err.message
+        })
       })
     },
     getUserInfo() {
       this.$api.user.getUserInfo().then(res => {
         this.userInfo = res.data
-        this.form.nickName = res.data.nickName
+        this.form.nickName = res.data.nickname
         this.form.intro = res.data.intro
         this.form.avatar = res.data.avatar
       })
@@ -128,17 +154,29 @@ export default {
     },
     postPass() {
       if(!this.form.password) {
-        Notification({type: 'warning', title: '异常', message: '请输入密码'})
+        ElNotification({
+          type: 'warning',
+          title: '异常',
+          message: '请输入密码'
+        })
         return
       }
       if (this.passwordError) {
-        Notification({type: 'warning', title: '异常', message: '两次输入的密码不一致'})
+        ElNotification({
+          type: 'warning',
+          title: '异常',
+          message: '两次输入的密码不一致'
+        })
         return
       }
       this.$api.user.updateUserPassword(this.form).then(res => {
         this.cancel();
         this.dialog = false;
-        Notification({type: 'success', title: '修改个人信息', message: '修改成功'})
+        ElNotification({
+          type: 'success',
+          title: '修改个人信息',
+          message: '修改成功'
+        })
         this.$store.dispatch('getUserInfo')
       })
     },
@@ -146,7 +184,9 @@ export default {
       this.$emit('close-drawer')
     },
     handleUploadSuccess(res, file) {
-      this.form.avatar = res.data.url
+      alert(res)
+      this.form.avatar = res
+      file.url = res
     }
   }
 }

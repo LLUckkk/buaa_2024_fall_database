@@ -5,7 +5,10 @@
       <!--下面的trendList 为了便于显示自己新建了一个-->
       <!-- <el-timeline-item v-for="(trend, index) in test_trends" :key="index" type="primary" :color="trend.color"
         size="normal" placement="top" :timestamp="$utils.convert.parseTime(String(trend.createTime))"> -->
-      <el-timeline-item v-for="(trend, index) in trendList" :key="index" type="primary" :color="trend.color"
+      <el-timeline-item v-for="(trend, index) in trendList" :key="index" 
+        class="trend-item-animation"
+        :style="{ animationDelay: index * 50 + 'ms' }"
+        type="primary" :color="trend.color"
         size="normal" placement="top" :timestamp="$utils.convert.parseTime(String(trend.createTime))">
         <div class="trend-type" v-if="trend.type === 'publish'">上新了一件宝贝</div>
         <div class="trend-type" v-if="trend.type === 'sell'">卖出了一件宝贝</div>
@@ -286,6 +289,22 @@ export default {
     &-leave-to {
       opacity: 0;
       transform: scale(0.98);
+    }
+  }
+
+  .trend-item-animation {
+    animation: slideInUp 0.3s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
