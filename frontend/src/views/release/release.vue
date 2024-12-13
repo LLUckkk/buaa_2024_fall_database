@@ -120,12 +120,19 @@ export default {
   methods: {
     uploadImage(options) {
       const { file } = options
-      this.$api.upload.uploadImage(file).then(res => {
+      let formData = new FormData();
+      formData.append('file', file);
+      this.$api.upload.uploadImage(formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then(res => {
         alert(res.data)
         this.fileList.push({
           url: res.data,
           data: res.data
         })
+        options.onSuccess(res.data, file)
+      }).catch(() => {
+        options.onError(new Error('Upload failed'), file)
       })
     },
     publish() {
