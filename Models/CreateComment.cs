@@ -2,8 +2,8 @@ namespace Market.Models
 {
     public class CreateComment
     {
-        public string ProductId { get; set; }
-        public string ParentId { get; set; }
-        public string Content { get; set; }
+        public required string ProductId { get; set; }
+        public string? ParentId { get; set; }
+        public required string Content { get; set; }
     }
 }

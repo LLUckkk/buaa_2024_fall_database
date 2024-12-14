@@ -13,6 +13,8 @@ namespace Market.Services
         public Result AddUserAddress(UserAddressObj req)
         {
             var userid = _tokenService.GetCurrentLoginUserId();
+            if (req.Address == null || req.Phone == null || req.Name == null)
+                return Result.Fail(ResultCode.ValidateError);
             var userAddress = new UserAddress
             {
                 Id = Guid.NewGuid().ToString(),
@@ -28,6 +30,32 @@ namespace Market.Services
             var save = _dbContext.SaveChanges();
             if (save == 0)
                 return Result.Fail(ResultCode.SaveError);
+            return Result.Ok();
+        }
+
+        public Result UpdateUserAddress(UserAddressObj req)
+        {
+            var userid = _tokenService.GetCurrentLoginUserId();
+            var userAddress = _dbContext.UserAddresses.FirstOrDefault(ua => ua.Id == req.Id);
+            if (userAddress == null || userAddress.UserId != userid)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+
+            if (req.Name != null)
+                userAddress.Name = req.Name;
+            if (req.Phone != null)
+                userAddress.Phone = req.Phone;
+            if (req.Address != null)
+                userAddress.Address = req.Address;
+            if (req.Name != null || req.Phone != null || req.Address != null)
+            {
+                userAddress.UpdateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                _dbContext.UserAddresses.Update(userAddress);
+                var save = _dbContext.SaveChanges();
+                if (save == 0)
+                    return Result.Fail(ResultCode.SaveError);
+            }
             return Result.Ok();
         }
 
@@ -47,10 +75,16 @@ namespace Market.Services
             return Result.Ok();
         }
 
-        public Result<List<UserAddress>> GetUserAddressList()
+        public Result<List<UserAddressObj>> GetUserAddressList()
         {
             var userId = _tokenService.GetCurrentLoginUserId();
-            return Result<List<UserAddress>>.Ok(_dbContext.UserAddresses.Where(ua => userId != null && ua.UserId == userId).ToList());
+            return Result<List<UserAddressObj>>.Ok(_dbContext.UserAddresses.Where(ua => userId != null && ua.UserId == userId).ToList().OrderByDescending(ua => ua.CreateTime).Select(ua => new UserAddressObj
+            {
+                Id = ua.Id,
+                Name = ua.Name,
+                Phone = ua.Phone,
+                Address = ua.Address,
+            }).ToList());
         }
     }
 }

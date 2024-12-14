@@ -19,6 +19,13 @@ namespace Market.Controllers
             return Ok(_userAddressService.AddUserAddress(address));
         }
 
+        // TODO : Implement Update method
+        [HttpPut]
+        public IActionResult Update([FromBody] UserAddressObj address)
+        {
+            return Ok(_userAddressService.UpdateUserAddress(address));
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

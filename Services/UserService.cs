@@ -37,7 +37,8 @@ namespace Market.Services
             return Result<string>.Ok(_tokenService.GenerateToken(user.Id, "User"));
         }
 
-        public Result<string> GetValidateToken(string email) {
+        public Result<string> GetValidateToken(string email)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
@@ -45,16 +46,19 @@ namespace Market.Services
             }
             return Result<string>.Ok("123456");
         }
-        public Result ResetPassword(ResetPasswordObj req) {
+        public Result ResetPassword(ResetPasswordObj req)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == req.Email);
             if (user == null)
             {
                 return Result.Fail(ResultCode.NotFoundError, "User not found");
             }
-            if (string.IsNullOrEmpty(req.NewPassword)) {
+            if (string.IsNullOrEmpty(req.NewPassword))
+            {
                 return Result.Fail(ResultCode.ValidateError, "Password is required");
             }
-            if(req.Token != "123456") {
+            if (req.Token != "123456")
+            {
                 return Result.Fail(ResultCode.ValidateError, "Invalid token");
             }
             user.Password = _passwordHasher.HashPassword(req.NewPassword);
@@ -75,7 +79,8 @@ namespace Market.Services
             return Result<User>.Ok(user);
         }
 
-        public Result<User> GetUser(string id) {
+        public Result<User> GetUser(string id)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
@@ -83,7 +88,8 @@ namespace Market.Services
             }
             return Result<User>.Ok(user);
         }
-        public Result<Page<User>> GetUserList(UserAdminPage req) {
+        public Result<Page<User>> GetUserList(UserAdminPage req)
+        {
             var query = _dbContext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(req.Key))
@@ -92,7 +98,7 @@ namespace Market.Services
             }
 
             query = query.Where(u => u.CheckStatus == req.CheckStatus);
-        
+
 
             query = query.OrderByDescending(u => u.CreateTime);
 
@@ -111,41 +117,34 @@ namespace Market.Services
         }
         public Result UpdateUserInfo(UpdateUserInfo req)
         {
-            try
+
+            var user = GetCurrentUser()!;
+            if (req.Nickname != null)
             {
-                var uid = _tokenService.GetCurrentLoginUserId();
-                var user = _dbContext.Users.FirstOrDefault(u => u.Id == uid);
-                if (user == null)
-                {
-                    return Result.Fail(ResultCode.NotFoundError);
-                }
-
-                if (req.NickName != null)
-                {
-                    user.CheckNickName = req.NickName;
-                }
-
-                if (req.Intro != null)
-                {
-                    user.CheckIntro = req.Intro;
-                }
-
-                if (req.Avatar != null)
-                {
-                    user.CheckAvatar = req.Avatar;
-                }
-
-                user.CheckStatus = 0;
-
-                _dbContext.Users.Update(user);
-                _dbContext.SaveChanges();
-
-                return Result.Ok();
+                user.Nickname = req.Nickname;
             }
-            catch (Exception)
+
+            if (req.Intro != null)
             {
-                return Result.Fail(ResultCode.UpdateError);
+                user.Intro = req.Intro;
             }
+
+            if (req.Avatar != null)
+            {
+                user.Avatar = req.Avatar;
+            }
+
+            user.CheckStatus = 0;
+
+            _dbContext.Users.Update(user);
+            var save = _dbContext.SaveChanges();
+            ApproveUserProfileUpdate(user.Id);
+            if (save == 0)
+            {
+                return Result.Fail(ResultCode.SaveError);
+            }
+            return Result.Ok();
+
         }
         public Result UpdateUserPassword(UpdateUserInfo req)
         {
@@ -202,7 +201,8 @@ namespace Market.Services
             return _dbContext.Users.FirstOrDefault(u => u.Id == id);
         }
 
-        public Result EnableUser(string id) {
+        public Result EnableUser(string id)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
@@ -214,7 +214,8 @@ namespace Market.Services
             _dbContext.SaveChanges();
             return Result.Ok();
         }
-        public Result DisableUser(string id) {
+        public Result DisableUser(string id)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
@@ -226,7 +227,8 @@ namespace Market.Services
             _dbContext.SaveChanges();
             return Result.Ok();
         }
-        public Result ApproveUserProfileUpdate(string id) {
+        public Result ApproveUserProfileUpdate(string id)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {
@@ -257,7 +259,8 @@ namespace Market.Services
 
             return Result.Ok();
         }
-        public Result RejectUserProfileUpdate(string id) {
+        public Result RejectUserProfileUpdate(string id)
+        {
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
             {

@@ -20,6 +20,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("image")]
+        [RequestSizeLimit(2147483647)]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {

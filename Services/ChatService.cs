@@ -13,7 +13,7 @@ namespace Market.Services
         public Result<string> Create(ChatListCreate req)
         {
             var user = _userService.GetCurrentUser();
-            var existing = _dbContext.ChatLists.FirstOrDefault(c => c.FromUserId == user.Id && c.ToUserId == req.ToUserId || c.FromUserId == req.ToUserId && c.ToUserId == user.Id);
+            var existing = _dbContext.ChatLists.FirstOrDefault(c => c.FromUserId == user!.Id && c.ToUserId == req.ToUserId || c.FromUserId == req.ToUserId && c.ToUserId == user.Id);
             if (existing != null)
             {
                 return Result<string>.Ok(existing.Id);
@@ -26,7 +26,7 @@ namespace Market.Services
             var chatList = new ChatList
             {
                 Id = Guid.NewGuid().ToString(),
-                FromUserId = user.Id,
+                FromUserId = user!.Id,
                 ToUserId = req.ToUserId,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
@@ -44,6 +44,8 @@ namespace Market.Services
                 Id = Guid.NewGuid().ToString(),
                 ChatListId = chatList.Id,
                 FromUserId = user.Id,
+                FromUserNick = user.Nickname,
+                ToUserNick = target.Nickname,
                 ToUserId = req.ToUserId,
                 Content = "我刚刚查看了您的宝贝哦～",
                 SendTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
@@ -91,6 +93,7 @@ namespace Market.Services
             var user = _userService.GetCurrentUser();
             var count = _dbContext.ChatLists
                         .Where(c => c.FromUserId == user.Id || c.ToUserId == user.Id)
+                        .ToList()
                         .AsEnumerable()
                         .Sum(c => GetListUnreadCount(c.Id));
             return Result<int>.Ok(count);
@@ -126,6 +129,12 @@ namespace Market.Services
             {
                 return new ChatMessage
                 {
+                    Id = "",
+                    ChatListId = chatId,
+                    FromUserId = "",
+                    ToUserId = "",
+                    FromUserNick = "",
+                    ToUserNick = "",
                     Content = "暂无消息",
                     SendTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 };

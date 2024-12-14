@@ -63,11 +63,11 @@ CREATE TABLE chat_list (
     product_id VARCHAR(36) REFERENCES product_info (id),
     product_image VARCHAR(255),
     from_user_id VARCHAR(36) NOT NULL,
-    from_user_avatar VARCHAR(100),
+    from_user_avatar VARCHAR(255),
     from_user_nick VARCHAR(100),
     to_user_id VARCHAR(36) NOT NULL,
     to_user_nick VARCHAR(100),
-    to_user_avatar VARCHAR(100),
+    to_user_avatar VARCHAR(255),
     create_time BIGINT,
     update_time BIGINT
 );

@@ -33,9 +33,5 @@ namespace Market.Entities
 
         [Column("create_time")]
         public long CreateTime { get; set; }
-
-
-        [ForeignKey("PubUserId")]
-        public User User { get; set; }
     }
 }

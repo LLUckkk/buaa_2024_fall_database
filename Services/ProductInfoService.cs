@@ -84,7 +84,8 @@ namespace Market.Services
                 UserId = item.UserId,
                 CreateTime = item.CreateTime,
                 UpdateTime = item.UpdateTime,
-                Avatar = user?.Avatar
+                Type = item.TypeName!,
+                UserInfo = _userService.GetUserById(item.UserId),
             }
             ).ToList();
 
@@ -115,11 +116,13 @@ namespace Market.Services
                 Province = info.Province,
                 City = info.City,
                 District = info.District,
+                LikeCount = info.LikeCount,
                 Status = info.Status,
                 UserId = info.UserId,
                 CreateTime = info.CreateTime,
                 UpdateTime = info.UpdateTime,
                 UserInfo = user,
+                Type = info.TypeName!,
             };
             return Result<ProductInfoDetail>.Ok(detail);
         }
@@ -144,6 +147,7 @@ namespace Market.Services
             }
             info.LikeCount += 1;
             _dbContext.ProductInfos.Update(info);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
         public Result<Page<ProductInfoDetail>> GetProductInfoPage(SystemProductInfoPage req)
@@ -182,6 +186,8 @@ namespace Market.Services
                                 UserId = pi.UserId,
                                 CreateTime = pi.CreateTime,
                                 UpdateTime = pi.UpdateTime,
+                                Type = pi.TypeName!,
+
                             })
                             .ToList();
             page.ForEach(pi =>
@@ -245,13 +251,15 @@ namespace Market.Services
                     UserId = productInfo.UserId,
                     CreateTime = productInfo.CreateTime,
                     UpdateTime = productInfo.UpdateTime,
+                    UserInfo = _userService.GetUserById(productInfo.UserId),
+                    Type = productInfo.TypeName!
                 };
 
                 return detail;
             }).Where(pi => pi != null).ToList();
             collectInfoList.ForEach(pi =>
             {
-                pi.UserInfo = _userService.GetUserById(pi.UserId);
+                pi!.UserInfo = _userService.GetUserById(pi.UserId);
                 var productVoucher = _dbContext.ProductVouchers.FirstOrDefault(pv => pv.ProductId == pi.Id);
                 if (productVoucher != null)
                 {

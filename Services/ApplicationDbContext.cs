@@ -30,10 +30,6 @@ namespace Market.Services
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.User)
-                .WithMany()
-                .HasForeignKey(c => c.PubUserId);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Market.Services
                 CreateTime = c.CreateTime,
                 PubUserId = c.PubUserId,
                 PubNickname = c.PubNickname,
-                PubAvatar = c.User.Avatar,
+                PubAvatar = _dbContext.Users.FirstOrDefault(u => u.Id == c.PubUserId)?.Avatar!,
             }).ToList();
             var commentCount = comments.Count;
             ResolveCommentTree(comments);
@@ -37,11 +37,11 @@ namespace Market.Services
                 Id = Guid.NewGuid().ToString(),
                 ProductId = req.ProductId,
                 Content = req.Content,
-                PubUserId = user.Id,
+                PubUserId = user!.Id,
                 PubNickname = user.Nickname,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds()
             };
-            if (req.ParentId != null)
+            if (!string.IsNullOrEmpty(req.ParentId))
             {
                 var parent = _dbContext.Comments.FirstOrDefault(c => c.Id == req.ParentId);
                 if (parent == null)

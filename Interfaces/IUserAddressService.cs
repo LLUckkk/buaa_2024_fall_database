@@ -6,7 +6,8 @@ namespace Market.Interfaces
     public interface IUserAddressService
     {
         Result AddUserAddress(UserAddressObj req);
+        Result UpdateUserAddress(UserAddressObj req);
         Result DeleteUserAddress(string id);
-        Result<List<UserAddress>> GetUserAddressList();
+        Result<List<UserAddressObj>> GetUserAddressList();
     }
 }
