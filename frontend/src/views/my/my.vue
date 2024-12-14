@@ -110,6 +110,8 @@
       :show-close="false"
       direction="rtl"
       destroy-on-close
+      :z-index="3000"
+      append-to-body
     >
       <user_edit v-if="type === 'user'" @close-drawer="closeDrawer"></user_edit>
       <user_address v-if="type === 'address'" @close-drawer="closeDrawer"></user_address>
@@ -209,13 +211,14 @@ export default {
   min-height: 100vh;
   background-image: url('/public/bg-pattern.png');
   background-color: var(--el-bg-color);
-  background-size: cover;
+  //background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
   padding: 24px;
-  margin-left: -15px;
+  margin-left: 10px;
   position: relative;
+  z-index: 0;
 
   &::before {
     content: '';
@@ -225,24 +228,22 @@ export default {
     right: 0;
     bottom: 0;
     background: rgba(255, 255, 255, 0.8);
-    z-index: 0;
+    z-index: 1;
   }
 
   & > * {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 }
 
 .user-profile {
   max-width: 1200px;
-  margin: 0 auto;
-  margin-top: 40px;
+  margin: 40px auto;
   padding: 40px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  padding-top: 40px;
 }
 
 .user-info {
@@ -281,7 +282,6 @@ export default {
   .basic-info {
     margin-bottom: 24px;
     text-align: left;
-    padding-top: 10px;
 
     .user-name {
       font-size: 28px;
