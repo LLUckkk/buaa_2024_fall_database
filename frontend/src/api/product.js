@@ -19,12 +19,15 @@ export default {
     return http.delete('product/info/'+id)
   },
   getCollectProduct(){
-    return http.get('/product/info/my/collect')
+    return http.get('/my/collect')
   },
   seckillVoucher(id){
     return http.post('/voucher/order/seckill/'+id)
   },
   disableProduct(id){
     return http.put('/product/info/disable/'+id)
+  },
+  enableProduct(id) {
+    return http.put('/product/info/enable/'+id)
   }
 }

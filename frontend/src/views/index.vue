@@ -2,34 +2,27 @@
   <div class="container" id="container">
     <div class="top">
       <header class="mask-paper">
-        <a style="display: flex">
-          <img class="logo" style="width: 90px;height: 72px;margin-top: 50px" src="@/assets/logo_neww.png" />
-          <span
-            style="line-height: 100px;font-weight: bolder;font-size: 30px;margin-left: 10px;margin-top: 40px;letter-spacing: 2px;font-family: '微软雅黑'">
-            <span style="color: rgb(51.2, 126.4, 204);">航游</span>
-            <span style="color: #ff2442;">集市</span>
+        <a class="logo-container">
+          <img class="logo" src="@/assets/logo_neww.png" />
+          <span class="brand-name">
+            <span class="brand-primary">航游</span>
+            <span class="brand-secondary">集市</span>
           </span>
-
         </a>
-        <div class="tool-box">
-        </div>
-        <div class="input-box" id="sujContainer" v-show="$route.path === '/dashboard'"  style="margin-top: 10px;">
-          <input type="text" v-model="key" class="search-input" placeholder="搜索你想要的" @focus="focusInput"
-            @keyup.enter="searchPage" ref="SearchInput" />
-          <div class="input-button">
-            <div class="search-icon" v-if="key === ''">
-              <i style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px">
-                <el-icon>
-                  <Search />
-                </el-icon>
-              </i>
-            </div>
-            <div class="close-icon" v-else @click="clearKeyword">
-              <i style="width: 1em; height: 1em; margin-right: 8px;margin-top: 5px">
-                <el-icon>
-                  <CircleClose />
-                </el-icon>
-              </i>
+        <div class="input-box" v-show="$route.path === '/dashboard'">
+          <div class="search-wrapper">
+            <input 
+              type="text" 
+              v-model="key" 
+              class="search-input" 
+              placeholder="搜索你想要的"
+              @focus="focusInput"
+              @keyup.enter="searchPage" 
+              ref="SearchInput"
+            />
+            <div class="input-button">
+              <el-icon v-if="key === ''" class="search-icon" style = "margin-top: 43px;margin-left: -10px;"><Search /></el-icon>
+              <el-icon v-else @click="clearKeyword" class="close-icon"><CircleClose /></el-icon>
             </div>
           </div>
         </div>
@@ -151,6 +144,7 @@ import Cookies from "js-cookie";
 import user from "@/store/user";
 import { Search } from "@element-plus/icons-vue";
 import api from "@/api";
+import emitter from '@/utils/eventBus'
 
 export default {
   computed: {
@@ -166,6 +160,7 @@ export default {
       showLogin: false,
       key: "",
       loginStatus: false,
+      emitter: emitter
     }
   },
   created() {
@@ -234,7 +229,7 @@ export default {
     },
     focusInput() { },
     searchPage() {
-      this.$eventBus.$emit('keyChanged', this.key);
+      this.emitter.emit('keyChanged', this.key)
     },
     loginClose(val) {
       this.showLogin = false;
@@ -363,236 +358,382 @@ a {
     display: flex;
 
     .side-bar {
-      @media screen and (max-width: 695px) {
-        display: none;
-      }
-
-      @media screen and (min-width: 696px) and (max-width: 959px) {
-        display: none;
-      }
-
-      @media screen and (min-width: 960px) and (max-width: 1191px) {
-        width: calc(-18px + 25vw);
-        margin-left: 12px;
-      }
-
-      @media screen and (min-width: 1192px) and (max-width: 1423px) {
-        width: calc(-16.8px + 20vw);
-        margin-left: 12px;
-      }
-
-      @media screen and (min-width: 1424px) and (max-width: 1727px) {
-        width: calc(-21.33333px + 16.66667vw);
-        margin-left: 16px;
-      }
-
-      @media screen and (min-width: 1728px) {
-        width: 266.66667px;
-        margin-left: 16px;
-      }
-
-      height: calc(100vh - 72px);
-      overflow-y: scroll;
-      background-color: #fff;
       display: flex;
+      width: 220px;
       flex-direction: column;
-      flex-shrink: 0;
-      padding-top: 16px;
+      justify-content: space-between;
+      height: calc(100vh - 92px);
       margin-top: 72px;
       position: fixed;
       overflow: visible;
-
+      padding: 24px 16px;
+      margin-left: -16px;
+      left: 24px;
+      
+      background: #fff;
+      backdrop-filter: blur(8px);
+      
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.06),
+        0 1px 3px rgba(0, 0, 0, 0.02),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      
+      border-radius: 16px;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        border-radius: inherit;
+        z-index: -1;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        background: linear-gradient(135deg,
+          rgba(0, 0, 0, 0.03),
+          transparent 50%
+        );
+        border-radius: inherit;
+        z-index: -2;
+      }
 
       .channel-list {
-        min-height: auto;
-        -webkit-user-select: none;
-        user-select: none;
-
-        .active-channel {
-          background-color: rgba(0, 0, 0, 0.03);
-          border-radius: 999px;
-          color: #333;
-        }
-
-        li:hover {
-          background-color: rgba(0, 0, 0, 0.03);
-          border-radius: 999px;
-          color: #333;
-        }
-
+        padding: 0 8px;
+        
         li {
-          padding-left: 16px;
-          min-height: 48px;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          margin-bottom: 8px;
-          color: rgba(51, 51, 51, 0.6);
-
+          margin-bottom: 12px;
+          transition: all 0.3s ease;
+          
           .link-wrapper {
-            display: flex;
-            width: 100%;
             height: 48px;
+            display: flex;
             align-items: center;
+            padding: 0 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            
+            .el-icon, 
+            .el-badge,
+            .el-image {
+              flex-shrink: 0;
+              width: 24px;
+              height: 24px;
+              margin-right: 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .channel {
+              font-size: 16px;
+              line-height: 1.5;
+              font-weight: 500;
+              white-space: nowrap;
+              background: linear-gradient(45deg, #666, #999);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              transition: all 0.3s ease;
+            }
+            
+            &:hover {
+              background: linear-gradient(45deg,
+                rgba(255, 36, 66, 0.04),
+                rgba(255, 107, 129, 0.03)
+              );
+              transform: translateX(4px);
+            }
           }
-
-          .message-count {
-            margin-left: 7rem;
-            background-color: red;
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
-            line-height: 20px;
-            text-align: center;
-            border-radius: 50%;
-            color: #fff;
+          
+          &.active-channel {
+            .link-wrapper {
+              background: linear-gradient(45deg,
+                rgba(255, 36, 66, 0.08),
+                rgba(255, 107, 129, 0.05)
+              );
+              box-shadow: 0 2px 8px rgba(255, 36, 66, 0.03);
+              
+              .channel {
+                background: linear-gradient(45deg, #ff6b81, #ff8c9a);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 600;
+              }
+              
+              .el-icon {
+                transform: scale(1.1);
+              }
+            }
           }
-        }
-
-        .channel {
-          font-size: 17px;
-          font-weight: 600;
-          margin-left: 12px;
-          color: #333;
         }
       }
 
       .information-container {
-        display: inline-block;
-        width: 70%;
-        color: #333;
-        font-size: 16px;
-        position: absolute;
-        bottom: 0;
-
+        margin-top: auto;
+        padding: 16px 8px;
+        border-top: 1px solid rgba(255, 36, 66, 0.04);
+        position: relative;
+        
         .information-pad {
-          z-index: 16;
-          margin-bottom: 4px;
+          position: absolute;
+          bottom: 100%;
+          left: 0;
           width: 100%;
-
+          padding: 8px;
+          
           .container {
-            width: 100%;
-            background: #fff;
-            box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.08), 0 1px 4px 0 rgba(0, 0, 0, 0.04);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
             border-radius: 12px;
-
-            .divider {
-              margin: 0px 12px;
-              list-style: none;
-              height: 0;
-              border: 1px solid rgba(0, 0, 0, 0.08);
-              border-width: 1px 0 0;
-            }
-
+            border: 1px solid rgba(255, 36, 66, 0.04);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            
             .group-wrapper {
-              padding: 4px;
-
+              padding: 8px 0;
+              
               .group-header {
-                display: flex;
-                align-items: center;
-                padding: 0 12px;
-                font-weight: 400;
-                height: 32px;
+                padding: 8px 16px;
+                font-size: 14px;
                 color: rgba(51, 51, 51, 0.6);
-                font-size: 12px;
               }
-
+              
               .menu-item {
-                height: 40px;
-                color: rgba(51, 51, 51, 0.8);
-                font-size: 16px;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                padding: 0 12px;
-                font-weight: 400;
+                padding: 12px 16px;
+                transition: all 0.3s ease;
                 cursor: pointer;
-
-                .icon {
-                  color: rgba(51, 51, 51, 0.3);
-                  margin-left: auto;
-                }
-
-                .component {
-                  margin-left: auto;
-                }
-
-                .multistage-toggle {
-                  position: relative;
-                  background: rgba(0, 0, 0, 0.03);
-                  display: flex();
-                  padding: 2px;
-                  border-radius: 999px;
-                  cursor: pointer;
-
-                  .active {
-                    background: #fff;
-                    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
-                      0 1px 2px 0 rgba(0, 0, 0, 0.02);
-                    color: #333;
-                  }
-
-                  .toggle-item {
-                    border-radius: 999px;
-                    background: transparent;
-                    color: rgba(51, 51, 51, 0.6);
-
-                    .icon-wrapper {
-                      width: 24px;
-                      height: 24px;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      cursor: pointer;
-                    }
+                
+                a {
+                  display: flex;
+                  align-items: center;
+                  color: #333;
+                  
+                  i {
+                    margin-right: 8px;
                   }
                 }
-              }
-
-              .menu-item:hover {
-                background-color: rgba(0, 0, 0, 0.03);
-                border-radius: 999px;
-                color: #333;
+                
+                &:hover {
+                  background: linear-gradient(45deg,
+                    rgba(255, 36, 66, 0.04),
+                    rgba(255, 107, 129, 0.03)
+                  );
+                }
               }
             }
           }
         }
 
         .information-wrapper {
-          -webkit-user-select: none;
-          user-select: none;
-          cursor: pointer;
-          position: relative;
-          margin-bottom: 20px;
+          padding: 0 16px;
           height: 48px;
-          width: 100%;
           display: flex;
-          font-weight: 600;
           align-items: center;
-          border-radius: 999px;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: linear-gradient(45deg,
+              rgba(255, 36, 66, 0.08),
+              rgba(255, 107, 129, 0.06)
+            );
+          }
+          
+          i {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .channel {
+            font-size: 16px;
+            line-height: 1.5;
+          }
         }
       }
     }
 
     .main-content {
       width: 100%;
+      
+      &.with-side-bar {
+        margin-top: 20px;
+        border-radius: 16px;
+        background: transparent;
+        margin-left: -26px;
+
+        @media screen and (min-width: 960px) and (max-width: 1191px) {
+          padding-left: calc(-6px + 25vw);
+        }
+
+        @media screen and (min-width: 1192px) and (max-width: 1423px) {
+          padding-left: calc(-4.8px + 20vw);
+        }
+
+        @media screen and (min-width: 1424px) and (max-width: 1727px) {
+          padding-left: calc(-5.33333px + 16.66667vw);
+        }
+
+        @media screen and (min-width: 1728px) {
+          padding-left: 282.66667px;
+        }
+      }
+    }
+  }
+}
+
+.mask-paper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1728px;
+  height: 72px;
+  padding: 0 24px;
+  background: #fff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+      rgba(255, 36, 66, 0.03),
+      rgba(255, 107, 129, 0.02)
+    );
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      rgba(255, 36, 66, 0),
+      rgba(255, 36, 66, 0.1) 50%,
+      rgba(255, 36, 66, 0)
+    );
+  }
+
+  .logo-container,
+  .input-box,
+  .right {
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .logo {
+      width: 90px;
+      height: 72px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
     }
 
-    .main-content {
-      @media screen and (min-width: 960px) and (max-width: 1191px) {
-        padding-left: calc(-6px + 25vw);
+    .brand-name {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-family: '微软雅黑';
+      
+      .brand-primary {
+        color: rgb(51.2, 126.4, 204);
+        background: linear-gradient(45deg, rgb(51.2, 126.4, 204), #4a90e2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .brand-secondary {
+        color: #ff2442;
+        background: linear-gradient(45deg, #ff2442, #ff6b81);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
+  .input-box {
+    .search-wrapper {
+      position: relative;
+      width: 500px;
+      height: 44px;
+      
+      .search-input {
+        width: 100%;
+        height: 100%;
+        padding: 0 48px 0 20px;
+        font-size: 16px;
+        border: 2px solid transparent;
+        border-radius: 22px;
+        background: rgba(0, 0, 0, 0.02);
+        transition: all 0.3s ease;
+        
+        &:focus {
+          border-color: #ff2442;
+          background: #fff;
+          box-shadow: 0 0 0 4px rgba(255,36,66,0.05);
+        }
+        
+        &::placeholder {
+          color: rgba(0,0,0,0.4);
+        }
       }
 
-      @media screen and (min-width: 1192px) and (max-width: 1423px) {
-        padding-left: calc(-4.8px + 20vw);
-      }
-
-      @media screen and (min-width: 1424px) and (max-width: 1727px) {
-        padding-left: calc(-5.33333px + 16.66667vw);
-      }
-
-      @media screen and (min-width: 1728px) {
-        padding-left: 282.66667px;
+      .input-button {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        .el-icon {
+          font-size: 20px;
+          color: rgba(0,0,0,0.5);
+          transition: all 0.3s ease;
+          
+          &:hover {
+            color: #ff2442;
+            transform: scale(1.1);
+          }
+        }
       }
     }
   }

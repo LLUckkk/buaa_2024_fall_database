@@ -5,29 +5,26 @@
         <div class="header-left"></div>
         <div class="header-user">
           <el-avatar :src="toUserInfo.avatar" />
-          <span style="margin-left: 5px">{{ toUserInfo.nickName }}</span>
+          <span style="margin-left: 5px">{{ toUserInfo.nickname }}</span>
 
         </div>
         <div class="header-tool">
           <!--          <i class="el-icon-more icon-item"></i>-->
-
         </div>
 
       </header>
       <div class="order-detail">
         <div class="details-box" @click="toMain()">
-          <el-image style=" width: 100%;height: 100%;border-radius: 5px;" src="@/assets/logo.jpg"
-            fit="cover"></el-image>
-          <!-- <el-image  style=" width: 100%;height: 100%;border-radius: 5px;" :src="productInfo.image" fit="cover"></el-image> -->
+          <el-image  style=" width: 100%;height: 100%;border-radius: 5px;" :src="productInfo.image" fit="cover"></el-image>
         </div>
         <div class="info">
           <!--                <div class="interaction-hint"><span>1天前</span></div>-->
           <div class="product-info" @click="toMain()">
-            <div class="interaction-price">￥ {{ $utils.convert.to_price(productInfo.price) }}</div>
-            <!-- <div class="address"> {{ productInfo.province }} {{ productInfo.city }}</div> -->
+            <div class="interaction-price">￥ {{ this.$utils.convert.to_price(productInfo.price) }}</div>
+            <div class="address"> {{productInfo.city }}</div>
           </div>
           <div class="buy">
-            <el-button type="danger" round @click="purchase" v-if="productInfo.status === 1 &&productInfo.userId!==userInfo.id">购买</el-button>
+            <el-button type="danger" round @click="purchase" v-if="productInfo.userId!==userInfo.id">购买</el-button>
           </div>
         </div>
       </div>
@@ -87,8 +84,9 @@
 import websocket from "@/utils/websocket";
 import Main from "@/views/main/main.vue";
 import utils from "@/utils";
-import { timePanelSharedProps } from "element-plus/es/components/time-picker/src/props/shared";
-
+import api from "@/api";
+import store from "@/store";
+import { MessageBox } from 'element-ui'
 export default {
   components: { Main },
   props: {
@@ -118,6 +116,8 @@ export default {
   },
   created(){
     this.$utils = utils
+    this.$api = api
+    this.$store = store
   },
   mounted() {
     this.getProductInfo()
@@ -133,13 +133,24 @@ export default {
   },
   methods: {
     getMessage() {
-      this.$api.chatMessage.getMessageList({ chatListId: this.chatListItem.id }).then(res => {
+      this.$api.chatMessage.getMessageList({ chatId: this.chatListItem.id }).then(res => {
         this.chatMessageList = res.data
       })
     },
     purchase() {
-      this.close();
-      this.$router.push('/orderCreate?productId=' + this.productInfo.id)
+      this.$confirm('确认要购买该商品吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消', 
+        type: 'warning'
+      }).then(() => {
+        this.close();
+        this.$router.push('/orderCreate?productId=' + this.productInfo.id)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消购买'
+        });        
+      });
     },
     submit() {
       let message = {
@@ -161,7 +172,7 @@ export default {
       this.close();
     },
     getProductInfo() {
-      this.$api.product.getProductInfo({productId: this.productId}).then(res=>{
+      this.$api.product.getProductInfo({id: this.productId}).then(res=>{
         this.productInfo = res.data
         this.productInfo.image = JSON.parse(this.productInfo.image)[0]
       })

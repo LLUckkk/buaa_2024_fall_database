@@ -1,78 +1,116 @@
 <template>
-  <div class="container">
-    <div class="push-container">
-      <el-form label-position="left" class="check-form" :model="formData" :rules="rules" ref="form" label-width="80px"
-        :show-message="false" status-icon :hide-required-asterisk="true" size="mini">
-        <div class="header"><span class="header-icon"></span><span class="header-title">发布闲置</span></div>
-        <div class="img-list">
-          <el-upload v-model:file-list="fileList" :http-request="uploadImage" list-type="picture-card"
-            :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUploadSuccess">
-            <div style="line-height: 80px;font-size: 12px;color: #9999b3">+添加优质图</div>
-          </el-upload>
+  <div class="release-container">
+    <div class="release-card">
+      <!-- 标题区域 -->
+      <div class="card-header">
+        <div class="title-bar"></div>
+        <h2>发布闲置</h2>
+      </div>
 
-          <el-dialog :visible.sync="dialog.visible">
-            <img width="100%" :src="dialog.imageUrl" alt="预览图像">
-          </el-dialog>
+      <!-- 表单区域 -->
+      <el-form 
+        :model="formData" 
+        :rules="rules" 
+        ref="form"
+        label-position="top"
+        class="release-form"
+      >
+        <!-- 图片上传区 -->
+        <div class="upload-section">
+          <h3>商品图片</h3>
+          <el-upload
+            v-model:file-list="fileList"
+            :http-request="uploadImage"
+            list-type="picture-card"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-success="handleUploadSuccess"
+          >
+            <div class="upload-tip">
+              <i class="el-icon-plus"></i>
+              <span>添加图片</span>
+            </div>
+          </el-upload>
         </div>
-        <div class="push-content">
-          <el-form-item label-width="0" prop="title">
-            <el-input style="margin-left: 15px;" v-model="formData.title" maxlength="20" show-word-limit type="text"
-              placeholder="填写商品标题，可能会更容易卖出哦~" class="input-title" />
+
+        <!-- 基本信息区 -->
+        <div class="basic-info">
+          <el-form-item prop="title">
+            <el-input
+              v-model="formData.title"
+              maxlength="20"
+              show-word-limit
+              placeholder="请输入商品标题"
+            />
           </el-form-item>
-          <el-form-item label-width="0" prop="intro">
-            <el-input style="margin-left: 15px;" v-model="formData.intro" :rows="5" maxlength="200" show-word-limit
-              type="textarea" placeholder="描述下宝贝的品牌型号、货品来源..." class="input-content" />
-          </el-form-item>
-        </div>
-        <div class="btns">
-          <!--          <button class="css-fm44j css-osq2ks dyn">-->
-          <!--            <span class="btn-content"># 话题</span></button-->
-          <!--          >-->
-          <!--          <button class="css-fm44j css-osq2ks dyn">-->
-          <!--          <span class="btn-content"-->
-          <!--          ><div class="smile"></div>-->
-          <!--            表情</span-->
-          <!--          >-->
-          <!--          </button>-->
-          <el-form-item label="商品分类" prop="type" style="width:300px ">
-            <el-select v-model="formData.type" placeholder="选择商品分类">
-              <el-option v-for="(item, index) in menuList" :key="item.id" :label="item.typeName"
-                :value="item.typeCode"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="商品位置" prop="type" style="width:300px ">
-            <el-select v-model="formData.city" placeholder="选择商品位置">
-              <el-option v-for="(item, index) in placeList" :key="item.id" :label="item.typeName"
-                :value="item.typeCode"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="价格">
-            <el-input-number required controls-position="right" v-model="formData.price" :precision="2" :step="1"
-              :min="0"></el-input-number>
+
+          <el-form-item prop="intro">
+            <el-input
+              v-model="formData.intro"
+              type="textarea"
+              :rows="4"
+              maxlength="200"
+              show-word-limit
+              placeholder="描述商品的品牌型号、使用情况等信息"
+            />
           </el-form-item>
         </div>
-        <div style="margin-left: 20px">
-          <el-divider style="width: 576px" />
+
+        <!-- 商品详情区 -->
+        <div class="product-details">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="商品分类" prop="type">
+                <el-select v-model="formData.type" placeholder="选择分类" class="full-width">
+                  <el-option
+                    v-for="item in menuList"
+                    :key="item.id"
+                    :label="item.typeName"
+                    :value="item.typeCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="商品位置" prop="city">
+                <el-select v-model="formData.city" placeholder="选择位置" class="full-width">
+                  <el-option
+                    v-for="item in placeList"
+                    :key="item.id"
+                    :label="item.typeName"
+                    :value="item.typeCode"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="价格">
+                <el-input-number
+                  v-model="formData.price"
+                  :precision="2"
+                  :step="1"
+                  :min="0"
+                  controls-position="right"
+                  class="price-input"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
-        <div class="submit">
-          <button class="publishBtn" type="submit" @click.prevent="publish()">
-            <span class="btn-content">发布</span>
-          </button>
-          <button class="clearBtn" @click="$router.push('/')">
-            <span class="btn-content">取消</span>
-          </button>
+
+        <!-- 操作按钮区 -->
+        <div class="action-buttons">
+          <el-button type="primary" @click="publish">发布商品</el-button>
+          <el-button @click="$router.push('/')">取消</el-button>
         </div>
       </el-form>
     </div>
-
-    <!--抽屉 地址编辑-->
-    <div>
-      <el-drawer @close-drawer="closeDrawer" :show-close="false" :visible.sync="drawer" direction="rtl">
-        <address_edit @close-drawer="closeDrawer"></address_edit>
-      </el-drawer>
-    </div>
   </div>
 </template>
+
 <script>
 //import gdMapUtil from "@/utils/gdMapUtil";
 //import Address_edit from "@/views/release/address_edit.vue";
@@ -142,7 +180,7 @@ export default {
         this.formData.price = 0
       }
       if (!this.formData.originalPrice) {
-        this.formData.originalPrice = this.formData.price // 如果未设置原价，使用当前价格
+        this.formData.originalPrice = this.formData.price // 如未设置原价，使用当前价格
       }
       if (!this.formData.likeCount) {
         this.formData.likeCount = 0
@@ -221,172 +259,83 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-/deep/ .push-content .el-input--mini .el-input__inner {
-  height: 40px;
-}
+.release-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 40px 0;
+  margin-top: 30px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
 
-.check-form .el-form-item__content {
-  margin-left: 0 !important;
-}
-
-/deep/ .el-drawer__header {
-  display: none;
-}
-
-/deep/ .el-upload-list--picture-card .el-upload-list__item {
-  width: 80px;
-  height: 80px;
-}
-
-/deep/ .el-upload-list__item.is-success .el-upload-list__item-status-label {
-  display: none;
-}
-
-/deep/ .el-upload--picture-card {
-  width: 80px;
-  height: 80px;
-}
-
-.container {
-  flex: 1;
-  padding-top: 72px;
-
-  .push-container {
-    margin-left: 12vw;
-    width: 600px;
+  .release-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
     border-radius: 8px;
-    box-sizing: border-box;
-    box-shadow: var(--el-box-shadow-lighter);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 10px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 
-    .header {
-      padding: 15px 0;
-      line-height: 16px;
-      font-size: 16px;
-      font-weight: 400;
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
 
-      .header-icon {
-        position: relative;
-        top: 2px;
-        display: inline-block;
-        width: 6px;
-        height: 19px;
-        background: #ff2442;
-        border-radius: 3px;
-        margin-right: 2px;
+      .title-bar {
+        width: 4px;
+        height: 20px;
+        background: #409EFF;
+        margin-right: 10px;
+        border-radius: 2px;
       }
 
-      .header-title {
-        line-height: 20px;
-        font-size: 20px;
+      h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
       }
     }
 
-    .img-list {
-      width: 540px;
-      margin-left: 20px;
-      padding: 0;
-    }
+    .release-form {
+      .upload-section {
+        margin-bottom: 30px;
+      }
 
-    .push-content {
-      padding: 10px 6px 10px 6px;
-      position: relative;
+      .basic-info {
+        margin-bottom: 30px;
+      }
 
-      .scroll-tag-container {
-        position: absolute;
-        width: 98%;
-        background-color: #fff;
-        z-index: 99999;
-        border: 1px solid #f4f4f4;
-        height: 300px;
-        overflow: auto;
+      .product-details {
+        margin-bottom: 30px;
 
-        .scrollbar-tag-item {
-          display: flex;
-          align-items: center;
-          height: 30px;
-          margin: 10px;
-          text-align: center;
-          border-radius: 4px;
-          padding-left: 2px;
-          color: #484848;
+        .price-input {
+          width: 100%;
+          max-width: 200px;
+        }
+
+        :deep(.el-form-item__label) {
+          padding: 0;
+          margin-bottom: 8px;
+          margin-right: 280px;
           font-size: 14px;
-        }
-
-        .scrollbar-tag-item:hover {
-          background-color: #f8f8f8;
+          color: #666;
         }
       }
 
-      .input-title {
-        margin-bottom: 5px;
-        font-size: 12px;
+      .full-width {
+        width: 100%;
       }
 
-      .input-content {
-        font-size: 12px;
-      }
-    }
+      .action-buttons {
+        text-align: center;
+        margin-top: 40px;
 
-    .btns {
-      padding: 0 12px 0px 20px;
-
-      button {
-        min-width: 62px;
-        width: 62px;
-        margin: 0 6px 0 0;
-        height: 18px;
-      }
-
-      .css-fm44j {
-        -webkit-font-smoothing: antialiased;
-        appearance: none;
-        font-family: RedNum, RedZh, RedEn, -apple-system;
-        vertical-align: middle;
-        text-decoration: none;
-        border: 1px solid rgb(217, 217, 217);
-        outline: none;
-        user-select: none;
-        cursor: pointer;
-        display: inline-flex;
-        -webkit-box-pack: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        align-items: center;
-        margin-right: 16px;
-        border-radius: 4px;
-        background-color: white;
-        color: rgb(38, 38, 38);
-        height: 24px;
-        font-size: 12px;
-      }
-    }
-
-    .categorys {
-      padding: 0 12px 10px 12px;
-    }
-
-    .submit {
-      padding: 0 12px 10px 20px;
-      margin-top: 10px;
-
-      button {
-        width: 80px;
-        height: 32px;
-        font-size: 14px;
-      }
-
-      .publishBtn {
-        background-color: #ff2442;
-        color: #fff;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      .clearBtn {
-        cursor: pointer;
-        border-radius: 4px;
-        margin-left: 10px;
-        border: 1px solid rgb(217, 217, 217);
+        .el-button {
+          font-size: 16px;
+          padding: 10px 20px;
+        }
       }
     }
   }

@@ -3,6 +3,9 @@ export default {
   saveAddress(data) {
     return http.post('/user/address', data)
   },
+  updateAddress(data) {
+    return http.put('/user/address', data)
+  },
   getAddressList() {
   return http.get('/user/address/list')
   },

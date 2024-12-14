@@ -74,7 +74,7 @@
                   <input class="comment-input" v-model="commentForm.content" type="text" :placeholder="placeholder"
                     @keyup.enter="submitComment" />
                   <div class="input-buttons" @click="removeContent">
-                    <i class="el-icon-circle-close"></i>
+                    <el-icon><Close /></el-icon>
                   </div>
                 </div>
                 <button class="submit" @click="submitComment">发送</button>
@@ -83,7 +83,9 @@
           </div>
         </div>
       </div>
-      <el-button class="close-button" type="danger" icon="el-icon-close" circle @click="close()"></el-button>
+      <el-button class="close-button" type="danger" icon="el-icon-close" circle @click="close()" style="background-color: white; position: absolute; top: 25px; right: 100px;">
+        <el-icon style="margin-right: 9px;" size="large" color = "black"><Close /></el-icon>
+      </el-button>
     </div>
     <!--抽屉 聊天侧边栏-->
     <div>
@@ -231,12 +233,13 @@ export default {
         ElNotification({
           type: 'error',
           title: '航游集市',
-          message: '收藏失败，请重试'
+          message: '收��失败，请重试'
         });
       }
     },
     async chatUser() {
-      //this.$api.product.addProductLike(this.productId)
+      alert(this.productId)
+      this.$api.product.addProductLike(this.productId)
       let data = {
         fromUserId: this.currentUserId,
         toUserId: this.productInfo.userId,
@@ -244,9 +247,9 @@ export default {
         productImage: this.productInfo.image[0],
       }
       try {
-        //const chatListId = await this.$api.chatList.createChat(data)
-        //const chatListData = await this.$api.chatList.getChatListById({ chatListId: chatListId.data })
-        //this.chatListItem = chatListData.data
+        const chatListId = await this.$api.chatList.createChat(data)
+        const chatListData = await this.$api.chatList.getChatListById({ chatId: chatListId.data })
+        this.chatListItem = chatListData.data
         this.chatVisiable = true
       } catch (error) {
         console.error('创建聊天失败:', error)
@@ -376,6 +379,9 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04),
       0 1px 2px 0 rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     // 添加图标样式
     i {

@@ -37,7 +37,7 @@
                   <!--                <div class="interaction-hint"><span>1天前</span></div>-->
                   <div class="interaction-content">{{ productInfo.intro }}</div>
                 </div>
-                <div class="interaction-price">￥{{ $utils.convert.to_price(productInfo.price) }}</div>
+                <div class="interaction-price">￥{{ this.$utils.convert.to_price(productInfo.price) }}</div>
               </div>
             </div>
           </div>
@@ -46,25 +46,25 @@
           <button class="publishBtn" type="submit" @click.prevent="confirmBuy()">
             <span class="btn-content">确认购买</span>
           </button>
-          <button class="clearBtn" @click="$router.push('/')">
+          <button class="clearBtn" @click="$router.push('/dashboard')">
             <span class="btn-content">取消</span>
           </button>
         </div>
       </el-form>
     </div>
     <div>
-      <el-drawer destroy-on-close @close-drawer="closeDrawer" @confirm="confirm" :show-close="false" :size="'400px'" :visible.sync="drawer" direction="rtl">
+      <el-drawer destroy-on-close @close-drawer="closeDrawer" @confirm="confirm" :show-close="false" :size="'400px'" v-model="drawer" direction="rtl">
         <user_address :button="true" @close-drawer="closeDrawer" @confirm="confirm"></user_address>
       </el-drawer>
     </div>
   </div>
 </template>
 <script>
-import gdMapUtil from "@/utils/gdMapUtil";
-import Address_edit from "@/pages/publish/address_edit.vue";
-import {Notification} from "element-ui";
-import User_edit from "@/pages/user/user_edit.vue";
-import User_address from "@/pages/user/user_address.vue";
+import {ElNotification} from "element-plus";
+import User_edit from "@/views/my/user_edit.vue";
+import User_address from "@/views/my/user_address.vue";
+import api from "@/api";
+import utils from "@/utils";
 
 export default {
   components: {User_address, User_edit},
@@ -86,6 +86,8 @@ export default {
     }
   },
   created() {
+    this.$api = api
+    this.$utils = utils
     this.formData.productId = this.$route.query.productId
     this.formData.phone = this.$store.state.user.userInfo.phone
     this.formData.idname = this.$store.state.user.userInfo.nickName
@@ -94,7 +96,7 @@ export default {
   },
   methods: {
     getProductInfo() {
-      this.$api.product.getProductInfo({productId: this.formData.productId}).then(res => {
+      this.$api.product.getProductInfo({id: this.formData.productId}).then(res => {
         this.productInfo = res.data
         this.productInfo.image = JSON.parse(res.data.image)[0]
       })

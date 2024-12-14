@@ -38,7 +38,7 @@
 
         </i>
       </div>
-      <Waterfall :list="list" :width="180" :hasAroundGutter="false" style="max-width: 1200px; margin: 0 auto;" :delay="1000"
+      <Waterfall :list="list" :width="180" :hasAroundGutter="false" style="max-width: 1200px; margin: 0 auto;" :delay="50"
         :animationEffect="'animate__zoomIn'">
         <template #default="{ item }">
           <div class="card animate__animated animate__zoomIn" @click="toMain(item.id)">
@@ -109,7 +109,8 @@ import screenUtil from "@/utils/screenUtil"
 import api from "@/api"
 import utils from "@/utils"
 import 'animate.css'
-
+import emitter from '@/utils/eventBus'
+import { ElMessage } from 'element-plus'
 // 状态定义
 const show = ref(false)
 const skeleton = ref(true)
@@ -133,12 +134,22 @@ const page_param = ref({
 const getProductList = async () => {
   try {
     const res = await api.product.getProductList(page_param.value)
+    if (!Array.isArray(res.data)) {
+      throw new Error('返回数据格式错误')
+    }
+    
     let productList = res.data
     productList.forEach(item => {
       if (item.image) {
-        item.image = JSON.parse(item.image)[0]
+        try {
+          item.image = JSON.parse(item.image)[0]
+        } catch (e) {
+          console.warn('图片数据解析失败:', e)
+          item.image = ''
+        }
       }
     })
+    
     if (productList.length === 0) {
       noMore.value = true
     } else {
@@ -146,8 +157,8 @@ const getProductList = async () => {
     }
   } catch (error) {
     console.error('获取商品列表失败:', error)
+    ElMessage.error('获取数据失败，请稍后重试')
   } finally {
-    // 关闭加载动画
     skeleton.value = false
     busy.value = false
     topLoading.value = false
@@ -213,6 +224,13 @@ const loadMoreData = () => {
 
 const closeMain = () => {
   mainShow.value = false
+  // // 重新加载逻辑
+  // window.location.reload()
+  // // 或者其他刷新页面的方法
+  // 重置数据并重新获取
+  page_param.value.pageNumber = 1
+  list.value = []
+  getProductList()
 }
 
 const toMain = (val) => {
@@ -228,10 +246,12 @@ onMounted(() => {
   // 初始化时设置 skeleton 为 true
   skeleton.value = true
   getProductList()
+  emitter.on('keyChanged', handleKeyChange)
 })
 
 onUnmounted(() => {
   window.removeEventListener("scroll", windowScroll)
+  emitter.off('keyChanged', handleKeyChange)
 })
 </script>
 
@@ -252,14 +272,15 @@ onUnmounted(() => {
       backdrop-filter: blur(20px);
       background-color: transparent;
       width: calc(100vw - 24px);
-
+      border-radius: 12px;
+      
       position: relative;
       overflow: hidden;
       display: flex;
       user-select: none;
       -webkit-user-select: none;
       align-items: center;
-      font-size: 14px;
+      font-size: 16px;
       color: rgba(51, 51, 51, 0.8);
       height: 40px;
       white-space: nowrap;
@@ -281,6 +302,7 @@ onUnmounted(() => {
           background: rgba(0, 0, 0, 0.03);
           border-radius: 999px;
           color: #333;
+          font-size: 17px;
         }
 
         .channel {
@@ -292,6 +314,7 @@ onUnmounted(() => {
           cursor: pointer;
           -webkit-user-select: none;
           user-select: none;
+          font-size: 16px;
         }
       }
     }

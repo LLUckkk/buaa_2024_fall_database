@@ -3,7 +3,7 @@
     <div class="push-container">
       <div class="header"><span class="header-icon"></span><span class="header-title">支付</span></div>
       <div class="img-list">
-        <div v-if="paymentOrderInfo.paymentStatus === 0 || paymentOrderInfo.paymentStatus === 1" style="color: white;font-size: 20px;font-weight: bold">支付金额：{{ $utils.convert.to_price(paymentOrderInfo.payPrice) }} 元</div>
+        <div v-if="paymentOrderInfo.paymentStatus === 0 || paymentOrderInfo.paymentStatus === 1" style="color: white;font-size: 20px;font-weight: bold">支付金额：{{ this.$utils.convert.to_price(paymentOrderInfo.payPrice) }} 元</div>
         <div v-if="paymentOrderInfo.paymentStatus === 9" style="color: white;font-size: 20px;font-weight: bold">支付成功</div>
       </div>
 
@@ -39,7 +39,7 @@
           </button>
         </div>
         <div v-else>
-          <button class="publishBtn" type="submit" @click="$router.push('/user')">
+          <button class="publishBtn" type="submit" @click="$router.push('/my')">
             <span class="btn-content" >返回</span>
           </button>
         </div>
@@ -49,6 +49,8 @@
 </template>
 <script>
 
+import api from "@/api";
+import utils from "@/utils";
 
 export default {
   data() {
@@ -58,6 +60,8 @@ export default {
     }
   },
   created() {
+    this.$api = api
+    this.$utils = utils
     this.getPaymentOrder()
   },
   methods: {

@@ -8,7 +8,10 @@ import dashboard from '@/views/dashboard/dashboard.vue'
 import index from '@/views/index.vue'
 //临时添加
 import main from '@/views/main/main.vue'
-
+import orderCreate from '@/views/order/order-create.vue'
+import orderDetail from '@/views/order/order-detail.vue'
+import orderEvaluate from '@/views/order/order-evaluate.vue'
+import paymentPay from '@/views/order/payment-pay.vue'
 const routes = [
   {
     path: '/',
@@ -59,6 +62,31 @@ const routes = [
         path: '/release',
         name: 'release',
         component: release
+      },
+      {
+        path: '/orderCreate',
+        name: 'orderCreate',
+        component: orderCreate
+      },
+      {
+        path: '/orderDetail',
+        name: 'orderDetail',
+        component: orderDetail
+      },
+      {
+        path: '/orderDetail',
+        name: 'orderDetail',
+        component: orderDetail
+      },
+      {
+        path: '/orderEvaluate',
+        name: 'orderEvaluate',
+        component: orderEvaluate
+      },
+      {
+        path: '/payentPay',
+        name: 'paymentPay',
+        component: paymentPay
       }
     ]
   },

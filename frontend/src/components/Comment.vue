@@ -2,7 +2,7 @@
   <div class="comments-container">
     <div class="total">共{{ commentCount }}条评论</div>
     <div class="list-container">
-      <div class="parent-comment" v-for="(oneComment, oneIndex) in dataList" :key="oneIndex">
+      <div class="parent-comment" v-for="(oneComment, oneIndex) in dataList.filter(comment => comment.parentId === null)" :key="oneIndex">
         <div class="comment-item">
           <div class="comment-inner-container">
             <div class="avatar">

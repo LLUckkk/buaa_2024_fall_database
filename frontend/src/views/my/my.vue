@@ -42,19 +42,19 @@
             <div class="user-stats">
               <div class="stat-item">
                 <span class="stat-label">发布</span>
-                <span class="stat-value">{{userStat.publish}}</span>
+                <span class="stat-value">{{userStat.published}}</span>
               </div>
               <div class="stat-item">
                 <span class="stat-label">卖出</span>
-                <span class="stat-value">{{userStat.sell}}</span>
+                <span class="stat-value">{{userStat.sold}}</span>
               </div>
               <div class="stat-item">
                 <span class="stat-label">买入</span>
-                <span class="stat-value">{{userStat.buy}}</span>
+                <span class="stat-value">{{userStat.bought}}</span>
               </div>
               <div class="stat-item">
                 <span class="stat-label">收藏</span>
-                <span class="stat-value">{{userStat.collect}}</span>
+                <span class="stat-value">{{userStat.collected}}</span>
               </div>
             </div>
           </div>
@@ -123,7 +123,7 @@ import User_edit from "@/views/my/user_edit.vue"
 import User_address from "@/views/my/user_address.vue"
 import api from "@/api"
 import { ElMessage } from "element-plus"
-
+import { provide } from 'vue'
 export default {
   components: {
     User_address,
@@ -190,6 +190,16 @@ export default {
       this.type = 'address'
       this.drawer = true
     }
+  },
+
+  setup() {
+    const reload = () => {
+      // 重新加载逻辑
+      window.location.reload()
+      // 或者其他刷新页面的方法
+    }
+    
+    provide('reload', reload)
   }
 }
 </script>
@@ -197,17 +207,42 @@ export default {
 <style lang="less" scoped>
 .user-page {
   min-height: 100vh;
+  background-image: url('/public/bg-pattern.png');
   background-color: var(--el-bg-color);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   padding: 24px;
+  margin-left: -15px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 0;
+  }
+
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .user-profile {
   max-width: 1200px;
   margin: 0 auto;
+  margin-top: 40px;
   padding: 40px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding-top: 40px;
 }
 
 .user-info {
@@ -239,32 +274,37 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-left: 20px;
 }
 
 .info-content {
   .basic-info {
     margin-bottom: 24px;
+    text-align: left;
+    padding-top: 10px;
 
     .user-name {
       font-size: 28px;
       font-weight: 600;
       color: var(--el-text-color-primary);
       margin-bottom: 12px;
+      text-align: left;
     }
 
     .user-meta {
       display: flex;
       gap: 24px;
       color: var(--el-text-color-secondary);
-      font-size: 14px;
-
+      font-size: 18px;
+      justify-content: flex-start;
+      
       .meta-item {
         display: flex;
         align-items: center;
         gap: 8px;
-
+        
         .el-icon {
-          font-size: 16px;
+          font-size: 18px;
         }
       }
     }
@@ -273,8 +313,9 @@ export default {
   .user-bio {
     margin-bottom: 32px;
     color: var(--el-text-color-regular);
-    font-size: 15px;
+    font-size: 20px;
     line-height: 1.6;
+    text-align: left;
 
     .bio-placeholder {
       color: var(--el-text-color-secondary);

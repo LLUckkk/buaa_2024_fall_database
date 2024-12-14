@@ -220,11 +220,10 @@ export default {
 
     async submitForm() {
       if (!this.formRef) return
-      
       try {
         await this.formRef.validate()
         if (this.isEdit) {
-          await this.$api.userAddress.saveAddress(this.form)
+          await this.$api.userAddress.updateAddress(this.form)
           ElMessage.success('修改成功')
         } else {
           await this.$api.userAddress.saveAddress(this.form)

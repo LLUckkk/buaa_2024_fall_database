@@ -1,11 +1,4 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/recommend">Recommend</router-link> |
-    <router-link to="/market">Market</router-link> |
-    <router-link to="/release">Release</router-link> |
-    <router-link to="/my">My</router-link>
-  </nav> -->
   <router-view/>
 </template>
 

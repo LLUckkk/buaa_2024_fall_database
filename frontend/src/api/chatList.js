@@ -6,8 +6,8 @@ export default {
   getChatList(){
     return http.get('/chat/list/all')
   },
-  getChatListById(chaListId){
-    return http.get('/chat/list/one',{params: chaListId})
+  getChatListById(chatListId){
+    return http.get('/chat/list/one',{params: chatListId})
   },
   getNoReadCount(){
     return http.get('/chat/list/unread/total')

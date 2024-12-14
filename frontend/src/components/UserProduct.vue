@@ -1,27 +1,24 @@
 <template>
   <div class="feeds-container">
     <Waterfall :list="list" :width="230" :hasAroundGutter="false" :animationDelay="0" :animationEffect="''" :animationDuration="0" style="max-width: 1260px;">
-      <template #item="{ item}">
+      <template #default="{item}">
         <div class="card  animate__animated animate__bounceIn">
           <el-image @click="toMain(item.productId)" style="border-radius: 10px;width: 230px;height: 157px;cursor: pointer;" :src="item.image" fit="cover"></el-image>
           <div class="footer">
             <a class="title"><span>{{ item.title }}</span></a>
-            <div style="display:flex;justify-content: space-between;margin-bottom: 5px">
-              <span v-if="activeTab !== 'publish' && activeTab !== 'collect' " style="font-size: 12px;color: #9e9e9e">收货方式：{{ item.postMode }}</span>
-              <span v-if="activeTab !== 'publish' && activeTab !== 'collect'  " style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="toOrder(item)">查看订单</span>
-              <span v-if="activeTab === 'publish' || activeTab === 'collect' " style="font-size: 12px;color: #9e9e9e">收货方式：{{ item.postType === 0 ? '邮寄' : '用户自提' }}</span>
+              <div style="display:flex;justify-content: space-between;margin-bottom: 5px">
+              <!-- <span v-if="activeTab !== 'publish' && activeTab !== 'collect'  " style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="toOrder(item)">查看订单</span> -->
               <span v-if="activeTab === 'publish' && (item.status === 1 ||item.status === 2) "  style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="del(item)">删除</span>
               <span v-if="activeTab === 'publish' && (item.status === 9) "  style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="disable(item)">下架</span>
+              <span v-if="activeTab === 'publish' && (item.status !== 9) "  style="font-size: 12px;color: #3a64ff;cursor: pointer; margin-left: 10px;" @click="enable(item)">重新上架</span>
             </div>
             <div class="price">
-              <span style="color: red">￥{{ $utils.convert.to_price(item.price) }}</span>
-              <span style="margin-left:5px;font-size: 11px;color: #9e9e9e;font-weight: normal;text-decoration: line-through">￥{{ $utils.convert.to_price(item.originalPrice) }}</span>
-              <el-tag type="warning" size="mini" v-if="activeTab === 'publish' && item.status ===1 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >审核中</el-tag>
-              <el-tag type="danger" size="mini" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: #F56C6C;margin-left: 10px" >审核失败</el-tag>
+              <span style="color: red">￥{{ this.$utils.convert.to_price(item.price) }}</span>
               <el-tag type="success" size="mini" v-if="activeTab === 'publish' && item.status ===9 " style="font-size: 12px;color: #67C23A;margin-left: 10px" >上线</el-tag>
+              <el-tag type="danger" size="mini" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: red;margin-left: 10px" >已下架</el-tag>
               <el-tag type="info" size="mini" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>
             </div>
-            <div v-if="activeTab ==='purchase'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
+            <!-- <div v-if="activeTab ==='purchase'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
               <button v-if="item.dealStatus === 1 " class="publishBtn" type="submit"><span class="btn-content">订单失败</span></button>
               <button @click="toEvaluate(item)" v-if="item.dealStatus === 9 " class="publishBtn" type="submit"><span class="btn-content">去评价</span></button>
               <button v-if="item.dealStatus === 11 " class="publishBtn" type="submit"><span class="btn-content">评价完成</span></button>
@@ -30,8 +27,8 @@
               <button @click="toPay(item)" v-if="item.dealStatus === 0 || item.dealStatus === 2" class="publishBtn" type="submit"><span class="btn-content">待付款</span></button>
               <button @click="confirmSelf(item)" v-if="item.dealStatus === 4 &&item.postMode === '用户自提'" class="publishBtn" type="submit"><span class="btn-content">确认提货：{{ item.postSelfCode }} </span></button>
               <button @click="confirmPost(item)" v-if="item.dealStatus === 4 &&item.postMode === '物流发货' " class="publishBtn" type="submit"><span class="btn-content">确认收货</span></button>
-            </div>
-            <div v-if="activeTab ==='sell'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
+            </div> -->
+            <!-- <div v-if="activeTab ==='sell'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
               <button v-if="item.dealStatus === 0 || item.dealStatus === 2" class="publishBtn" type="submit"><span class="btn-content">待付款</span></button>
               <button v-if="item.dealStatus === 1 " class="publishBtn" type="submit"><span class="btn-content">订单失败</span></button>
               <button v-if="item.dealStatus === 9 " class="publishBtn" type="submit"><span class="btn-content">交易成功</span></button>
@@ -40,7 +37,7 @@
               <button v-if="item.dealStatus === 4 &&item.postMode === '用户自提' " class="publishBtn" type="submit"><span class="btn-content">待提货: {{ item.postSelfCode }}</span></button>
               <button @click="post(item)" v-if="item.dealStatus === 3 &&item.postMode === '物流发货'" class="publishBtn" type="submit"><span class="btn-content">去发货</span></button>
               <button @click="post(item)" v-if="item.dealStatus === 3 &&item.postMode === '用户自提'" class="publishBtn" type="submit"><span class="btn-content">上传提货地址</span></button>
-            </div>
+            </div> -->
           </div>
         </div>
       </template>
@@ -59,8 +56,12 @@ import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
 import Main from "@/views/main/main.vue";
 import post_edit from "@/components/post_edit.vue";
-import {Notification} from 'element-plus';
-
+import {ElNotification} from 'element-plus';
+import api from '@/api';
+import utils from '@/utils';
+import { inject } from 'vue';
+ 
+const reload = inject("reload");
 export default {
   components: {post_edit, Waterfall, LazyImg, Main},
   props: {
@@ -77,12 +78,15 @@ export default {
     }
   },
   created() {
-    //this.getList()
+    this.$api = api
+    this.$utils = utils
+    this.getList()
   },
   watch: {
     activeTab() {
-      //this.getList()
-    }
+      this.getList()
+    },
+  
   },
   methods: {
     getList() {
@@ -107,15 +111,18 @@ export default {
         })
       })
     },
-    disable(item){
+    disable(item) {
       this.$confirm('此操作将下架该商品, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$api.product.disableProduct(item.id).then(res => {
-          Notification({type: 'success', title: '闲宝交易平台', message: '下架成功'})
+          ElNotification({type: 'success', title: '闲宝交易平台', message: '下架成功'})
           this.getList();
+          if(this.reload) {
+            this.reload();
+          }
         })
       }).catch(() => {
         this.$message({
@@ -131,8 +138,11 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$api.product.delProductInfo(item.id).then(res => {
-          Notification({type: 'success', title: '闲宝交易平台', message: '删除成功'})
+          ElNotification({type: 'success', title: '闲宝交易平台', message: '删除成功'})
           this.getList();
+          if(this.reload) {
+            this.reload();
+          }
         })
       }).catch(() => {
         this.$message({
@@ -204,7 +214,27 @@ export default {
     toMain(val) {
       this.productId = val
       this.mainShow = true
-    }
+    },
+    enable(item) {
+      this.$confirm('此操作将重新上架该商品, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.product.enableProduct(item.id).then(res => {
+          ElNotification({type: 'success', title: '闲宝交易平台', message: '重新上架成功'})
+          this.getList();
+          if(this.reload) {
+            this.reload();
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消重新上架'
+        });
+      });
+    },
   }
 }
 </script>

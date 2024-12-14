@@ -4,7 +4,7 @@
       <div class="header"><span class="header-icon"></span><span class="header-title">订单详情</span></div>
       <div class="img-list">
         <div style="color: white;font-size: 20px;font-weight: bold">
-          {{ $utils.convert.to_text(productOrder.dealStatus, $utils.pro.orderStatus) }}
+          {{ this.utils.convert.to_text(productOrder.dealStatus, $utils.pro.orderStatus) }}
         </div>
       </div>
       <div style="margin-left: 20px">
@@ -76,14 +76,14 @@
               <i class="el-icon-s-claim"></i>
               商品金额
             </template>
-            {{ $utils.convert.to_price(productInfo.price) }} 元
+            {{ this.$utils.convert.to_price(productInfo.price) }} 元
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
               <i class="el-icon-s-claim"></i>
               支付金额
             </template>
-            {{ $utils.convert.to_price(paymentOrder.payPrice) }} 元
+            {{ this.$utils.convert.to_price(paymentOrder.payPrice) }} 元
           </el-descriptions-item>
         </el-descriptions>
       </div>
@@ -113,7 +113,8 @@
   </div>
 </template>
 <script>
-
+import api from "@/api";
+import utils from "@/utils";
 
 export default {
   data() {
@@ -125,6 +126,8 @@ export default {
     }
   },
   created() {
+    this.$api = api
+    this.$utils = utils
     this.getDetail()
   },
   methods: {

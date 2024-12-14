@@ -10,10 +10,10 @@ export default {
     return http.post('/product/order',data)
   },
   getMySellProductOrder(){
-    return http.get('/product/order/my/sell')
+    return http.get('/my/sell')
   },
   getMyBuyProductOrder() {
-    return http.get('/product/order/my/buy')
+    return http.get('/my/buy')
   },
   userSelfProduct(productOrderId){
     return http.put('/product/order/user/self/'+ productOrderId)

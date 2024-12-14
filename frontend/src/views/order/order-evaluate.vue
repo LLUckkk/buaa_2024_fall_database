@@ -18,7 +18,7 @@
                   <!--                <div class="interaction-hint"><span>1天前</span></div>-->
                   <div class="interaction-content">{{ productInfo.productInfo }}</div>
                 </div>
-                <div class="interaction-price">￥{{ $utils.convert.to_price(productInfo.buyMoneyAll) }}</div>
+                <div class="interaction-price">￥{{ this.$utils.convert.to_price(productInfo.buyMoneyAll) }}</div>
               </div>
             </div>
           </div>
@@ -44,7 +44,7 @@
           <button class="publishBtn" type="submit" @click.prevent="evaluate()">
             <span class="btn-content">完成评价</span>
           </button>
-          <button class="clearBtn" @click="$router.push('/user')">
+          <button class="clearBtn" @click="$router.push('/my')">
             <span class="btn-content">取消</span>
           </button>
         </div>
@@ -53,9 +53,7 @@
   </div>
 </template>
 <script>
-import gdMapUtil from "@/utils/gdMapUtil";
-import Address_edit from "@/pages/publish/address_edit.vue";
-import {Notification} from "element-ui";
+import {ElNotification} from "element-plus";
 
 export default {
   data() {
@@ -84,7 +82,7 @@ export default {
     evaluate(){
       this.$api.productOrder.evaluateOrder(this.formData).then(res=>{
         this.$router.push("/orderDetail?orderId="+ this.$route.query.orderId)
-        Notification({type: 'success', title: '闲宝交易平台', message: '评价成功'})
+        ElNotification({type: 'success', title: '闲宝交易平台', message: '评价成功'})
       })
     },
   },
