@@ -86,7 +86,7 @@ import Main from "@/views/main/main.vue";
 import utils from "@/utils";
 import api from "@/api";
 import store from "@/store";
-import { MessageBox } from 'element-ui'
+import { ElMessageBox } from 'element-plus'
 export default {
   components: { Main },
   props: {
@@ -118,15 +118,25 @@ export default {
     this.$utils = utils
     this.$api = api
     this.$store = store
+    
   },
-  mounted() {
-    this.getProductInfo()
-    this.userInfo = this.$store.state.user.userInfo
-    this.getUserInfo()
-    websocket.Init(this.chatListItem.id, this.userInfo.id);
-    this.getMessage();
-    this.receiveMessage();
-
+  async mounted() {
+    try {
+      await this.getThisUserInfo();
+      await this.getProductInfo();
+      await this.getUserInfo();
+      //alert(this.userInfo.id)
+      if (this.userInfo.id) {
+        websocket.Init(this.chatListItem.id, this.userInfo.id);
+        this.getMessage();
+        this.receiveMessage();
+      } else {
+        throw new Error('未能获取用户ID');
+      }
+    } catch (error) {
+      console.error('初始化聊天失败:', error);
+      this.$message.error('聊天初始化失败，请重试');
+    }
   },
   destroyed() {
     this.close()
@@ -176,6 +186,12 @@ export default {
         this.productInfo = res.data
         this.productInfo.image = JSON.parse(this.productInfo.image)[0]
       })
+    },
+    getThisUserInfo() {
+      return this.$api.user.getUserInfo().then(res => {
+        this.userInfo = res.data;
+        return res.data;
+      });
     },
     getUserInfo() {
       this.toUserId = this.userInfo.id === this.chatListItem.fromUserId ? this.chatListItem.toUserId : this.chatListItem.fromUserId

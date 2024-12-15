@@ -77,7 +77,7 @@ import api from "@/api";
 
 export default {
   components: {Main, Chat},
-  //components: { Main, Chat },
+
   data() {
     return {
       productId: '',

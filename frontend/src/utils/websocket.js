@@ -1,7 +1,7 @@
-import {Message} from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 
-let url = 'ws://127.0.0.1:5050/websocket'
+let url = 'ws://localhost:8080/api/ws'
 
 var ws
 // 重连定时器实例
@@ -16,7 +16,7 @@ var websocket = {
 
     // 判断浏览器是否支持websocket
     if (!'WebSocket' in window) {
-      Message({
+      ElMessage({
         type: 'error',
         message: '您的浏览器不支持websocket'
       })
@@ -24,7 +24,8 @@ var websocket = {
     }
 
     // 创建websocket实例
-    ws = new WebSocket(url + '/' + roomId+'/'+userId)
+    //ws = new WebSocket(url + '/' + roomId+'/'+userId)
+    ws = new WebSocket(url + '/' + roomId)
     // 监听websocket连接
     ws.onopen = function () {
       console.log("websocket 连接成功")
@@ -33,7 +34,7 @@ var websocket = {
     ws.onerror = function (e) {
       console.log('重连开关', websocketswitch)
       console.log('数据传输发生错误', e)
-      Message({
+      ElMessage({
         message: '数据传输发生错误',
         type: 'error'
       })
