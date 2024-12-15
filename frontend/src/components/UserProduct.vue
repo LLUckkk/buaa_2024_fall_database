@@ -14,9 +14,9 @@
             </div>
             <div class="price">
               <span style="color: red">￥{{ $utils.convert.to_price(item.price) }}</span>
-              <el-tag type="success" size="mini" v-if="activeTab === 'publish' && item.status ===9 " style="font-size: 12px;color: #67C23A;margin-left: 10px" >上线</el-tag>
-              <el-tag type="danger" size="mini" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: red;margin-left: 10px" >已下架</el-tag>
-              <el-tag type="info" size="mini" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>
+              <el-tag type="success" v-if="activeTab === 'publish' && item.status ===9 " style="font-size: 12px;color: #67C23A;margin-left: 10px" >上线</el-tag>
+              <el-tag type="danger" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: red;margin-left: 10px" >已下架</el-tag>
+              <el-tag type="info" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>
             </div>
             <!-- <div v-if="activeTab ==='purchase'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
               <button v-if="item.dealStatus === 1 " class="publishBtn" type="submit"><span class="btn-content">订单失败</span></button>
@@ -59,9 +59,7 @@ import post_edit from "@/components/post_edit.vue";
 import {ElNotification} from 'element-plus';
 import api from '@/api';
 import utils from '@/utils';
-import { inject } from 'vue';
  
-const reload = inject("reload");
 export default {
   components: {post_edit, Waterfall, LazyImg, Main},
   props: {

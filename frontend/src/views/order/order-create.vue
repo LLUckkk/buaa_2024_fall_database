@@ -5,7 +5,7 @@
         <div class="header"><span class="header-icon"></span><span class="header-title">确认购买</span></div>
         <div class="img-list" v-if="productInfo.postType !== 1">
           <div class="header-title" style="margin-top: 10px;margin-bottom: 15px;font-size: 18px">收货地址
-            <el-button type="primary" size="mini" style="margin-left: 20px" @click="open">我的收货地址</el-button></div>
+            <el-button type="primary" style="margin-left: 20px" @click="open">我的收货地址</el-button></div>
 
         </div>
         <div class="push-content" v-if="productInfo.postType !== 1">

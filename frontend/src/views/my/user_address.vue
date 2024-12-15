@@ -3,7 +3,7 @@
     <div style="display: flex;align-items: center;justify-content: space-between">
       <div style="font-size: 25px;color: black;">我的地址</div>
       <div>
-        <el-button size="mini" type="primary" @click="toAdd" style="margin-left: 20px">
+        <el-button type="primary" @click="toAdd" style="margin-left: 20px">
           添加地址
         </el-button>
       </div>

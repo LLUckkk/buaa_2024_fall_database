@@ -24,8 +24,7 @@
             </div>
           </div>
           <div class="product-image">
-            <el-image style=" width: 100%;height: 100%;border-radius: 5px;" :src="item.productImage"
-              fit="container"></el-image>
+            <el-image style=" width: 100%;height: 100%;border-radius: 5px;" :src="item.productImage"></el-image>
           </div>
         </div>
       </div>
