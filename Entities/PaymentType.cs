@@ -12,7 +12,7 @@ namespace Market.Entities
 
         [Column("type_name")]
         [StringLength(200)]
-        public string TypeName { get; set; }
+        public required string TypeName { get; set; }
 
         [Column("wx_pay")]
         public decimal WxPay { get; set; }

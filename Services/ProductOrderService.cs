@@ -22,7 +22,7 @@ namespace Market.Services
             {
                 return Result<string>.Fail(ResultCode.BusinessError, "商品目前不可购买");
             }
-            if (product.UserId == user!.Id)
+            if (product.UserId == user.Id)
             {
                 return Result<string>.Fail(ResultCode.BusinessError, "不能购买自己的商品");
             }
@@ -33,8 +33,8 @@ namespace Market.Services
                 ProductId = productId,
                 ProductUserId = product.UserId,
                 UserId = user.Id,
-                ProductType = product.TypeCode,
-                ProductTypeName = product.TypeName,
+                ProductType = product.TypeCode!,
+                ProductTypeName = product.TypeName!,
                 ProductTitle = product.Title,
                 ProductImg = product.Image,
                 ProductPrice = product.OriginalPrice,
@@ -89,13 +89,13 @@ namespace Market.Services
         public Result<List<ProductOrder>> GetMySellOrderList()
         {
             var user = _userService.GetCurrentUser();
-            var orders = _dbContext.ProductOrders.Where(o => o.ProductUserId == user!.Id).OrderByDescending(o => o.CreateTime).ToList();
+            var orders = _dbContext.ProductOrders.Where(o => o.ProductUserId == user.Id).OrderByDescending(o => o.CreateTime).ToList();
             return Result<List<ProductOrder>>.Ok(orders);
         }
         public Result<List<ProductOrder>> GetMyBuyOrderList()
         {
             var user = _userService.GetCurrentUser();
-            var orders = _dbContext.ProductOrders.Where(o => o.UserId == user!.Id).OrderByDescending(o => o.CreateTime).ToList();
+            var orders = _dbContext.ProductOrders.Where(o => o.UserId == user.Id).OrderByDescending(o => o.CreateTime).ToList();
             return Result<List<ProductOrder>>.Ok(orders);
         }
         public Result<Page<ProductOrder>> GetProductOrderList(SystemProductOrderPage req)
@@ -111,7 +111,8 @@ namespace Market.Services
                 PageSize = req.PageSize
             });
         }
-        public Result<ProductOrderDetail> GetProductOrderDetail(string orderId) {
+        public Result<ProductOrderDetail> GetProductOrderDetail(string orderId)
+        {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId);
             if (order == null)
             {
@@ -141,7 +142,8 @@ namespace Market.Services
             };
             return Result<ProductOrderDetail>.Ok(detail);
         }
-        public Result<Page<ProductOrder>> GetProductOrderToBeApprovedList(SystemProductOrderPage req) {
+        public Result<Page<ProductOrder>> GetProductOrderToBeApprovedList(SystemProductOrderPage req)
+        {
             var orders = _dbContext.ProductOrders
                 .Where(o => req.Key != null && (o.OrderNumber.Contains(req.Key) || o.ProductInfo.Contains(req.Key)) && o.DealStatus == 11)
                 .OrderByDescending(o => o.CreateTime)
@@ -158,19 +160,22 @@ namespace Market.Services
             });
         }
 
-        public Result<long> GetTodayCount() {
+        public Result<long> GetTodayCount()
+        {
             var startDay = DateTime.Today;
             var endDay = DateTime.UtcNow;
             var count = _dbContext.ProductOrders.Count(o => o.CreateTime >= startDay && o.CreateTime <= endDay);
             return Result<long>.Ok(count);
         }
-        public Result<long> GetMonthCount() {
+        public Result<long> GetMonthCount()
+        {
             var startDay = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             var endDay = DateTime.UtcNow;
             var count = _dbContext.ProductOrders.Count(o => o.CreateTime >= startDay && o.CreateTime <= endDay);
             return Result<long>.Ok(count);
         }
-        public Result<long> GetTodayTurnover() {
+        public Result<long> GetTodayTurnover()
+        {
             long money = 0L;
             var startDay = DateTime.Today;
             var endDay = DateTime.UtcNow;
@@ -182,7 +187,8 @@ namespace Market.Services
             }
             return Result<long>.Ok(money);
         }
-        public Result<long> GetMonthTurnover() {
+        public Result<long> GetMonthTurnover()
+        {
             long money = 0L;
             var startDay = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             var endDay = DateTime.UtcNow;
@@ -195,7 +201,8 @@ namespace Market.Services
             return Result<long>.Ok(money);
         }
 
-        public Result UserPerformSelfPickup(string orderId) {
+        public Result UserPerformSelfPickup(string orderId)
+        {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId && o.DealStatus == 4 && o.PostMode == "自提");
             if (order == null)
             {
@@ -205,7 +212,8 @@ namespace Market.Services
             _dbContext.ProductOrders.Update(order);
             return Result.Ok();
         }
-        public Result UserPerformDelivery(ProductOrderPost req) {
+        public Result UserPerformDelivery(ProductOrderPost req)
+        {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.ProductOrderId && o.DealStatus == 3 && o.PostMode == "快递");
             if (order == null)
             {
@@ -218,7 +226,8 @@ namespace Market.Services
             _dbContext.ProductOrders.Update(order);
             return Result.Ok();
         }
-        public Result UserConfigurePickupAddress(ProductOrderPost req) {
+        public Result UserConfigurePickupAddress(ProductOrderPost req)
+        {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.ProductOrderId && o.DealStatus == 3 && o.PostMode == "自提");
             if (order == null)
             {
@@ -232,7 +241,8 @@ namespace Market.Services
             _dbContext.ProductOrders.Update(order);
             return Result.Ok();
         }
-        public Result UserConfirmDelivery(string orderId) {
+        public Result UserConfirmDelivery(string orderId)
+        {
             var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == orderId && o.DealStatus == 4 && o.PostMode == "快递");
             if (order == null)
             {
@@ -243,9 +253,10 @@ namespace Market.Services
             _dbContext.ProductOrders.Update(order);
             return Result.Ok();
         }
-        public Result UserFeedback(ProductOrderEvaluate req) {
+        public Result UserFeedback(ProductOrderEvaluate req)
+        {
             var user = _userService.GetCurrentUser();
-            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.Id && o.UserId == user!.Id && o.DealStatus == 9);
+            var order = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == req.Id && o.UserId == user.Id && o.DealStatus == 9);
             if (order == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);
@@ -256,6 +267,25 @@ namespace Market.Services
             order.UpdateTime = DateTime.UtcNow;
             _dbContext.ProductOrders.Update(order);
             return Result.Ok();
+        }
+
+        public Result<UserStatistics> GetUserStat()
+        {
+            var userId = _userService.GetCurrentUser()!.Id;
+            var published = _dbContext.ProductInfos.Where(p => p.UserId == userId).Count();
+            var bought = _dbContext.ProductOrders.Where(po => po.UserId == userId).Count();
+            var sold = _dbContext.ProductOrders.Where(po => po.ProductUserId == userId).Count();
+            var collected = _dbContext.ProductCollects.Where(pc => pc.UserId == userId).Count();
+
+            var userStat = new UserStatistics
+            {
+                Published = published,
+                Bought = bought,
+                Sold = sold,
+                Collected = collected
+            };
+
+            return Result<UserStatistics>.Ok(userStat);
         }
     }
 }

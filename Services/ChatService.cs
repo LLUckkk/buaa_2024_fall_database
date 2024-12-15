@@ -13,7 +13,7 @@ namespace Market.Services
         public Result<string> Create(ChatListCreate req)
         {
             var user = _userService.GetCurrentUser();
-            var existing = _dbContext.ChatLists.FirstOrDefault(c => c.FromUserId == user!.Id && c.ToUserId == req.ToUserId || c.FromUserId == req.ToUserId && c.ToUserId == user.Id);
+            var existing = _dbContext.ChatLists.FirstOrDefault(c => c.FromUserId == user.Id && c.ToUserId == req.ToUserId || c.FromUserId == req.ToUserId && c.ToUserId == user.Id);
             if (existing != null)
             {
                 return Result<string>.Ok(existing.Id);
@@ -26,7 +26,7 @@ namespace Market.Services
             var chatList = new ChatList
             {
                 Id = Guid.NewGuid().ToString(),
-                FromUserId = user!.Id,
+                FromUserId = user.Id,
                 ToUserId = req.ToUserId,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),

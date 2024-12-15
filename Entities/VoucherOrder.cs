@@ -7,6 +7,7 @@ namespace Market.Entities
     public class VoucherOrder
     {
         [Key]
+        [Column("id")]
         public string? Id { get; set; }
 
         [Column("user_id")]

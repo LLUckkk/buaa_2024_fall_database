@@ -7,41 +7,41 @@ namespace Market.Entities {
         [Key]
         [Column("id")]
         [StringLength(36)]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("product_id")]
         [StringLength(36)]
-        public string ProductId { get; set; }
+        public required string ProductId { get; set; }
 
         [Column("product_image")]
         [StringLength(255)]
-        public string ProductImage { get; set; }
+        public required string ProductImage { get; set; }
 
         [Column("from_user_id")]
         [StringLength(36)]
         [Required]
-        public string FromUserId { get; set; }
+        public required string FromUserId { get; set; }
 
         [Column("from_user_avatar")]
         [StringLength(100)]
-        public string FromUserAvatar { get; set; }
+        public required string FromUserAvatar { get; set; }
 
         [Column("from_user_nick")]
         [StringLength(100)]
-        public string FromUserNickname { get; set; }
+        public required string FromUserNickname { get; set; }
 
         [Column("to_user_id")]
         [StringLength(36)]
         [Required]
-        public string ToUserId { get; set; }
+        public required string ToUserId { get; set; }
 
         [Column("to_user_nick")]
         [StringLength(100)]
-        public string ToUserNickname { get; set; }
+        public required string ToUserNickname { get; set; }
 
         [Column("to_user_avatar")]
         [StringLength(100)]
-        public string ToUserAvatar { get; set; }
+        public required string ToUserAvatar { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }

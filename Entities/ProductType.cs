@@ -8,13 +8,13 @@ namespace Market.Entities
     {
         [Key]
         [Column("id", TypeName = "VARCHAR(36)")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("type_code", TypeName = "VARCHAR(10)")]
-        public string TypeCode { get; set; }
+        public required string TypeCode { get; set; }
 
         [Column("type_name", TypeName = "VARCHAR(20)")]
-        public string TypeName { get; set; }
+        public required string TypeName { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }

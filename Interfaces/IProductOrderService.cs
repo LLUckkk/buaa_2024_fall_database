@@ -24,6 +24,8 @@ namespace Market.Interfaces
         Result UserConfirmDelivery(string orderId);
         Result UserFeedback(ProductOrderEvaluate req);
 
+        Result<UserStatistics> GetUserStat();
+
         // List<Map> getTableData();
         // List<Map<String, Object>> getVideoData();
         // Map<String, List<Map<String, Long>>> getOrderData();

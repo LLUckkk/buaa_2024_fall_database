@@ -10,11 +10,11 @@ namespace Market.Entities
         [Key]
         [Column("id")]
         [StringLength(36)]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("avatar")]
         [StringLength(255)]
-        public string Avatar { get; set; }
+        public required string Avatar { get; set; }
 
         [Column("intro")]
         [StringLength(255)]
@@ -22,25 +22,25 @@ namespace Market.Entities
 
         [Column("nick_name")]
         [StringLength(100)]
-        public string Nickname { get; set; }
+        public required string Nickname { get; set; }
 
         [Column("username")]
         [StringLength(100)]
-        public string Username { get; set; }
+        public required string Username { get; set; }
 
         [Column("email")]
         [StringLength(100)]
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
         
         [Column("student_id")]
         [StringLength(20)]
-        public string StudentId { get; set; }
+        public required string StudentId { get; set; }
 
         [Column("password")]
         [StringLength(100)]
         [JsonIgnore]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         [Column("status")]
         public int Status { get; set; }

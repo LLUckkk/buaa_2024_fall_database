@@ -190,10 +190,10 @@ namespace Market.Services
             return user;
         }
 
-        public User? GetCurrentUser()
+        public User GetCurrentUser()
         {
             var uid = _tokenService.GetCurrentLoginUserId();
-            return _dbContext.Users.FirstOrDefault(u => u.Id == uid);
+            return _dbContext.Users.FirstOrDefault(u => u.Id == uid)!;
         }
 
         public User? GetUserById(string id)

@@ -62,5 +62,10 @@ namespace Market.Controllers
         public IActionResult UserFeedback([FromBody] ProductOrderEvaluate dto) {
             return Ok(_productOrderService.UserFeedback(dto));
         }
+
+        [HttpGet("stat")]
+        public IActionResult GetUserStat() {
+            return Ok(_productOrderService.GetUserStat());
+        }
     }
 }

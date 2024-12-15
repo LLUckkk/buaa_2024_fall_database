@@ -8,25 +8,25 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("username")]
-        public string Username { get; set; }
+        public required string Username { get; set; }
 
         [Column("password")]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         [Column("name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Column("role_id")]
-        public string RoleId { get; set; }
+        public required string RoleId { get; set; }
 
         [Column("role_code")]
-        public string RoleCode { get; set; }
+        public required string RoleCode { get; set; }
 
         [Column("role_name")]
-        public string RoleName { get; set; }
+        public required string RoleName { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }

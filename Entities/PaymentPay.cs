@@ -8,28 +8,28 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("user_id")]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         [Column("order_id")]
-        public string OrderId { get; set; }
+        public required string OrderId { get; set; }
 
         [Column("payment_price")]
         public long PaymentPrice { get; set; }
 
         [Column("payment_type")]
-        public string PaymentType { get; set; }
+        public required string PaymentType { get; set; }
 
         [Column("payment_result_data")]
-        public string PaymentResultData { get; set; }
+        public string? PaymentResultData { get; set; }
 
         [Column("payment_time_start")]
-        public string PaymentTimeStart { get; set; }
+        public required string PaymentTimeStart { get; set; }
 
         [Column("payment_time_expire")]
-        public string PaymentTimeExpire { get; set; }
+        public required string PaymentTimeExpire { get; set; }
 
         [Column("payment_status")]
         public int PaymentStatus { get; set; } = 0;

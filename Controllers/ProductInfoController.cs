@@ -45,6 +45,12 @@ namespace Market.Controllers
             return Ok(_productInfoService.HideProduct(id));
         }
 
+        [HttpPut("enable/{id}")]
+        public IActionResult ShowProduct([FromRoute] string id)
+        {
+            return Ok(_productInfoService.ShowProduct(id));
+        }
+
         [HttpGet("my")]
         public IActionResult GetMyProductList()
         {
@@ -109,7 +115,7 @@ namespace Market.Controllers
             return Ok(Result<List<ProductInfoDetail>>.Ok(publish));
         }
 
-        [HttpPut("/like/count/{productId}")]
+        [HttpPut("like/count/{productId}")]
         public IActionResult LikeProduct([FromRoute] string productId)
         {
             return Ok(_productInfoService.CreateLike(productId));

@@ -31,7 +31,7 @@ namespace Market.Services
             var fileName = Guid.NewGuid().ToString() + extension;
             var fullPath = Path.Combine(_imagePath, user.Id, fileName);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {

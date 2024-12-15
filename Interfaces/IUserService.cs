@@ -12,7 +12,7 @@ namespace Market.Interfaces
         Result<Page<User>> GetUserList(UserAdminPage req);
         Result UpdateUserInfo(UpdateUserInfo req);
         Result UpdateUserPassword(UpdateUserInfo req);
-        User? GetCurrentUser();
+        User GetCurrentUser();
         User? GetUserById(string id);
         Result EnableUser(string id);
         Result DisableUser(string id);

@@ -27,7 +27,7 @@ namespace Market.Services
                 OriginalPrice = (long)req.OriginalPrice * 100,
                 Status = 9, // TODO
                 LikeCount = 0,
-                UserId = user!.Id,
+                UserId = user.Id,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
                 UpdateTime = DateTimeOffset.Now.ToUnixTimeSeconds(),
             };
@@ -132,7 +132,7 @@ namespace Market.Services
             var user = _userService.GetCurrentUser();
 
             var list = _dbContext.ProductInfos
-                .Where(pi => pi.UserId == user!.Id && pi.Status != 10)
+                .Where(pi => pi.UserId == user.Id && pi.Status != 10)
                 .OrderByDescending(pi => pi.CreateTime)
                 .ToList();
 
@@ -226,7 +226,7 @@ namespace Market.Services
         {
             var user = _userService.GetCurrentUser();
 
-            var collectList = _dbContext.ProductCollects.Where(pc => pc.UserId == user!.Id).ToList();
+            var collectList = _dbContext.ProductCollects.Where(pc => pc.UserId == user.Id).ToList();
             var collectInfoList = collectList.Select(collect =>
             {
                 var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == collect.ProductId);
@@ -316,6 +316,23 @@ namespace Market.Services
             _dbContext.SaveChanges();
             return Result.Ok();
         }
+
+        public Result ShowProduct(string id) {
+            var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
+            if (productInfo == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            if (productInfo.Status != 2)
+            {
+                return Result.Fail(ResultCode.ValidateError);
+            }
+            productInfo.Status = 9;
+            _dbContext.ProductInfos.Update(productInfo);
+            _dbContext.SaveChanges();
+            return Result.Ok();
+        }
+
         public Result<long> GetTodayCount()
         {
             var startDay = new DateTimeOffset(DateTime.UtcNow.Date).ToUnixTimeSeconds();

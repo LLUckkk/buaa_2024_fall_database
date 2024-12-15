@@ -28,7 +28,7 @@ namespace Market.Services
                 UserId = user.Id,
                 PayPrice = productOrder.Price,
                 PayTypeId = 1,
-                PayTypeName = paymentType.TypeName,
+                PayTypeName = paymentType!.TypeName,
                 OrderStatus = 0,
                 PaymentStatus = 0,
                 ProcessStatus = 0,
@@ -113,7 +113,7 @@ namespace Market.Services
             {
                 return Result<string>.Fail(ResultCode.Fail, "订单已过期");
             }
-            var type = _dbContext.PaymentTypes.FirstOrDefault(t => t.Id == order.PayTypeId);
+            var type = _dbContext.PaymentTypes.FirstOrDefault(t => t.Id == order.PayTypeId)!;
             var pay = new PaymentPay
             {
                 Id = Guid.NewGuid().ToString(),

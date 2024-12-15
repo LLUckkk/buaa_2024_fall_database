@@ -37,7 +37,7 @@ namespace Market.Services
                 Id = Guid.NewGuid().ToString(),
                 ProductId = req.ProductId,
                 Content = req.Content,
-                PubUserId = user!.Id,
+                PubUserId = user.Id,
                 PubNickname = user.Nickname,
                 CreateTime = DateTimeOffset.Now.ToUnixTimeSeconds()
             };

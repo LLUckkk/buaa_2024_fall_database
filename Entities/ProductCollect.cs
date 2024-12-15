@@ -8,13 +8,13 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("user_id")]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         [Column("product_id")]
-        public string ProductId { get; set; }
+        public required string ProductId { get; set; }
 
         [Column("create_time")]
         public long CreateTime { get; set; }

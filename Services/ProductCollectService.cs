@@ -40,7 +40,7 @@ namespace Market.Services
         public Result Delete(string id)
         {
             var userId = _tokenService.GetCurrentLoginUserId();
-            var collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.Id == id && pc.UserId == userId);
+            var collect = _dbContext.ProductCollects.FirstOrDefault(pc => pc.ProductId == id && pc.UserId == userId);
             if (collect == null)
             {
                 return Result.Fail(ResultCode.NotFoundError);

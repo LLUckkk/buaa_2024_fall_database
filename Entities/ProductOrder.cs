@@ -7,34 +7,34 @@ public class ProductOrder
 {
     [Key]
     [Column("id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 
     [Column("order_number")]
-    public string OrderNumber { get; set; }
+    public required string OrderNumber { get; set; }
 
     [Column("product_user_id")]
-    public string ProductUserId { get; set; }
+    public required string ProductUserId { get; set; }
 
     [Column("product_id")]
-    public string ProductId { get; set; }
+    public required string ProductId { get; set; }
 
     [Column("user_id")]
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
 
     [Column("product_title")]
-    public string ProductTitle { get; set; }
+    public required string ProductTitle { get; set; }
 
     [Column("product_img")]
-    public string ProductImg { get; set; }
+    public required string ProductImg { get; set; }
 
     [Column("product_price")]
     public long ProductPrice { get; set; }
 
     [Column("product_type")]
-    public string ProductType { get; set; }
+    public required string ProductType { get; set; }
 
     [Column("product_type_name")]
-    public string ProductTypeName { get; set; }
+    public required string ProductTypeName { get; set; }
 
     [Column("product_sell_price")]
     public long ProductSellPrice { get; set; }
@@ -52,7 +52,7 @@ public class ProductOrder
     public long ProductMoney { get; set; }
 
     [Column("product_info")]
-    public string ProductInfo { get; set; }
+    public required string ProductInfo { get; set; }
 
     [Column("buy_money_all")]
     public long BuyMoneyAll { get; set; }
@@ -61,37 +61,37 @@ public class ProductOrder
     public long Price { get; set; }
 
     [Column("buy_info")]
-    public string BuyInfo { get; set; }
+    public string? BuyInfo { get; set; }
 
     [Column("post_mode")]
-    public string PostMode { get; set; }
+    public required string PostMode { get; set; }
 
     [Column("post_self_code")]
     public string? PostSelfCode { get; set; }
 
     [Column("post_username")]
-    public string PostUsername { get; set; }
+    public string? PostUsername { get; set; }
 
     [Column("post_phone")]
-    public string PostPhone { get; set; }
+    public string? PostPhone { get; set; }
 
     [Column("post_address")]
     public string? PostAddress { get; set; }
 
     [Column("ship_username")]
-    public string ShipUsername { get; set; }
+    public string? ShipUsername { get; set; }
 
     [Column("ship_phone")]
-    public string ShipPhone { get; set; }
+    public string? ShipPhone { get; set; }
 
     [Column("ship_address")]
-    public string ShipAddress { get; set; }
+    public string? ShipAddress { get; set; }
 
     [Column("ship_num")]
-    public string ShipNum { get; set; }
+    public string? ShipNum { get; set; }
 
     [Column("ship_company")]
-    public string ShipCompany { get; set; }
+    public string? ShipCompany { get; set; }
 
     [Column("ship_time")]
     public DateTime ShipTime { get; set; }
@@ -100,7 +100,7 @@ public class ProductOrder
     public int PayStatus { get; set; }
 
     [Column("pay_order_id")]
-    public string PayOrderId { get; set; }
+    public string? PayOrderId { get; set; }
 
     [Column("deal_status")]
     public int DealStatus { get; set; } = 0;
@@ -109,7 +109,7 @@ public class ProductOrder
     public int EvaScore { get; set; }
 
     [Column("eva_content")]
-    public string EvaContent { get; set; }
+    public string? EvaContent { get; set; }
 
     [Column("create_time")]
     public DateTime CreateTime { get; set; }

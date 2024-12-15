@@ -8,19 +8,19 @@ namespace Market.Entities
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Column("user_id")]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         [Column("title")]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [Column("intro")]
-        public string Intro { get; set; }
+        public required string Intro { get; set; }
 
         [Column("image")]
-        public string Image { get; set; }
+        public required string Image { get; set; }
 
         [Column("price")]
         public long Price { get; set; }
