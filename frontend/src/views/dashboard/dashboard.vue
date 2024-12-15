@@ -44,7 +44,7 @@
           <div class="card animate__animated animate__zoomIn" @click="toMain(item.id)">
             <div class="info-wrapper">
               <h3 class="title">{{ item.title }}</h3>
-              <div class="price">{{ item.price }}</div>
+                <div class="price">{{ (item.price / 100).toFixed(2) }}</div>
               <div class="author-wrapper">
                 <div class="author">
                   <img class="author-avatar" :src="item.userInfo.avatar" />

@@ -13,7 +13,7 @@
               <span v-if="activeTab === 'publish' && (item.status !== 9) "  style="font-size: 12px;color: #3a64ff;cursor: pointer; margin-left: 10px;" @click="enable(item)">重新上架</span>
             </div>
             <div class="price">
-              <span style="color: red">￥{{ this.$utils.convert.to_price(item.price) }}</span>
+              <span style="color: red">￥{{ $utils.convert.to_price(item.price) }}</span>
               <el-tag type="success" size="mini" v-if="activeTab === 'publish' && item.status ===9 " style="font-size: 12px;color: #67C23A;margin-left: 10px" >上线</el-tag>
               <el-tag type="danger" size="mini" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: red;margin-left: 10px" >已下架</el-tag>
               <el-tag type="info" size="mini" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>

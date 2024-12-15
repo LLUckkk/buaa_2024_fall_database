@@ -76,14 +76,14 @@
               <i class="el-icon-s-claim"></i>
               商品金额
             </template>
-            {{ this.$utils.convert.to_price(productInfo.price) }} 元
+            {{ $utils.convert.to_price(productInfo.price) }} 元
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
               <i class="el-icon-s-claim"></i>
               支付金额
             </template>
-            {{ this.$utils.convert.to_price(paymentOrder.payPrice) }} 元
+            {{ $utils.convert.to_price(paymentOrder.payPrice) }} 元
           </el-descriptions-item>
         </el-descriptions>
       </div>

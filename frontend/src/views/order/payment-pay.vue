@@ -3,7 +3,7 @@
     <div class="push-container">
       <div class="header"><span class="header-icon"></span><span class="header-title">支付</span></div>
       <div class="img-list">
-        <div v-if="paymentOrderInfo.paymentStatus === 0 || paymentOrderInfo.paymentStatus === 1" style="color: white;font-size: 20px;font-weight: bold">支付金额：{{ this.$utils.convert.to_price(paymentOrderInfo.payPrice) }} 元</div>
+        <div v-if="paymentOrderInfo.paymentStatus === 0 || paymentOrderInfo.paymentStatus === 1" style="color: white;font-size: 20px;font-weight: bold">支付金额：{{ $utils.convert.to_price(paymentOrderInfo.payPrice) }} 元</div>
         <div v-if="paymentOrderInfo.paymentStatus === 9" style="color: white;font-size: 20px;font-weight: bold">支付成功</div>
       </div>
 

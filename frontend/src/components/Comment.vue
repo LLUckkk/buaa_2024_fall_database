@@ -17,7 +17,7 @@
               <div class="content">{{ oneComment.content }}</div>
               <div class="info">
                 <div class="date">
-                  <span>{{ this.$utils.convert.formatTime(oneComment.createTime) }}</span> <span>{{ oneComment.pubProvince }}</span>
+                  <span>{{ $utils.convert.formatTime(oneComment.createTime) }}</span> <span>{{ oneComment.pubProvince }}</span>
                   <span class="reply" @click="reply(oneComment)" v-if="productStatus === 9">回复</span>
                   <span class="reply" v-if="delshow && productStatus === 9" style="color: #3a64ff;margin-left: 10px" @click="del(oneComment)">删除</span>
                 </div>
@@ -54,7 +54,7 @@
                           @click="saveComment(twoComment, oneIndex, twoIndex)"
                       >
                         <span class="date">
-                            <span>{{ this.$utils.convert.formatTime(twoComment.createTime) }}</span> <span>{{ twoComment.pubProvince }}</span>
+                            <span>{{ $utils.convert.formatTime(twoComment.createTime) }}</span> <span>{{ twoComment.pubProvince }}</span>
                           <!--                          <ChatRound style="width: 1.2em; height: 1.2em" />-->
                           <span class="reply" @click="reply(twoComment)" v-if="productStatus === 9">回复</span>
                           <span class="reply" style="color: #3a64ff;margin-left: 10px" v-if="delshow && productStatus === 9" @click="del(twoComment)" >删除</span>

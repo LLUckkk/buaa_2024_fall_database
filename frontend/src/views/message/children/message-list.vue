@@ -73,6 +73,7 @@ import Chat from '@/components/Chat.vue'
 //import Address_edit from "@/views/publish/address_edit.vue";
 import websocket from "@/utils/websocket";
 import Main from "@/views/main/main.vue";
+import utils from "@/utils";
 import api from "@/api";
 
 export default {
@@ -91,6 +92,7 @@ export default {
   },
   created() {
     this.$api = api;
+    this.$utils = utils;
   },
   mounted() {
     //this.userInfo = this.$store.state.user.userInfo

@@ -20,7 +20,7 @@
         <div class="info">
           <!--                <div class="interaction-hint"><span>1天前</span></div>-->
           <div class="product-info" @click="toMain()">
-            <div class="interaction-price">￥ {{ this.$utils.convert.to_price(productInfo.price) }}</div>
+            <div class="interaction-price">￥ {{ $utils.convert.to_price(productInfo.price) }}</div>
             <div class="address"> {{productInfo.city }}</div>
           </div>
           <div class="buy">
@@ -115,8 +115,8 @@ export default {
     }
   },
   created(){
-    this.$utils = utils
     this.$api = api
+    this.$utils = utils
     this.$store = store
     
   },
@@ -125,14 +125,8 @@ export default {
       await this.getThisUserInfo();
       await this.getProductInfo();
       await this.getUserInfo();
-      //alert(this.userInfo.id)
-      if (this.userInfo.id) {
-        websocket.Init(this.chatListItem.id, this.userInfo.id);
-        this.getMessage();
-        this.receiveMessage();
-      } else {
-        throw new Error('未能获取用户ID');
-      }
+      this.getMessage();
+      this.receiveMessage();
     } catch (error) {
       console.error('初始化聊天失败:', error);
       this.$message.error('聊天初始化失败，请重试');
@@ -190,7 +184,6 @@ export default {
     getThisUserInfo() {
       return this.$api.user.getUserInfo().then(res => {
         this.userInfo = res.data;
-        return res.data;
       });
     },
     getUserInfo() {
@@ -211,8 +204,10 @@ export default {
         if (e.data === 'ok') {
           return
         }
-        let message = JSON.parse(e.data);
+        let message = JSON.parse(e.data).data;
+          if (message.chatListId === this.chatListItem.id) {
         this.chatMessageList.push(message)
+        }
       }
     },
   },

@@ -37,7 +37,7 @@
                   <!--                <div class="interaction-hint"><span>1天前</span></div>-->
                   <div class="interaction-content">{{ productInfo.intro }}</div>
                 </div>
-                <div class="interaction-price">￥{{ this.$utils.convert.to_price(productInfo.price) }}</div>
+                <div class="interaction-price">￥{{ $utils.convert.to_price(productInfo.price) }}</div>
               </div>
             </div>
           </div>

@@ -12,10 +12,10 @@ var websocketswitch = false
 
 var websocket = {
   // websocket建立连接
-  Init(roomId,userId) {
+  Init() {
 
     // 判断浏览器是否支持websocket
-    if (!'WebSocket' in window) {
+    if (!('WebSocket' in window)) {
       ElMessage({
         type: 'error',
         message: '您的浏览器不支持websocket'
@@ -24,13 +24,11 @@ var websocket = {
     }
 
     // 创建websocket实例
-    //ws = new WebSocket(url + '/' + roomId+'/'+userId)
-    ws = new WebSocket(url + '/' + roomId)
+    ws = new WebSocket(url)
     // 监听websocket连接
     ws.onopen = function () {
       console.log("websocket 连接成功")
     }
-    // 监听websocket连接错误信息
     ws.onerror = function (e) {
       console.log('重连开关', websocketswitch)
       console.log('数据传输发生错误', e)
@@ -38,9 +36,7 @@ var websocket = {
         message: '数据传输发生错误',
         type: 'error'
       })
-
-      // 打开重连
-      reconnect(roomId,userId)
+      reconnect()
     }
     // 监听websocket接受消息
     // ws.onmessage = function (e) {
@@ -68,7 +64,7 @@ var websocket = {
     // 发送消息给后端
     ws.send(msg)
   },
-  // 暴露websocket实例
+
   getwebsocket() {
     return ws
   }
@@ -81,13 +77,12 @@ var websocket = {
 
 // 浏览器刷新重新连接
 // 刷新页面后需要重连-并且是在登录之后
-// if (window.performance.navigation.type == 1) {
-//   //刷新后重连
-//   websocket.Init()
-// }
+if (window.performance.navigation.type == 1) {
+  websocket.Init()
+}
 
 // 重连方法
-function reconnect(roomId,userId) {
+function reconnect() {
   // 判断是否主动关闭连接
   if (websocketswitch) {
     return
@@ -96,7 +91,7 @@ function reconnect(roomId,userId) {
   tt && clearTimeout(tt)
   tt = setTimeout(function () {
     console.log('执行断线重连...')
-    websocket.Init(roomId,userId)
+    websocket.Init()
     websocketswitch = false
   }, 4000)
 }

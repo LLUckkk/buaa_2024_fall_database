@@ -15,9 +15,9 @@
           <div class="author-container">
             <div class="author-me">
               <div class="info">
-                <img class="avatar-item" style="width: 40px; height: 40px" :src="this.productInfo.userInfo.avatar"
+                <img class="avatar-item" style="width: 40px; height: 40px" :src="productInfo.userInfo.avatar"
                   alt="" />
-                <span class="name">{{ this.productInfo.userInfo.nickname }}</span>
+                <span class="name">{{ productInfo.userInfo.nickname }}</span>
                 <!-- <span class="name">user</span> -->
               </div>
             </div>
@@ -25,17 +25,17 @@
             <div class="note-scroller">
               <div class="note-content">
                 <div class="title">
-                  {{ this.productInfo.title }}
+                  {{ productInfo.title }}
                   <!-- 麦当劳 -->
                 </div>
 
                 <div class="desc">
-                  <span>{{ this.productInfo.intro }} <br /></span>
+                  <span>{{ productInfo.intro }} <br /></span>
                 </div>
                 <div class="post-container">
                   <div class="post">
                     <span style="font-weight: bold;color: red;font-size: 11px">￥<span style="font-size: 16px">{{
-                      this.$utils.convert.to_price(productInfo.price) }}</span></span>
+                      $utils.convert.to_price(productInfo.price) }}</span></span>
                   </div>
                 </div>
 

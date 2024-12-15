@@ -18,7 +18,7 @@
                   <!--                <div class="interaction-hint"><span>1天前</span></div>-->
                   <div class="interaction-content">{{ productInfo.productInfo }}</div>
                 </div>
-                <div class="interaction-price">￥{{ this.$utils.convert.to_price(productInfo.buyMoneyAll) }}</div>
+                <div class="interaction-price">￥{{ $utils.convert.to_price(productInfo.buyMoneyAll) }}</div>
               </div>
             </div>
           </div>
@@ -54,6 +54,7 @@
 </template>
 <script>
 import {ElNotification} from "element-plus";
+import utils from "@/utils";
 
 export default {
   data() {
@@ -71,6 +72,7 @@ export default {
   created() {
     this.formData.id = this.$route.query.orderId
     this.getInfo()
+    this.$utils = utils
   },
   methods: {
     getInfo() {

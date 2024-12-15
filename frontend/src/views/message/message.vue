@@ -42,6 +42,7 @@
   <script>
   import Message_list from "@/views/message/children/message-list.vue";
   import api from "@/api";
+  import emitter from '@/utils/eventBus'
   
   export default {
     components: {Message_list},
@@ -56,7 +57,7 @@
     methods: {
       setMessageCount(val){
         this.messageCount = val
-        this.$eventBus.$emit('noReadMessage', val);
+        emitter.emit('noReadMessage', val);
       },
     }
   }
