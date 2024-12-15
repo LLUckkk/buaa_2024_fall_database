@@ -38,10 +38,25 @@
 
         </i>
       </div>
-      <Waterfall :list="list" :width="180" :hasAroundGutter="false" style="max-width: 1200px; margin: 0 auto;" :delay="50"
-        :animationEffect="'animate__zoomIn'">
+      <Waterfall :list="list" :width="280" :hasAroundGutter="false" style="max-width: 1400px; margin: 0 auto;" :delay="100"
+        :animationEffect="'animate__fadeInUp'" :animationDuration="600" :animationDelay="50">
         <template #default="{ item }">
           <div class="card animate__animated animate__zoomIn" @click="toMain(item.id)">
+            <div class="info-wrapper">
+              <h3 class="title">{{ item.title }}</h3>
+              <div class="price">{{ item.price }}</div>
+              <div class="author-wrapper">
+                <div class="author">
+                  <img class="author-avatar" :src="item.userInfo.avatar" />
+                  <span class="name">{{ item.userInfo.nickname }}</span>
+                </div>
+                <div class="like-wrapper">
+                  <i class="el-icon-thumb"></i>
+                  <span class="count">{{ item.likeCount }}人想要</span>
+                </div>
+              </div>
+            </div>
+            
             <div class="card-img-wrapper">
               <el-image 
                 class="card-img"
@@ -55,20 +70,6 @@
               </el-image>
               <div class="card-overlay">
                 <span class="view-detail">查看详情</span>
-              </div>
-            </div>
-            <div class="footer">
-              <h3 class="title">{{ item.title }}</h3>
-              <div class="price">￥{{ item.price }}</div>
-              <div class="author-wrapper">
-                <div class="author">
-                  <img class="author-avatar" :src="item.userInfo.avatar" />
-                  <span class="name">{{ item.userInfo.nickname }}</span>
-                </div>
-                <div class="like-wrapper">
-                  <i class="el-icon-thumb"></i>
-                  <span class="count">{{ item.likeCount }}人想要</span>
-                </div>
               </div>
             </div>
           </div>
@@ -368,114 +369,168 @@ onUnmounted(() => {
     }
 
     .card {
-      position: relative;
-      cursor: pointer;
-
-      .top-tag-area {
-        position: absolute;
-        left: 12px;
-        top: 12px;
-        z-index: 4;
-
-        .top-wrapper {
-          background: #ff2442;
-          border-radius: 999px;
-          font-weight: 500;
-          color: #fff;
-          line-height: 120%;
-          font-size: 12px;
-          padding: 5px 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-    }
-
-    .footer {
-      padding: 10px 12px;
-
-      .title {
-        margin-bottom: 6px;
-        word-break: break-all;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        font-weight: 500;
-        font-size: 15px;
-        line-height: 1.4;
-        height: 42px;
-        color: #333;
+      display: flex;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      height: 180px;
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.05),
+        0 1px 3px rgba(0, 0, 0, 0.02),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      
+      // 优化动画效果
+      animation: cardFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 8px 24px rgba(0, 0, 0, 0.08),
+          0 2px 8px rgba(0, 0, 0, 0.04),
+          0 0 0 1px rgba(0, 0, 0, 0.02);
       }
 
-      .price {
-        margin-bottom: 8px;
-        word-break: break-all;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        font-weight: 600;
-        font-size: 17px;
-        color: #ff4d4f;
-        line-height: 1.2;
-      }
-
-      .author-wrapper {
-        height: 28px;
+      // 左侧信息区
+      .info-wrapper {
+        flex: 1;
+        padding: 16px 20px;
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: space-between;
-        color: rgba(51, 51, 51, 0.8);
-        font-size: 12px;
-        transition: color 1s;
-
-        .author {
-          display: flex;
-          align-items: center;
-          color: inherit;
+        min-width: 0;
+        
+        .title {
+          font-size: 15px;
+          line-height: 1.5;
+          color: #333;
+          font-weight: 500;
+          margin-bottom: 8px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
           overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          margin-right: 12px;
-
-          .author-avatar {
-            margin-right: 6px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid #f0f0f0;
-            flex-shrink: 0;
-            object-fit: cover;
-          }
-
-          .name {
-            color: #666;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 13px;
-            max-width: 80px;
+        }
+        
+        .price {
+          font-size: 20px;
+          font-weight: 600;
+          color: #ff4d4f;
+          margin: 10px 0;
+          
+          &::before {
+            content: '¥';
+            font-size: 15px;
+            font-weight: normal;
+            margin-right: 2px;
           }
         }
-
-        .like-wrapper {
-          position: relative;
+        
+        .author-wrapper {
+          margin-top: 12px;
           display: flex;
           align-items: center;
-          padding-left: 8px;
+          justify-content: space-between;
+          
+          .author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            .author-avatar {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              border: 2px solid #fff;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            
+            .name {
+              font-size: 13px;
+              color: #666;
+              max-width: 100px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+          
+          .like-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            
+            i {
+              font-size: 13px;
+              color: #ff4d4f;
+              margin-right: 3px;
+            }
+            
+            .count {
+              font-size: 12px;
+              color: #666;
+            }
+          }
+        }
+      }
 
-          .count {
-            color: #666;
-            margin-left: 2px;
-            white-space: nowrap;
+      // 右侧图片区
+      .card-img-wrapper {
+        width: 160px;
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+        padding: 10px 10px 10px 0;
+        
+        .card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+          border-radius: 12px;
+        }
+        
+        .card-overlay {
+          position: absolute;
+          top: 10px;
+          bottom: 10px;
+          left: -1px;
+          right: 9px;
+          border-radius: 12px;
+          background: rgba(0,0,0,0.02);
+          opacity: 0;
+          transition: all 0.3s ease;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 2px solid transparent;
+
+          .view-detail {
+            color: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
           }
 
-          i {
-            font-size: 15px;
-            color: #666;
-            margin-right: 2px;
+          &:hover {
+            opacity: 1;
+            background: rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(2px);
+
+            .view-detail {
+              color: #ffffff;
+              background: rgba(0,0,0,0.4);
+              text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+              transform: scale(1.05);
+            }
           }
         }
       }
@@ -594,150 +649,40 @@ onUnmounted(() => {
     }
   }
 
-  // 优化商品卡片样式
-  .card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.2s ease-out;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-    animation-duration: 0.8s;
-    animation-fill-mode: both;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      transition: all 0.2s ease-out;
-
-      .card-overlay {
-        opacity: 1;
-        transition: opacity 0.2s ease-out;
-      }
+  // 调整瀑布流为双列布局
+  :deep(.waterfall-container) {
+    padding: 10px;
+    
+    .waterfall-item {
+      padding: 8px;
+      width: 50% !important; // 强制双列
     }
+  }
 
-    .card-img-wrapper {
-      position: relative;
-      padding-top: 75%;
-
-      .card-img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .card-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.2s ease-out;
-
-        .view-detail {
-          color: #fff;
-          font-size: 14px;
-          padding: 6px 16px;
-          border: 1px solid #fff;
-          border-radius: 20px;
-        }
-      }
-    }
-
-    .footer {
-      padding: 8px 10px;    
+  // 响应式调整
+  @media screen and (max-width: 768px) {
+    .card {
+      height: 140px;
       
-      .title {
-        font-size: 17px;             
-        line-height: 1.3;    
-        height: 42px;                
-        margin-bottom: 4px;  
-        color: #2c2c2c;            
-        font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-        font-weight: 600;          
-        letter-spacing: 0.3px;      
-        transition: color 0.2s;     
+      .card-img-wrapper {
+        width: 120px;
+        height: 140px;
+      }
+      
+      .info-wrapper {
+        padding: 12px 14px;
         
-        &:hover {
-          color: #000000;         
+        .title {
+          font-size: 14px;
         }
-      }
-      
-      .price {
-        margin-bottom: 8px;
-        word-break: break-all;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        font-weight: 600;
-        font-size: 17px;
-        color: #ff4d4f;
-        line-height: 1.2;
-      }
-
-      .author-wrapper {
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: rgba(51, 51, 51, 0.8);
-        font-size: 12px;
-        transition: color 1s;
-
-        .author {
-          display: flex;
-          align-items: center;
-          color: inherit;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          margin-right: 12px;
-
-          .author-avatar {
-            margin-right: 6px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid #f0f0f0;
-            flex-shrink: 0;
-            object-fit: cover;
-          }
-
-          .name {
-            color: #666;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 13px;
-            max-width: 80px;
-          }
+        
+        .price {
+          font-size: 18px;
+          margin: 8px 0;
         }
-
-        .like-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-          padding-left: 8px;
-
-          .count {
-            color: #666;
-            margin-left: 2px;
-            white-space: nowrap;
-          }
-
-          i {
-            font-size: 15px;
-            color: #666;
-            margin-right: 2px;
-          }
+        
+        .author-wrapper {
+          margin-top: 8px;
         }
       }
     }
@@ -762,7 +707,7 @@ onUnmounted(() => {
   }
 }
 
-// 确保 Main 组件的动画层级正确
+// 确保 Main 组件的画层级正确
 :deep(.main-component) {
   z-index: 1000;
   position: fixed;
@@ -812,6 +757,74 @@ onUnmounted(() => {
   to {
     opacity: 1;
     transform: scale3d(1, 1, 1);
+  }
+}
+
+// 添加响应式布局部分
+@media screen and (max-width: 1400px) {
+  .feeds-container {
+    max-width: 1200px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .feeds-container {
+    max-width: 900px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .card {
+    height: 160px;
+    
+    .card-img-wrapper {
+      width: 140px;
+      height: 160px;
+    }
+    
+    .info-wrapper {
+      padding: 14px 16px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .card {
+    height: 140px;
+    
+    .card-img-wrapper {
+      width: 120px;
+      height: 140px;
+    }
+    
+    .info-wrapper {
+      padding: 12px 14px;
+      
+      .title {
+        font-size: 14px;
+      }
+      
+      .price {
+        font-size: 18px;
+        margin: 8px 0;
+      }
+      
+      .author-wrapper {
+        margin-top: 8px;
+      }
+    }
+  }
+}
+
+// 添加更丝滑的动画关键帧
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 </style>
