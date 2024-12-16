@@ -8,15 +8,21 @@
             <a class="title"><span>{{ item.title }}</span></a>
               <div style="display:flex;justify-content: space-between;margin-bottom: 5px">
               <!-- <span v-if="activeTab !== 'publish' && activeTab !== 'collect'  " style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="toOrder(item)">查看订单</span> -->
-              <span v-if="activeTab === 'publish' && (item.status === 1 ||item.status === 2) "  style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="del(item)">删除</span>
-              <span v-if="activeTab === 'publish' && (item.status === 9) "  style="font-size: 12px;color: #3a64ff;cursor: pointer" @click="disable(item)">下架</span>
-              <span v-if="activeTab === 'publish' && (item.status !== 9) "  style="font-size: 12px;color: #3a64ff;cursor: pointer; margin-left: 10px;" @click="enable(item)">重新上架</span>
+              <span v-if="activeTab === 'publish' && (item.status === 1 || item.status === 2) && item.status !== 12"  
+                    style="font-size: 12px;color: #3a64ff;cursor: pointer" 
+                    @click="del(item)">删除</span>
+              <span v-if="activeTab === 'publish' && item.status === 9 && item.status !== 12"  
+                    style="font-size: 12px;color: #3a64ff;cursor: pointer" 
+                    @click="disable(item)">下架</span>
+              <span v-if="activeTab === 'publish' && item.status !== 9 && item.status !== 12"  
+                    style="font-size: 12px;color: #3a64ff;cursor: pointer; margin-left: 10px;" 
+                    @click="enable(item)">重新上架</span>
             </div>
             <div class="price">
               <span style="color: red">￥{{ $utils.convert.to_price(item.price) }}</span>
               <el-tag type="success" v-if="activeTab === 'publish' && item.status ===9 " style="font-size: 12px;color: #67C23A;margin-left: 10px" >上线</el-tag>
               <el-tag type="danger" v-if="activeTab === 'publish' && item.status ===2 " style="font-size: 12px;color: red;margin-left: 10px" >已下架</el-tag>
-              <el-tag type="info" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>
+              <el-tag type="warning" v-if="activeTab === 'publish' && item.status ===12 " style="font-size: 12px;color: #E6A23C;margin-left: 10px" >已卖出</el-tag>
             </div>
             <!-- <div v-if="activeTab ==='purchase'" style="display: flex;justify-content: flex-end;font-size: 15px;margin-top: 5px">
               <button v-if="item.dealStatus === 1 " class="publishBtn" type="submit"><span class="btn-content">订单失败</span></button>
