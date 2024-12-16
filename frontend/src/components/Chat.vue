@@ -164,6 +164,9 @@ export default {
         chatListId: this.chatListItem.id,
         sendTime: new Date().getTime()
       }
+      if (websocket.getwebsocket().readyState !== 1) {
+        websocket.Init()
+      }
       websocket.Send(message)
       this.chatMessageList.push(message)
       this.$nextTick(() => {
