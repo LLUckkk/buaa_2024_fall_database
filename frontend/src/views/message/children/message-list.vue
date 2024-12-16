@@ -14,7 +14,7 @@
             </div>
 
             <div class="interaction-content" style="height: 20px">
-              <span>{{ item.chatMessage.content }}</span>
+              <span class="message-content">{{ item.chatMessage.content }}</span>
 
               <div class="msg-count" v-show="item.noReadCount > 0">{{ item.noReadCount }}</div>
             </div>
@@ -34,7 +34,7 @@
     <div>
       <el-drawer @onClose="closeChat" @open_main="toMain" :size="'450px'" :show-close="false"
          direction="rtl" v-model="chatVisiable">
-        <Chat :chat-list-item="chatListItem" @close="closeChat" @open_main="toMain"
+        <Chat :key="chatListItem.id" :chat-list-item="chatListItem" @close="closeChat" @open_main="toMain"
           :product-id="chatListItem.productId"></Chat>
       </el-drawer>
     </div>
@@ -233,6 +233,14 @@ export default {
             text-align: center;
             border-radius: 100%;
             margin-right: 20px;
+          }
+
+          .message-content {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 400px; // 你可以根据需要调整这个宽度
+            display: inline-block;
           }
         }
       }

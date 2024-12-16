@@ -118,7 +118,7 @@ export default {
     this.$api = api
     this.$utils = utils
     this.$store = store
-    
+    websocket.Init()
   },
   async mounted() {
     try {
@@ -157,6 +157,13 @@ export default {
       });
     },
     submit() {
+      const ws = websocket.getwebsocket()
+      if (!ws || ws.readyState !== 1) {
+        websocket.Init()
+        this.$message.warning('正在重新连接...')
+        return
+      }
+      
       let message = {
         fromUserId: this.userInfo.id,
         content: this.content,
@@ -164,9 +171,7 @@ export default {
         chatListId: this.chatListItem.id,
         sendTime: new Date().getTime()
       }
-      if (websocket.getwebsocket().readyState !== 1) {
-        websocket.Init()
-      }
+      
       websocket.Send(message)
       this.chatMessageList.push(message)
       this.$nextTick(() => {

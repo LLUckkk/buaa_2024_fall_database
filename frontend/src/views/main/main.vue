@@ -232,7 +232,7 @@ export default {
         ElNotification({
           type: 'error',
           title: '航游集市',
-          message: '收��失败，请重试'
+          message: '收藏失败，请重试'
         });
       }
     },
@@ -354,7 +354,7 @@ export default {
   display: flex;
   width: 100vw;
   height: 100vh;
-  z-index: 20;
+  z-index: 200;
   overflow: auto;
 
 
@@ -371,7 +371,7 @@ export default {
     position: fixed;
     right: 3.3vw;
     top: 1.3vw;
-    z-index: 100;
+    z-index: 202;
     width: 40px;
     height: 40px;
     padding: 0;
@@ -405,7 +405,7 @@ export default {
     border-radius: 20px;
     background: #f8f8f8;
     transform-origin: left top;
-    z-index: 100;
+    z-index: 201;
 
     .media-container {
       width: 68%;
@@ -848,5 +848,13 @@ export default {
   &.animate__fadeOut {
     animation-duration: 0.05s !important;
   }
+}
+
+.container .top {
+  z-index: 5; /* 降低顶部导航栏的层级 */
+}
+
+.mask-paper {
+  z-index: 5; /* 与顶部导航栏保持一致 */
 }
 </style>

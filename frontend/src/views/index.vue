@@ -609,6 +609,7 @@ a {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   transition: all 0.3s ease;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: -1;
   
   &::before {
     content: '';
@@ -737,5 +738,13 @@ a {
       }
     }
   }
+}
+
+.close-button {
+  z-index: 999;
+}
+
+.note-detail-mask {
+  z-index: 99;
 }
 </style>
