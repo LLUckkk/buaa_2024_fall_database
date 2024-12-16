@@ -110,7 +110,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$api.comment.delComment(item.id).then(res => {
-          Notification({type: 'success', title: '闲宝交易平台', message: '删除评论成功'})
+          Notification({type: 'success', title: '航游集市', message: '删除评论成功'})
           this.$emit("del", item)
         })
       })

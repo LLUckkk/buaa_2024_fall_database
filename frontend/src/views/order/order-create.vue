@@ -109,8 +109,8 @@ export default {
     },
     confirmBuy() {
       this.$api.productOrder.createProductOrder(this.formData).then(res => {
-        this.$api.paymentOrder.createPaymentOrder({orderId:res.data}).then(ress=>{
-          this.$router.push('/paymentPay?paymentOrderId='+ress.result)
+         this.$api.paymentOrder.createPaymentOrder({OrderId:res.data}).then(ress=>{
+          this.$router.push('/paymentPay?paymentOrderId='+ress.data)
         })
       })
     },

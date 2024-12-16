@@ -122,7 +122,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$api.product.disableProduct(item.id).then(res => {
-          ElNotification({type: 'success', title: '闲宝交易平台', message: '下架成功'})
+          ElNotification({type: 'success', title: '航游集市', message: '下架成功'})
           this.getList();
           if(this.reload) {
             this.reload();
@@ -142,7 +142,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$api.product.delProductInfo(item.id).then(res => {
-          ElNotification({type: 'success', title: '闲宝交易平台', message: '删除成功'})
+          ElNotification({type: 'success', title: '航游集市', message: '删除成功'})
           this.getList();
           if(this.reload) {
             this.reload();
@@ -226,7 +226,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$api.product.enableProduct(item.id).then(res => {
-          ElNotification({type: 'success', title: '闲宝交易平台', message: '重新上架成功'})
+          ElNotification({type: 'success', title: '航游集市', message: '重新上架成功'})
           this.getList();
           if(this.reload) {
             this.reload();

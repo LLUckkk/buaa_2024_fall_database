@@ -84,7 +84,7 @@ export default {
     evaluate(){
       this.$api.productOrder.evaluateOrder(this.formData).then(res=>{
         this.$router.push("/orderDetail?orderId="+ this.$route.query.orderId)
-        ElNotification({type: 'success', title: '闲宝交易平台', message: '评价成功'})
+        ElNotification({type: 'success', title: '航游集市', message: '评价成功'})
       })
     },
   },

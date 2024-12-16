@@ -135,8 +135,8 @@ const loginCheck = async () => {
             username: username.value,
             password: password.value,
         });
-            alert('欢迎回来');
-            window.location.href = '/dashboard';
+        alert('欢迎回来');
+        window.location.href = '/dashboard';
     } catch (error) {
         EMPassWord.value = error.message;
     }
