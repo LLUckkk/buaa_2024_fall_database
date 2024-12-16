@@ -40,13 +40,13 @@ namespace Market.Entities
         [Column("process_status", TypeName = "int")]
         public int ProcessStatus { get; set; }
 
-        [Column("time_create", TypeName = "timestamp")]
+        [Column("time_create")]
         public DateTime TimeCreate { get; set; }
 
-        [Column("time_update", TypeName = "timestamp")]
+        [Column("time_update")]
         public DateTime TimeUpdate { get; set; }
 
-        [Column("time_finish", TypeName = "timestamp")]
+        [Column("time_finish")]
         public DateTime TimeFinish { get; set; }
     }
 }

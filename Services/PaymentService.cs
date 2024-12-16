@@ -10,17 +10,15 @@ namespace Market.Services
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly IUserService _userService = userService;
         private readonly IProductOrderService _productOrderService = productOrderService;
-        public Result<string> CreatePaymentOrder(string productId)
+        public Result<string> CreatePaymentOrder(string productOrderId)
         {
             var user = _userService.GetCurrentUser();
-            var productOrder = _dbContext.ProductOrders.FirstOrDefault(o => o.ProductId == productId && o.UserId == user.Id);
+            var productOrder = _dbContext.ProductOrders.FirstOrDefault(o => o.Id == productOrderId);
             if (productOrder == null || productOrder.DealStatus != 0)
                 return Result<string>.Fail(ResultCode.ValidateError);
-            if (productOrder.Price <= 0)
-            {
-                return Result<string>.Fail(ResultCode.Fail);
-            }
             var paymentType = _dbContext.PaymentTypes.FirstOrDefault(p => p.Id == 1);
+            if (paymentType == null)
+                return Result<string>.Fail(ResultCode.ValidateError, "支付方式不存在");
             var paymentOrder = new PaymentOrder
             {
                 Id = Guid.NewGuid().ToString(),

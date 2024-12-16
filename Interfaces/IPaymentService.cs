@@ -5,7 +5,7 @@ namespace Market.Interfaces
 {
     public interface IPaymentService
     {
-        Result<string> CreatePaymentOrder(string productId);
+        Result<string> CreatePaymentOrder(string productOrderId);
         Result<PaymentOrder> GetPaymentOrderById(string orderId);
         void PaymentOrderStatusUpdateCallback(PaymentOrder order);
         Result<Page<PaymentOrder>> GetPaymentOrderPage(SystemPaymentOrderPage req);
