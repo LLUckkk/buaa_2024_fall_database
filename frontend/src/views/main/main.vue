@@ -110,7 +110,6 @@ const close = () => {
 <script>
 import Comment from "@/components/Comment.vue";
 import Chat from '@/components/Chat.vue'
-import websocket from "@/utils/websocket";
 import { ElNotification, ElMessage } from 'element-plus'
 import api from "@/api";
 import utils from "@/utils";

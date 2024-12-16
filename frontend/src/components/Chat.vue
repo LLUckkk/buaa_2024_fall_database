@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="transition: background-color 0.4s ease 0s;hsla:(0,0%,100%,0.98);">
+  <div class="container" style="transition: background-color 0.4s ease 0s;">
     <div class="chat-container">
       <header class="chat-header">
         <div class="header-left"></div>
@@ -162,10 +162,13 @@ export default {
         content: this.content,
         toUserId: this.toUserId,
         chatListId: this.chatListItem.id,
-        sendTime: String(new Date().getTime())
+        sendTime: new Date().getTime()
       }
       websocket.Send(message)
       this.chatMessageList.push(message)
+      this.$nextTick(() => {
+        this.$refs.ChatRef.scrollTop = this.$refs.ChatRef.scrollHeight
+      })
       this.content = ''
     },
     removeContent() {
@@ -200,13 +203,24 @@ export default {
     receiveMessage() {
       let ws = websocket.getwebsocket();
       ws.onmessage = (e) => {
-        //心跳消息不做处理
         if (e.data === 'ok') {
           return
         }
-        let message = JSON.parse(e.data).data;
-          if (message.chatListId === this.chatListItem.id) {
-        this.chatMessageList.push(message)
+        let message = JSON.parse(e.data).Data;
+        if (message.ChatListId === this.chatListItem.id) {
+          this.chatMessageList.push({
+            fromUserId: message.FromUserId,
+            content: message.Content,
+            toUserId: message.ToUserId,
+            chatListId: message.ChatListId,
+            sendTime: message.SendTime
+          })
+          this.$api.chatMessage.updateChatMessageIsRead(this.chatListItem.id).then(res => {
+            this.chatListItem.noReadCount = 0
+          })
+          this.$nextTick(() => {
+            this.$refs.ChatRef.scrollTop = this.$refs.ChatRef.scrollHeight
+          })
         }
       }
     },

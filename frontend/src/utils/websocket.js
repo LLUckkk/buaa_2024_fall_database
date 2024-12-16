@@ -77,7 +77,7 @@ var websocket = {
 
 // 浏览器刷新重新连接
 // 刷新页面后需要重连-并且是在登录之后
-if (window.performance.navigation.type == 1) {
+if (performance.getEntriesByType("navigation")[0].type === "reload" && window.location.pathname !== '/login') {
   websocket.Init()
 }
 
