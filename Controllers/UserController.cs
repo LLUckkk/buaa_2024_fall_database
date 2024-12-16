@@ -1,4 +1,5 @@
 using Market.Constants;
+using Market.Entities;
 using Market.Interfaces;
 using Market.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -33,8 +34,21 @@ namespace Market.Controllers
         [HttpGet("getUserInfo/byId")]
         public IActionResult GetUserInfoById(string userId)
         {
-            return Ok(_userService.GetUserById(userId));
+            var user = _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return Ok(Result<User?>.Fail(ResultCode.NotFoundError));
+            }
+            return Ok(Result<User?>.Ok(user));
+            // return Ok(Result<User?>.Ok(_userService.GetUserById(userId)));
         }
+
+        // // GET /user/websocketToken
+        // [HttpGet("websocketToken")]
+        // public IActionResult GetOneTimeWebsocketToken()
+        // {
+        //     return Ok(_userService.GetOneTimeWebsocketToken());
+        // }
 
         // PUT /user
         [HttpPut]

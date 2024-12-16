@@ -40,7 +40,7 @@ namespace Market.Entities
         [Column("password")]
         [StringLength(100)]
         [JsonIgnore]
-        public required string Password { get; set; }
+        public string? Password { get; set; }
 
         [Column("status")]
         public int Status { get; set; }

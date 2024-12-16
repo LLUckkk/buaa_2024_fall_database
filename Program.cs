@@ -104,6 +104,8 @@ namespace Market
 			builder.Services.AddAuthorization();
 
 			var app = builder.Build();
+			app.UseWebSockets(
+			);
 
 			if (app.Environment.IsDevelopment())
 			{

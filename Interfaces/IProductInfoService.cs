@@ -11,11 +11,8 @@ namespace Market.Interfaces
         Result<List<ProductInfo>> GetMyProductInfoList();
         Result CreateLike(string id);
         Result<Page<ProductInfoDetail>> GetProductInfoPage(SystemProductInfoPage req);
-        Result<ProductInfoAdminDetail> GetProductInfoAdminDetail(string id);
         Result<List<ProductInfoDetail>> GetMyProductCollectionInfoList();
         Result RemoveById(string id);
-        Result ApproveProduct(string id);
-        Result RejectProduct(string id);
         Result HideProduct(string id);
         Result ShowProduct(string id);
         Result<long> GetTodayCount();

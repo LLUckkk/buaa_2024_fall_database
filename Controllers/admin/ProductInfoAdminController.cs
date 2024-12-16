@@ -17,24 +17,6 @@ namespace Market.Controllers
             return Ok(_productInfoService.GetProductInfoPage(page));
         }
 
-        [HttpGet("detail/{id}")]
-        public IActionResult GetDetail([FromRoute] string id)
-        {
-            return Ok(_productInfoService.GetProductInfoAdminDetail(id));
-        }
-
-        [HttpPut("/pass/{id}")]
-        public IActionResult ApproveProduct(string id)
-        {
-            return Ok(_productInfoService.ApproveProduct(id));
-        }
-
-        [HttpPut("/fail/{id}")]
-        public IActionResult RejectProduct(string id)
-        {
-            return Ok(_productInfoService.RejectProduct(id));
-        }
-
         [HttpPut("/down/{id}")]
         public IActionResult DownProduct(string id)
         {

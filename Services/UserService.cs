@@ -11,6 +11,7 @@ namespace Market.Services
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly ITokenService _tokenService = tokenService;
 
+        private static readonly Dictionary<string, (string Token, long Expiration)> _websocketTokens = new();
 
         public Result<string> Register(UserRegister req)
         {
@@ -25,7 +26,7 @@ namespace Market.Services
         public Result<string> Login(UserLogin req)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Username == req.Username);
-            if (user == null || !_passwordHasher.VerifyPassword(req.Password, user.Password))
+            if (user == null || !_passwordHasher.VerifyPassword(req.Password, user.Password!))
             {
                 return Result<string>.Fail(ResultCode.NotFoundError, "Invalid username or password");
             }
@@ -274,6 +275,38 @@ namespace Market.Services
             _dbContext.SaveChanges();
 
             return Result.Ok();
+        }
+
+        public Result<string> GetOneTimeWebsocketToken()
+        {
+            var uid = _tokenService.GetCurrentLoginUserId();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == uid);
+            if (user == null)
+            {
+                return Result<string>.Fail(ResultCode.NotFoundError, "User not found");
+            }
+            var token = Guid.NewGuid().ToString(); // Generate a one-time token
+            var expiration = DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds(); // Set token expiration time
+            _websocketTokens[uid] = (token, expiration); // Store the token in memory
+            return Result<string>.Ok(token);
+        }
+
+        public string? ValidateWebsocketToken(string token)
+        {
+            var entry = _websocketTokens.FirstOrDefault(t => t.Value.Token == token);
+            if (entry.Equals(default(KeyValuePair<string, (string Token, long Expiration)>)))
+            {
+                return null; // Token not found
+            }
+
+            if (entry.Value.Expiration < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            {
+                _websocketTokens.Remove(entry.Key);
+                return null; // Token expired
+            }
+
+            _websocketTokens.Remove(entry.Key);
+            return entry.Key; // Return the user ID
         }
     }
 }

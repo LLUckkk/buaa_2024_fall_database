@@ -203,25 +203,7 @@ namespace Market.Services
                 PageSize = req.PageSize
             });
         }
-        public Result<ProductInfoAdminDetail> GetProductInfoAdminDetail(string id)
-        {
-            var info = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
-            if (info == null)
-            {
-                return Result<ProductInfoAdminDetail>.Fail(ResultCode.NotFoundError);
-            }
-            var user = _userService.GetUserById(info.UserId);
-            if (user == null)
-            {
-                return Result<ProductInfoAdminDetail>.Fail(ResultCode.NotFoundError);
-            }
-            var detail = new ProductInfoAdminDetail
-            {
-                User = user,
-                ProductInfo = info
-            };
-            return Result<ProductInfoAdminDetail>.Ok(detail);
-        }
+        
         public Result<List<ProductInfoDetail>> GetMyProductCollectionInfoList()
         {
             var user = _userService.GetCurrentUser();
@@ -268,38 +250,7 @@ namespace Market.Services
             });
             return Result<List<ProductInfoDetail>>.Ok(collectInfoList!);
         }
-        public Result ApproveProduct(string id)
-        {
-            var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
-            if (productInfo == null)
-            {
-                return Result.Fail(ResultCode.NotFoundError);
-            }
-            if (productInfo.Status != 1)
-            {
-                return Result.Fail(ResultCode.ValidateError);
-            }
-            productInfo.Status = 9;
-            _dbContext.ProductInfos.Update(productInfo);
-            _dbContext.SaveChanges();
-            return Result.Ok();
-        }
-        public Result RejectProduct(string id)
-        {
-            var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
-            if (productInfo == null)
-            {
-                return Result.Fail(ResultCode.NotFoundError);
-            }
-            if (productInfo.Status != 1)
-            {
-                return Result.Fail(ResultCode.ValidateError);
-            }
-            productInfo.Status = 2;
-            _dbContext.ProductInfos.Update(productInfo);
-            _dbContext.SaveChanges();
-            return Result.Ok();
-        }
+        
         public Result HideProduct(string id)
         {
             var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
@@ -323,7 +274,7 @@ namespace Market.Services
             {
                 return Result.Fail(ResultCode.NotFoundError);
             }
-            if (productInfo.Status != 2)
+            if (productInfo.Status == 9)
             {
                 return Result.Fail(ResultCode.ValidateError);
             }

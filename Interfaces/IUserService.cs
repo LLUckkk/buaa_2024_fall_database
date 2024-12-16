@@ -18,5 +18,7 @@ namespace Market.Interfaces
         Result DisableUser(string id);
         Result ApproveUserProfileUpdate(string id);
         Result RejectUserProfileUpdate(string id);
+        Result<string> GetOneTimeWebsocketToken();
+        string? ValidateWebsocketToken(string token);
     }
 }

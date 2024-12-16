@@ -10,6 +10,9 @@ namespace Market.Services
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly IUserService _userService = userService;
 
+        public ChatList? GetChatList(string chatId) {
+            return _dbContext.ChatLists.FirstOrDefault(c => c.Id == chatId);
+        }
         public Result<string> Create(ChatListCreate req)
         {
             var user = _userService.GetCurrentUser();
@@ -116,6 +119,7 @@ namespace Market.Services
                         .ToList();
             list.ForEach(m => m.IsRead = 1);
             _dbContext.ChatMessages.UpdateRange(list);
+            _dbContext.SaveChanges();
             return Result.Ok();
         }
 
@@ -149,6 +153,29 @@ namespace Market.Services
                         .Where(m => m.ChatListId == chatId && m.ToUserId == user.Id && m.IsRead == 0)
                         .Count();
             return count;
+        }
+
+        public Result<string> SendMessageSimple(ChatMessageWsObj req) {
+            Console.WriteLine("SendMessageSimple" + req);
+            var fromUser = _userService.GetUserById(req.FromUserId)!;
+            var toUser = _userService.GetUserById(req.ToUserId)!;
+            var msg = new ChatMessage
+            {
+                Id = Guid.NewGuid().ToString(),
+                ChatListId = req.ChatListId,
+                FromUserId = req.FromUserId,
+                ToUserId = req.ToUserId,
+                FromUserNick = fromUser.Nickname,
+                ToUserNick = toUser.Nickname,
+                Content = req.Content,
+                SendTime = req.SendTime,
+                IsRead = 0,
+            };
+            _dbContext.ChatMessages.Add(msg);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result<string>.Fail(ResultCode.SaveError);
+            return Result<string>.Ok(msg.Id);
         }
     }
 }
