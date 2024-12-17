@@ -311,5 +311,19 @@ namespace Market.Services
                 return Result.Fail(ResultCode.SaveError);
             return Result.Ok();
         }
+
+        public Result ModifyProductStatus(string id, int status) {
+            var productInfo = _dbContext.ProductInfos.FirstOrDefault(pi => pi.Id == id);
+            if (productInfo == null)
+            {
+                return Result.Fail(ResultCode.NotFoundError);
+            }
+            productInfo.Status = status;
+            _dbContext.ProductInfos.Update(productInfo);
+            var save = _dbContext.SaveChanges();
+            if (save == 0)
+                return Result.Fail(ResultCode.SaveError);
+            return Result.Ok();
+        }
     }
 }

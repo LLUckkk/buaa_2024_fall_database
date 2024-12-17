@@ -15,6 +15,7 @@ namespace Market.Interfaces
         Result RemoveById(string id);
         Result HideProduct(string id);
         Result ShowProduct(string id);
+        Result ModifyProductStatus(string id, int status);
         Result<long> GetTodayCount();
         Result<long> GetMonthCount();
     }

@@ -4,13 +4,13 @@ DROP TABLE IF EXISTS "user" CASCADE;
 
 CREATE TABLE "user" (
     id VARCHAR(36) PRIMARY KEY,
-    avatar VARCHAR(255),
-    intro VARCHAR(255),
-    nick_name VARCHAR(100),
-    username VARCHAR(100),
-    email VARCHAR(100),
-    student_id VARCHAR(20),
-    password VARCHAR(100),
+    avatar VARCHAR(255) NOT NULL,
+    intro VARCHAR(255) NOT NULL,
+    nick_name VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    student_id VARCHAR(20) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     status INTEGER,
     update_time BIGINT,
     create_time BIGINT,
@@ -90,9 +90,9 @@ DROP TABLE IF EXISTS comment CASCADE;
 
 CREATE TABLE comment (
     id VARCHAR(36) PRIMARY KEY,
-    product_id VARCHAR(36),
+    product_id VARCHAR(36) REFERENCES product_info (id),
     parent_id VARCHAR(36) REFERENCES comment (id),
-    pub_user_id VARCHAR(36),
+    pub_user_id VARCHAR(36) REFERENCES "user" (id),
     pub_nickname VARCHAR(100),
     parent_user_id VARCHAR(36),
     parent_user_nickname VARCHAR(255),
@@ -115,8 +115,8 @@ CREATE TABLE payment_order (
     payment_type VARCHAR(20),
     process_status INTEGER,
     time_create TIMESTAMPTZ,
-    time_update TIMESTAMPTZ,
-    time_finish TIMESTAMPTZ,
+    time_update TIMESTAMPTZ CHECK (time_update >= time_create),
+    time_finish TIMESTAMPTZ CHECK (time_finish >= time_update),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (pay_type_id) REFERENCES payment_type (id)
 );
@@ -135,8 +135,8 @@ CREATE TABLE payment_pay (
     payment_status INTEGER DEFAULT 0,
     process_status INTEGER DEFAULT 0,
     time_create TIMESTAMPTZ,
-    time_update TIMESTAMPTZ,
-    time_finish TIMESTAMPTZ,
+    time_update TIMESTAMPTZ CHECK (time_update >= time_create),
+    time_finish TIMESTAMPTZ CHECK (time_finish >= time_update),
     FOREIGN KEY (user_id) REFERENCES "user" (id),
     FOREIGN KEY (order_id) REFERENCES payment_order (id)
 );
@@ -275,3 +275,16 @@ CREATE TABLE voucher_order (
     FOREIGN KEY (product_id) REFERENCES product_info (id),
     FOREIGN KEY (voucher_id) REFERENCES product_voucher (id)
 );
+
+CREATE INDEX idx_user_username ON "user" (username);
+CREATE INDEX idx_user_email ON "user" (email);
+CREATE INDEX idx_product_user_id ON product_info (user_id);
+CREATE INDEX idx_chat_list_time ON chat_message (chat_list_id, send_time);
+CREATE INDEX idx_payment_order_number ON payment_order (order_number);
+CREATE INDEX idx_product_order_number ON product_order (order_number);
+CREATE INDEX idx_collect_user ON product_collect (user_id, create_time DESC);
+CREATE INDEX idx_collect_product ON product_collect (product_id);
+CREATE INDEX idx_buyer_orders ON product_order (user_id, deal_status);
+CREATE INDEX idx_seller_orders ON product_order (product_user_id, deal_status);
+CREATE INDEX idx_order_pay_status ON product_order (pay_status);
+

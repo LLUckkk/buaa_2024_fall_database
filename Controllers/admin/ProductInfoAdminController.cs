@@ -17,10 +17,10 @@ namespace Market.Controllers
             return Ok(_productInfoService.GetProductInfoPage(page));
         }
 
-        [HttpPut("/down/{id}")]
-        public IActionResult DownProduct(string id)
+        [HttpPut("modify/{id}")]
+        public IActionResult DownProduct([FromRoute] string id, [FromBody] int newStatus)
         {
-            return Ok(_productInfoService.HideProduct(id));
+            return Ok(_productInfoService.ModifyProductStatus(id, newStatus));
         }
     }
 }
