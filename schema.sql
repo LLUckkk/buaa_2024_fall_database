@@ -288,3 +288,40 @@ CREATE INDEX idx_buyer_orders ON product_order (user_id, deal_status);
 CREATE INDEX idx_seller_orders ON product_order (product_user_id, deal_status);
 CREATE INDEX idx_order_pay_status ON product_order (pay_status);
 
+CREATE OR REPLACE FUNCTION update_user_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.update_time = EXTRACT(EPOCH FROM NOW()) * 1000;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_user_timestamp BEFORE
+UPDATE ON "user" FOR EACH ROW
+EXECUTE FUNCTION update_user_timestamp ();
+
+CREATE OR REPLACE FUNCTION update_product_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.update_time = EXTRACT(EPOCH FROM NOW()) * 1000;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_product_timestamp BEFORE
+UPDATE ON product_info FOR EACH ROW
+EXECUTE FUNCTION update_product_timestamp ();
+
+CREATE OR REPLACE FUNCTION update_chat_list_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE chat_list
+    SET update_time = EXTRACT(EPOCH FROM NOW()) * 1000
+    WHERE id = NEW.chat_list_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_chat_list_update
+AFTER INSERT ON chat_message FOR EACH ROW
+EXECUTE FUNCTION update_chat_list_timestamp ();
