@@ -72,8 +72,13 @@
         </div>
         <div :class = "active == 1 ? 'card' : 'card active'">
             <div class = "head">
-                <div class = "name">闲置<span>集市</span></div>
-                <div class="desc">具体描述</div>
+                <div class = "name">航游<span>集市</span></div>
+                <div class="desc">
+                    <span class="desc-highlight">北航学子</span>的
+                    <span class="desc-highlight">交易</span>
+                    <span class="connector">&</span>
+                    <span class="desc-highlight">社交</span>平台
+                </div>
                 <div :class="active == 3 ? 'btn hidden' : 'btn'">
                     {{ active == 1 ? '还没有账号?' : '已有账号' }}
                     <button @click = "clickSwitch()">
@@ -93,6 +98,7 @@
 import {ref} from "vue";
 import { errorMessages } from "vue/compiler-sfc";
 import user from "@/api/user";
+import { ElMessage } from 'element-plus';
 // 响应式数据,R代表注册部分相关信息
 const active = ref(1);
 const username = ref('');
@@ -135,7 +141,6 @@ const loginCheck = async () => {
             username: username.value,
             password: password.value,
         });
-        alert('欢迎回来');
         window.location.href = '/dashboard';
     } catch (error) {
         EMPassWord.value = error.message;
@@ -182,12 +187,11 @@ const registerUser = async () => {
             email: email.value,
             studentId: studentId.value
         });
-            alert('注册成功');
-            window.location.href = '/dashboard';
-        
+        ElMessage.success('注册成功');
+        window.location.href = '/dashboard';
     } catch (error) {
         EMPassWord.value = error.message;
-        alert('注册失败');
+        ElMessage.error('注册失败');
     }
 };
 
@@ -231,10 +235,10 @@ const sendVerifyCode = async () => {
             }
         }, 1000);
         
-        alert('发送成功');
+        ElMessage.success('验证码发送成功');
     } catch (error) {
         EMVerifyCode.value = error.response.data.message;
-        alert('发送失败');
+        ElMessage.error('验证码发送失败');
     }
 };
 
@@ -273,10 +277,10 @@ const resetUser = async () => {
             newPassWord:password.value,
             token:verifyCode.value
         });
-        alert('重置成功');
+        ElMessage.success('重置成功');
     } catch (error) {
         EMVerifyCode.value = error.response.data.message;
-        alert('重置失败');
+        ElMessage.error('重置失败');
     }
 };
 
@@ -325,7 +329,27 @@ const clickSwitch2 = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+    /* 删除原来的渐变背景 */
+    /* background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%); */
+    
+    /* 添加背景图片 */
+    background-image: url('/public/back3.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* 添加伪元素作为遮罩层 */
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 0;
 }
 
 .slider {
@@ -335,6 +359,7 @@ const clickSwitch2 = () => {
     align-items: center;
     max-width: 1000px;
     padding: 50px;
+    z-index: 2;
 }
 
 .form {
@@ -466,7 +491,7 @@ button:hover {
 }
 
 .card .name {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
     margin-bottom: 15px;
 }
@@ -477,9 +502,41 @@ button:hover {
 }
 
 .card .desc {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
     margin-bottom: 30px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.desc-highlight {
+    font-weight: 600;
+    padding: 0 2px;
+    position: relative;
+    display: inline-block;
+}
+
+/* 保持北航学子的深蓝色 */
+.desc-highlight:first-child {
+    color: #1a4a80;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
+
+/* 为交易和社交添加珊瑚粉色 */
+.desc-highlight:not(:first-child) {
+    color: #FF6B6B; /* 明亮的珊瑚红色 */
+    text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
+
+.desc-highlight:not(:first-child)::after {
+    background: #FF8787;
+    opacity: 0.7;
+}
+
+.connector {
+    font-style: italic;
+    margin: 0 4px;
+    opacity: 0.9;
 }
 
 .card .btn button {
@@ -569,5 +626,15 @@ button:hover {
 .verify-container .errormessage {
     position: absolute;
     bottom: -20px;
+}
+
+.desc-highlight:first-child {
+    color: #1a4a80; /* 比卡片背景(#4a90e2)稍深的蓝色 */
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
+
+.desc-highlight::after {
+    background: #1a4a80;
+    opacity: 0.8;
 }
 </style>

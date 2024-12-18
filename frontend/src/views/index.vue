@@ -22,7 +22,7 @@
             />
             <div class="input-button">
               <el-icon v-if="key === ''" class="search-icon" style = "margin-top: 43px;margin-left: -10px;"><Search /></el-icon>
-              <el-icon v-else @click="clearKeyword" class="close-icon"><CircleClose /></el-icon>
+              <el-icon v-else @click="clearKeyword" class="close-icon"><CircleClose style="margin-top: 45px"size = "30px"/></el-icon>
             </div>
           </div>
         </div>

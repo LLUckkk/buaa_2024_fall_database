@@ -237,7 +237,6 @@ export default {
       }
     },
     async chatUser() {
-      alert(this.productId)
       this.$api.product.addProductLike(this.productId)
       let data = {
         fromUserId: this.currentUserId,

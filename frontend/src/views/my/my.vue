@@ -100,7 +100,7 @@
 
     <!-- 内容区域 -->
     <div class="content-section">
-      <user-product :activeTab="activeTab"></user-product>
+      <user-product :activeTab="activeTab" :mainZIndex="5000"></user-product>
     </div>
 
     <!-- 抽屉组件 -->

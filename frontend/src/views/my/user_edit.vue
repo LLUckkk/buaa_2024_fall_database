@@ -121,7 +121,6 @@ export default {
       console.log('onSubmit 被调用')
       this.$api.user.updateUserInfo(this.form).then(res => {
         console.log('API 调用成功', res)
-        alert(this.form.nickName)
         this.cancel();
         ElNotification({
           type: 'success',
@@ -184,7 +183,6 @@ export default {
       this.$emit('close-drawer')
     },
     handleUploadSuccess(res, file) {
-      alert(res)
       this.form.avatar = res
       file.url = res
     }
