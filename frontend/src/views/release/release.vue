@@ -261,10 +261,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .release-container {
-  background-image: url('/public/back4.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   min-height: 100vh;
   padding: 20px;
   position: relative;
