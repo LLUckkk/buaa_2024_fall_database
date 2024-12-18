@@ -1,5 +1,6 @@
 <template>
   <div class="release-container">
+    <div class="overlay"></div>
     <div class="release-card">
       <!-- 标题区域 -->
       <div class="card-header">
@@ -260,12 +261,25 @@ export default {
 </script>
 <style lang="less" scoped>
 .release-container {
+  background-image: url('/public/back4.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   min-height: 100vh;
-  background-color: #f5f7fa;
-  padding: 40px 0;
-  margin-top: 30px;
+  padding: 20px;
+  position: relative;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
+
+  // .overlay {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   background-color: rgba(0, 0, 0, 0.5);
+  //   z-index: 1;
+  // }
 
   .release-card {
     max-width: 800px;
@@ -299,6 +313,9 @@ export default {
     }
 
     .release-form {
+      position: relative;
+      z-index: 2;
+
       .upload-section {
         margin-bottom: 30px;
       }
