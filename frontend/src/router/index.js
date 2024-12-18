@@ -12,6 +12,7 @@ import orderCreate from '@/views/order/order-create.vue'
 import orderDetail from '@/views/order/order-detail.vue'
 import orderEvaluate from '@/views/order/order-evaluate.vue'
 import paymentPay from '@/views/order/payment-pay.vue'
+import admin from '@/views/admin/index.vue'
 const routes = [
   {
     path: '/',
@@ -87,6 +88,11 @@ const routes = [
         path: '/payentPay',
         name: 'paymentPay',
         component: paymentPay
+      },
+      {
+        path: '/admin',
+        name: 'admin',
+        component: admin
       }
     ]
   },
